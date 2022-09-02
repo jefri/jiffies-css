@@ -9,6 +9,11 @@
     <meta name="theme-color" content="#000000" />
     <link rel="stylesheet" href="./index.css" />
     <!-- <link rel="stylesheet" href="./bundle.min.css" /> -->
+    <!-- <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://github.com/jefri/jiffies-css/releases/download/v0.8.0/jiffies-css-bundle.min.css"
+    /> -->
   </head>
   <body>
     <header class="fluid">
@@ -554,9 +559,21 @@ public:
               border-radius: var(--spacing-block);
               --color: var(--color-primary-inverse);
             }
+
+            #swatches main {
+              min-height: 300px;
+              --grid-collumn-count: 2;
+            }
+
+            @media (min-width: 768px) {
+              #swatches main {
+                min-height: 150px;
+                --grid-column-count: 4;
+              }
+            }
           </style>
         </header>
-        <main class="grid" style="min-height: 200px; --grid-column-count: 4">
+        <main class="grid">
           <p style="background-color: var(--color-primary)">
             <strong>Primary Color</strong>
           </p>

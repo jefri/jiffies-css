@@ -43,6 +43,7 @@
 nav,
 nav > ul {
   display: flex;
+  flex-wrap: wrap;
 }
 
 nav > ul:first-of-type {
@@ -53,9 +54,21 @@ nav > ul:not(:last-of-type) {
   margin-bottom: var(--spacing-block-vertical);
 }
 
-aside :is(nav, nav > ul) {
-  flex-direction: column;
-  align-items: flex-start;
+aside nav > ul {
+  flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+  aside :is(nav, nav > ul) {
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  nav > ul li {
+    width: 100%;
+    padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
+  }
 }
 
 aside nav {
@@ -83,8 +96,6 @@ nav > ul {
 nav > ul li {
   display: inline-block;
   margin: 0;
-  width: 100%;
-  padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
   transition: background-color var(--timing) ease-in-out;
   --background-color: transparent;
   background-color: var(--background-color);
