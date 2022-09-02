@@ -2,7 +2,7 @@
 
 @import "./sanitize/index.css" layer(reset);
 @import "./theme/theme.css" layer(theme);
-@import "./layout/layout.css" layer(layout);
+/* @import "./layout/layout.css" layer(layout); */
 @import "./content/content.css" layer(content);
 @import "./component/component.css" layer(component);
 @import "./utility/utility.css" layer(utility);

@@ -16,16 +16,8 @@ details summary:not([role]) {
   transition: color var(--transition);
 }
 
-details summary:not([role])::-webkit-details-marker {
-  display: none;
-}
-
 details summary:not([role])::marker {
   display: none;
-}
-
-details summary:not([role])::-moz-list-bullet {
-  list-style-type: none;
 }
 
 details summary:not([role])::after {
