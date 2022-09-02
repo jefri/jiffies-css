@@ -2,6 +2,8 @@
 
 Post-Modern CSS Full-Page Reset
 
+[Demo Page](https://jefri.github.io/jiffies-css)
+
 * sanitize.css base
 * cutting edge standards
   * `:has()` pseudoselector
