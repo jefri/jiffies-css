@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#000000" />
     <link rel="stylesheet" href="./index.css" />
+    <!-- <link rel="stylesheet" href="./bundle.min.css" /> -->
   </head>
   <body>
     <header class="fluid">
@@ -42,6 +43,7 @@
           <li><a href="#bottom">Bottom</a></li>
         </ul>
         <ul>
+          <li><a href="#usage">Usage</a></li>
           <li><a href="#overview">Overview</a></li>
           <li><a href="#formatting">Formatting</a></li>
           <li><a href="#headings">Headings</a></li>
@@ -56,6 +58,42 @@
       </nav>
     </aside>
     <main>
+      <section id="usage">
+        <h1>Usage</h1>
+        <ul>
+          <li>
+            Download and save
+            <a
+              href="https://raw.githubusercontent.com/jefri/jiffies-css/main/index.css"
+              ><code>jiffies-css-bundle.css</code></a
+            >
+            in your project.
+          </li>
+          <li>
+            Add overrides to custom properties in a <code>:root {}</code> block.
+          </li>
+          <li>
+            For appropriate semantic markup, view the
+            <a href="https://github.com/jefri/jiffies-css/blob/main/index.html"
+              >source</a
+            >
+            of this file.
+          </li>
+          <li>
+            Sample customization block: <br />
+            <pre
+              style="
+                display: inline-block;
+                background-color: var(--card-background-color);
+              "
+            ><code>:root {
+  --color-primary-hue: 225deg;
+  --sizing: 0.8;
+}</code></pre>
+          </li>
+        </ul>
+      </section>
+
       <article id="overview">
         <header>
           <h1>Headings</h1>
@@ -416,7 +454,7 @@ public:
         </header>
 
         <main>
-          <form>
+          <form onsubmit="event.preventDefault(); return false;">
             <fieldset style="--grid-column-count: 3">
               <label>
                 Text Input <input type="text" placeholder="Text Input" />
@@ -486,7 +524,7 @@ public:
             <button>Button element</button>
           </form>
 
-          <form>
+          <form onsubmit="event.preventDefault(); return false;">
             <fieldset style="--grid-column-count: 4">
               <legend>Form States</legend>
               <input type="text" placeholder="Valid" aria-invalid="false" />
