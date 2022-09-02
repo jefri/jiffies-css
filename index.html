@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" />
+    <title>Jiffies CSS</title>
+    <meta name="description" content="Jiffies CSS Test Page" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <header class="fluid">
+      <nav>
+        <ul>
+          <li>
+            <a href="https://github.com/jefri/jiffies">
+              <svg
+                height="32"
+                aria-hidden="true"
+                viewBox="0 0 16 16"
+                version="1.1"
+                width="32"
+                data-view-component="true"
+                class="octicon octicon-mark-github v-align-middle"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
+                ></path>
+              </svg>
+            </a>
+          </li>
+          <li><a href="https://github.com/jefri/jiffies">Jiffies</a></li>
+        </ul>
+      </nav>
+    </header>
+    <aside>
+      <nav>
+        <ul>
+          <li><a href="#top">Top</a></li>
+          <li><a href="#bottom">Bottom</a></li>
+        </ul>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#formatting">Formatting</a></li>
+          <li><a href="#headings">Headings</a></li>
+          <li><a href="#lists">Lists</a></li>
+          <li><a href="#tables">Tables</a></li>
+          <li><a href="#accordian">Accordian</a></li>
+          <li><a href="#tabs">Tabs</a></li>
+          <li><a href="#buttons">Buttons</a></li>
+          <li><a href="#forms">Forms</a></li>
+          <li><a href="#swatches">Swatches</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main>
+      <article id="overview">
+        <header>
+          <h1>Headings</h1>
+          <p>Headings are built using &lt;h1&gt; etc tags.</p>
+        </header>
+        <main>
+          <hgroup>
+            <h1>Heading 1</h1>
+            <h2>Heading 2</h2>
+            <h3>Heading 3</h3>
+            <h4>Heading 4</h4>
+            <h5>Heading 5</h5>
+            <h6>Heading 6</h6>
+            <h3>hgroup :last-child</h3>
+          </hgroup>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum
+          </p>
+        </main>
+      </article>
+
+      <article id="formatting">
+        <header>
+          <h1>Formatting</h1>
+          <p>
+            Formatting uses the appropriate <code>&lt;b&gt;</code> etc inline
+            text tags.
+          </p>
+        </header>
+
+        <main>
+          <p>
+            This sentence is <b>bold</b>. If you like semantics, you might go
+            with <strong>strong</strong> or <em>emphasized</em> text. If not,
+            <i>italic</i> is still around. <small>Small</small> text is for fine
+            print. Your copy can also be <sub>subscripted</sub> and
+            <sup>superscripted</sup>, <ins>inserted</ins>, <del>deleted</del>,
+            or <mark>highlighted</mark>. You would use a
+            <a href="#!">hyperlink</a> to go to a new page.
+          </p>
+          <p>
+            If you like to write about there are plenty of semantic tags for
+            you. There's the generic
+            <code>code</code>, as well as <kbd>keyboard input</kbd>,
+            <samp>computer output</samp>, and <var>variables</var>.
+          </p>
+          <p>
+            You might have need of a <cite>citation</cite>,
+            <q>short quotation</q>, <abbr title="abbreviation">abbr</abbr>, or
+            <dfn>definition</dfn>. It might be <time>10:00pm</time>.
+          </p>
+          <address>
+            <p>
+              123 Fake Street<br />
+              Springfield, USA
+            </p>
+          </address>
+
+          <h2>Blockquote</h2>
+
+          <blockquote>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
+            molestiae et assumenda molestias alias ut saepe doloribus, porro,
+            deleniti neque, harum minus, commodi laudantium quod excepturi nam
+            corrupti odit provident.
+            <cite>- Blockquote Citation</cite>
+          </blockquote>
+
+          <h2>Preformatted Text</h2>
+          <pre>
+class Voila {
+public:
+  // Voila
+  static const string VOILA = "Voila";
+}</pre
+          >
+          <h2>Horizontal Line</h2>
+          <hr />
+        </main>
+      </article>
+
+      <article id="headings">
+        <header>
+          <h1>Headings</h1>
+        </header>
+
+        <main>
+          <h1>First Heading h1</h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea
+            delectus cupiditate minima, magni possimus commodi, eveniet? Rem,
+            adipisci architecto pariatur libero aliquid culpa sunt accusantium.
+            Ipsa error aliquid et! Animi.
+          </p>
+          <h2>Second Heading h2</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
+            molestias ullam quasi est a nemo, accusamus voluptatum autem. Eius
+            explicabo est assumenda voluptatem id, hic maxime mollitia facere
+            debitis quos.
+          </p>
+          <h3>Third Heading h3</h3>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
+            deleniti, repudiandae rerum nam laborum eligendi aperiam. Autem id,
+            ad necessitatibus accusantium, facilis, quae ullam est, voluptates
+            debitis fugiat quos inventore!
+          </p>
+          <h4>Fourth Heading h4</h4>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque cum
+            eum eligendi voluptatum quasi nisi doloremque ipsam unde, laboriosam
+            nihil voluptatem consequatur quam non similique vero ratione animi
+            sit veritatis.
+          </p>
+          <h5>Fifth Heading h5</h5>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit
+            voluptatem necessitatibus eos iusto nam deserunt, dicta possimus
+            error qui reiciendis, aut dolore magnam eligendi maiores expedita
+            commodi perferendis non blanditiis.
+          </p>
+        </main>
+      </article>
+
+      <article id="lists">
+        <header>
+          <h1>Lists</h1>
+        </header>
+        <main>
+          <h2>Unordered list</h2>
+
+          <ul>
+            <li>
+              List item one
+              <ul>
+                <li>Nested list item</li>
+              </ul>
+            </li>
+            <li>List item two</li>
+            <li>List item three</li>
+          </ul>
+
+          <h2>Ordered list</h2>
+
+          <ol>
+            <li>
+              List item one
+              <ol>
+                <li>Nested list item</li>
+              </ol>
+            </li>
+            <li>List item two</li>
+            <li>List item three</li>
+          </ol>
+          <h2>Definition List</h2>
+
+          <dl>
+            <dt>Definition Title One</dt>
+            <dd>First definition description</dd>
+            <dt>Definition Title Two</dt>
+            <dd>Second definition description</dd>
+          </dl>
+        </main>
+      </article>
+
+      <article id="tables">
+        <header>
+          <h1>Tables</h1>
+        </header>
+
+        <main>
+          <table>
+            <thead>
+              <tr>
+                <th>Head 1</th>
+                <th>Head 2</th>
+                <th>Head 3</th>
+              </tr>
+            </thead>
+            <tfoot>
+              <tr>
+                <th>Footer 1</th>
+                <th>Footer 2</th>
+                <th>Footer 3</th>
+              </tr>
+            </tfoot>
+            <tbody>
+              <tr>
+                <td>Description 1</td>
+                <td>Description 2</td>
+                <td>Description 3</td>
+              </tr>
+              <tr>
+                <td>Description 1</td>
+                <td>Description 2</td>
+                <td>Description 3</td>
+              </tr>
+              <tr>
+                <td>Description 1</td>
+                <td>Description 2</td>
+                <td>Description 3</td>
+              </tr>
+            </tbody>
+          </table>
+        </main>
+      </article>
+
+      <article id="accordian">
+        <header>
+          <h1>Accordian</h1>
+          <p>
+            Styling for <code>&lt;details&gt;</code> and
+            <code>&lt;summary&gt;</code>.
+          </p>
+        </header>
+        <main>
+          <details>
+            <summary>Accordion 1</summary>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Pellentesque urna diam, tincidunt nec porta sed, auctor id velit.
+              Etiam venenatis nisl ut orci consequat, vitae tempus quam commodo.
+              Nulla non mauris ipsum. Aliquam eu posuere orci. Nulla convallis
+              lectus rutrum quam hendrerit, in facilisis elit sollicitudin.
+              Mauris pulvinar pulvinar mi, dictum tristique elit auctor quis.
+              Maecenas ac ipsum ultrices, porta turpis sit amet, congue turpis.
+            </p>
+          </details>
+          <details open="">
+            <summary>Accordion 2</summary>
+            <ul>
+              <li>Vestibulum id elit quis massa interdum sodales.</li>
+              <li>Nunc quis eros vel odio pretium tincidunt nec quis neque.</li>
+              <li>Quisque sed eros non eros ornare elementum.</li>
+              <li>Cras sed libero aliquet, porta dolor quis, dapibus ipsum.</li>
+            </ul>
+          </details>
+        </main>
+      </article>
+
+      <article id="tabs">
+        <header>
+          <h1 id="tab-sample-header">Tabs</h1>
+          <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
+        </header>
+        <main>
+          <section role="tablist" aria-labelledby="tab-sample-header">
+            <div role="tab" id="tab-1" aria-controls="tabpanel-1">
+              <label>
+                Tab 1
+                <input
+                  type="radio"
+                  name="tablist-1"
+                  aria-controls="tabpanel-1"
+                  value="tab-1"
+                />
+              </label>
+            </div>
+            <div role="tabpanel" id="tabpanel-1" aria-labelledby="tab-1">
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Pellentesque urna diam, tincidunt nec porta sed, auctor id
+                velit. Etiam venenatis nisl ut orci consequat, vitae tempus quam
+                commodo. Nulla non mauris ipsum. Aliquam eu posuere orci. Nulla
+                convallis lectus rutrum quam hendrerit, in facilisis elit
+                sollicitudin. Mauris pulvinar pulvinar mi, dictum tristique elit
+                auctor quis. Maecenas ac ipsum ultrices, porta turpis sit amet,
+                congue turpis.
+              </p>
+            </div>
+            <div role="tab" id="tab-2" aria-controls="tabpanel-2">
+              <label>
+                Tab 2
+                <input type="radio" name="tablist-1" value="tab-2" checked />
+                <!-- Yep looks like that works! -->
+              </label>
+            </div>
+            <div role="tabpanel" id="tabpanel-2" aria-labelledby="tab-2">
+              <ul>
+                <li>Vestibulum id elit quis massa interdum sodales.</li>
+                <li>
+                  Nunc quis eros vel odio pretium tincidunt nec quis neque.
+                </li>
+                <li>Quisque sed eros non eros ornare elementum.</li>
+                <li>
+                  Cras sed libero aliquet, porta dolor quis, dapibus ipsum.
+                </li>
+              </ul>
+            </div>
+          </section>
+        </main>
+      </article>
+
+      <article id="buttons">
+        <header>
+          <h2>Buttons</h2>
+          <p>
+            Button elements, links with <code>role="button"</code>, and input
+            elements should all render exactly the same.
+          </p>
+        </header>
+        <main>
+          <section>
+            <button>Button</button>
+            <input type="submit" value="Submit" />
+            <input type="button" value="Input" />
+            <a role="button">Link</a>
+          </section>
+
+          <section>
+            <h3>Secondary Buttons</h3>
+            <p>
+              Adding a <code>secondary</code> class will display a secondary
+              color.
+            </p>
+            <button class="secondary">Button</button>
+            <input type="submit" value="Submit" class="secondary" />
+            <input type="button" value="Input" class="secondary" />
+            <input type="reset" value="Reset" />
+            <a role="button" class="secondary">Link</a>
+          </section>
+
+          <section>
+            <h3>Contrast</h3>
+            <p>
+              Adding a <code>contrast</code> class will create ghost/outline
+              buttons.
+            </p>
+            <button class="contrast">Button</button>
+            <input type="submit" value="Submit" class="contrast" />
+            <input type="button" value="Input" class="contrast" />
+            <a role="button" class="contrast">Link</a>
+          </section>
+
+          <section>
+            <h3>Outline</h3>
+            <p>
+              Adding an <code>outline</code> class will create outlined buttons
+              with no background.
+            </p>
+            <button class="outline">Button</button>
+            <input type="reset" value="Reset" class="outline" />
+            <input type="submit" value="Submit" class="contrast outline" />
+          </section>
+        </main>
+      </article>
+
+      <article id="forms">
+        <header>
+          <h1>Forms</h1>
+        </header>
+
+        <main>
+          <form>
+            <fieldset style="--grid-column-count: 3">
+              <label>
+                Text Input <input type="text" placeholder="Text Input" />
+              </label>
+              <label>
+                Password
+                <input type="password" placeholder="Password" />
+              </label>
+              <label>
+                URL
+                <input type="url" placeholder="http://www.example.com" />
+              </label>
+              <label>
+                Email Address
+                <input type="email" placeholder="email@example.com" />
+              </label>
+              <label>
+                Phone Number <input type="tel" placeholder="123-123-1234" />
+              </label>
+              <label>
+                Search <input type="search" placeholder="Search" />
+              </label>
+              <label>
+                Number <input type="number" placeholder="Number" />
+              </label>
+              <label>
+                Select
+                <select>
+                  <option>Option One</option>
+                  <option>Option Two</option>
+                  <option>Option Three</option>
+                </select>
+              </label>
+              <div>
+                <label>
+                  <input name="checkboxA" type="checkbox" checked="checked" />
+                  Choice A
+                </label>
+                <label>
+                  <input name="checkboxB" type="checkbox" /> Choice B
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input name="radio" type="radio" checked="checked" />
+                  Option 1
+                </label>
+                <label><input name="radio" type="radio" />Option 2</label>
+                <label>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    name="switch"
+                    checked="checked"
+                  />
+                  Switch 1
+                </label>
+              </div>
+              <label for="textarea">
+                Textarea
+                <textarea rows="5" cols="30" placeholder="Message"></textarea>
+              </label>
+            </fieldset>
+            <input type="button" value="Button" />
+            <input type="submit" value="Submit" />
+            <input type="reset" value="Reset" />
+            <button>Button element</button>
+          </form>
+
+          <form>
+            <fieldset style="--grid-column-count: 4">
+              <legend>Form States</legend>
+              <input type="text" placeholder="Valid" aria-invalid="false" />
+              <input type="text" placeholder="Invalid" aria-invalid="true" />
+              <input type="text" placeholder="Disabled" disabled />
+              <input type="text" value="Readonly" readonly />
+            </fieldset>
+          </form>
+
+          <!-- Progress progress -->
+          <!--
+    Loading [aria-busy=true]
+    Tooltip [data-tooltip][data-direction]
+        -->
+          <!-- Modal dialog -->
+        </main>
+      </article>
+
+      <article id="swatches">
+        <header>
+          <h2>Color Swatches</h2>
+          <style>
+            #swatches p {
+              width: 100%;
+              height: 100%;
+              padding: var(--spacing-block);
+              border-radius: var(--spacing-block);
+              --color: var(--color-primary-inverse);
+            }
+          </style>
+        </header>
+        <main class="grid" style="min-height: 200px; --grid-column-count: 4">
+          <p style="background-color: var(--color-primary)">
+            <strong>Primary Color</strong>
+          </p>
+          <p
+            style="
+              background-color: var(--color-accent);
+              --color: var(--color-accent-inverse);
+            "
+          >
+            <strong>Accent Color</strong>
+          </p>
+          <p style="background-color: var(--color-secondary)">
+            <strong>Secondary Color</strong>
+          </p>
+          <p style="background-color: var(--color-contrast)">
+            <strong>Contrast Color</strong>
+          </p>
+        </main>
+      </article>
+    </main>
+    <footer class="fluid" id="bottom">
+      <nav>
+        <ul>
+          <li>MIT License Copyright (c) 2022 David Souther</li>
+        </ul>
+        <ul>
+          <li>Inspired by</li>
+          <li>
+            <a href="https://csstools.github.io/sanitize.css/">sanitize.css</a>
+          </li>
+          <li><a href="https://picocss.com">Pico CSS</a></li>
+          <li>
+            <a href="https://taniarascia.github.io/primitive/">Primitive</a>
+          </li>
+          <li><a href="http://getskeleton.com/">Skeleton</a></li>
+        </ul>
+      </nav>
+    </footer>
+    <script src="./accessibility.js"></script>
+  </body>
+</html>

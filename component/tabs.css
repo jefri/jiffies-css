@@ -1,0 +1,91 @@
+[role="tablist"] {
+  --border: var(--card-inner-border);
+  --active-border: var(--border-width) var(--border-style) var(--color-primary);
+  /* If you have more than 5 tabs, you need to set this */
+  --tab-count: 5; /* <section role="tablist" style={{--tab-count: 8}} /> */
+  --spacing-tab-edge: calc(var(--spacing-block-horizontal) / 2);
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns:
+    /* One column for the ::before left-side space */
+    var(--spacing-tab-edge)
+    /* --tab-count columns "as small as their content" */
+    /* NB: Set "word-wrap: nowrap" on the tab labels in user's code */
+    repeat(var(--tab-count), min-content)
+    /* The rest of the area to the ::after right-side space */
+    1fr;
+  height: 100%;
+}
+
+[role="tablist"]::after,
+[role="tablist"]::before {
+  content: "";
+  display: block;
+  border-bottom: var(--border);
+  min-width: calc(var(--spacing-block-horizontal) / 2);
+  grid-row: 1;
+}
+
+[role="tablist"]::before {
+  order: -1;
+}
+
+[role="tablist"]::after {
+  order: 1;
+  grid-column-end: -1;
+}
+
+[role="tab"] {
+  grid-row: 1;
+  order: 0;
+  border: var(--border-empty);
+  border-bottom: var(--border);
+  height: min-content;
+  white-space: nowrap;
+}
+
+[role="tab"] label {
+  /* Ensure the padding is on the label, so the entire area is clickable */
+  padding-top: var(--spacing-form-element-vertical);
+  padding-bottom: calc(var(--spacing-form-element-vertical) / 2);
+  padding-left: var(--spacing-form-element-horizontal);
+  padding-right: var(--spacing-form-element-horizontal);
+}
+
+[role="tab"]:is(:hover) {
+  --border-color: var(--color-secondary);
+  border: var(--border);
+}
+
+[role="tab"]:has(:focus) {
+  --border-style: dotted;
+}
+
+[role="tab"]:has(:active) {
+  --border-style: dotted;
+}
+
+[role="tab"] [type="radio"] {
+  /* Leave the radio button focusable, but not visible. Copied from .screen-reader-text */
+  clip: rect(1px, 1px, 1px, 1px);
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+[role="tab"]:where(:has(:checked), [aria-selected="true"]) {
+  border-top: var(--active-border);
+  border-left: var(--border);
+  border-right: var(--border);
+  border-bottom: var(--border-empty);
+}
+
+[role="tabpanel"] {
+  display: none;
+  grid-area: 2/ 1 / span 1 / -1;
+}
+
+[role="tab"]:where([aria-selected="true"], :has(:checked)) + [role="tabpanel"] {
+  display: block;
+}

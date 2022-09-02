@@ -1,0 +1,52 @@
+:root {
+  --switch-color: var(--white);
+  --switch-background-color: var(--color-secondary);
+  --switch-checked-background-color: var(--color-primary);
+}
+
+[type="checkbox"][role="switch"] {
+  --border-width: 3px;
+  --background-color: var(--switch-background-color);
+  --border-color: var(--switch-background-color);
+  --color: var(--switch-color);
+  --switch-height: 1.25em;
+  --switch-width: 2.25em;
+  --transition-time: 0.2;
+  --switch-transition: var(--transition-time) var(--transition-function);
+
+  width: var(--switch-width);
+  height: var(--switch-height);
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--switch-height);
+  background-color: var(--background-color);
+  line-height: var(--switch-width);
+}
+
+[type="checkbox"][role="switch"]:focus {
+  --background-color: var(--switch-background-color);
+  --border-color: var(--switch-background-color);
+}
+
+[type="checkbox"][role="switch"]:checked {
+  --background-color: var(--switch-checked-background-color);
+  --border-color: var(--switch-checked-background-color);
+}
+
+[type="checkbox"][role="switch"]::before {
+  content: "";
+  display: block;
+  width: calc(var(--switch-height) - (var(--border-width) * 2));
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color);
+  transition: margin var(--switch-transition);
+}
+
+[type="checkbox"][role="switch"]:checked {
+  background-image: none;
+}
+
+[type="checkbox"][role="switch"]:checked::before {
+  margin-left: calc(var(--switch-width) * 0.5 - var(--border-width));
+  margin-inline-start: calc(var(--switch-width) * 0.5 - var(--border-width));
+}

@@ -1,0 +1,51 @@
+:root {
+  --sizing: 1;
+  --spacing-base: 1rem;
+  --spacing: calc(var(--sizing) * var(--spacing-base));
+  --spacing-block: var(--spacing);
+  --spacing-block-vertical: var(--spacing);
+  --spacing-block-horizontal: var(--spacing);
+
+  --sizing-form: var(--sizing);
+  --spacing-form: calc(var(--sizing-form) * var(--spacing));
+  --spacing-form-element-vertical-multiplier: 0.25;
+  --spacing-form-element-horizontal-multiplier: 1;
+  --spacing-form-element-vertical: calc(
+    var(--spacing-form-element-vertical-multiplier) * var(--spacing-form)
+  );
+  --spacing-form-element-horizontal: calc(
+    var(--spacing-form-element-horizontal-multiplier) * var(--spacing-form)
+  );
+
+  --sizing-nav: var(--sizing);
+  --spacing-nav: calc(var(--sizing-nav) * var(--spacing));
+  --spacing-nav-item-vertical-multiplier: 0.5;
+  --spacing-nav-item-horizontal-multiplier: 1;
+  --spacing-nav-item-vertical: calc(
+    var(--spacing-nav) * var(--spacing-nav-item-vertical-multiplier)
+  );
+  --spacing-nav-item-horizontal: calc(
+    var(--spacing-nav) * var(--spacing-nav-item-horizontal-multiplier)
+  );
+  --spacing-nav-link-vertical-multiplier: 2;
+  --spacing-nav-link-horizontal-multiplier: 1;
+  --spacing-nav-link-vertical: calc(
+    var(--spacing-nav) * var(--spacing-nav-link-vertical-multiplier)
+  );
+  --spacing-nav-link-horizontal: calc(
+    var(--spacing-nav) * var(--spacing-nav-link-horizontal-multiplier)
+  );
+
+  --spacing-typography-vertical-multiplier: 0.75;
+  --spacing-typography-horizontal-multiplier: 0.25;
+  --spacing-typography-vertical: calc(
+    var(--spacing) * var(--spacing-typography-vertical-multiplier)
+  );
+  --spacing-typography-horizontal: calc(
+    var(--spacing) * var(--spacing-typography-horizontal-multiplier)
+  );
+
+  --roundness: 0.25rem;
+  --sizing-border-width: 1px;
+  --sizing-border-radius: var(--roundness);
+}

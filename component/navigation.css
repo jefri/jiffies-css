@@ -1,0 +1,105 @@
+:root {
+  --header-nav-background-color: var(--color-primary);
+  --header-nav-color: var(--color-primary-inverse);
+  --header-border-color: var(--color-accent);
+  --header-border-width: calc(var(--border-width) * 2);
+  --header-border-style: var(--border-style);
+}
+
+:is(body, #body) > header:has(> nav) {
+  background-color: var(--header-nav-background-color);
+  color: var(--header-nav-color);
+  border-bottom: var(--header-border-width) var(--header-border-style)
+    var(--header-border-color);
+
+  box-shadow: var(--box-shadow-elevation-2);
+}
+
+:is(body, #body) > footer:has(> nav) {
+  background-color: var(--header-nav-background-color);
+  --color: var(--header-nav-color);
+  border-top: var(--header-border-width) var(--header-border-style)
+    var(--header-border-color);
+}
+
+:is(body, #body):has(> aside) {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+:is(body, #body):has(> aside) :is(header, footer) {
+  flex-basis: 100%;
+  flex-grow: 1;
+}
+
+:is(body, #body):has(> aside) main {
+  flex: 1;
+}
+
+:is(body, #body) > aside:has(> nav) {
+  float: left;
+}
+
+nav,
+nav > ul {
+  display: flex;
+}
+
+nav > ul:first-of-type {
+  margin-top: var(--spacing-block-vertical);
+}
+
+nav > ul:not(:last-of-type) {
+  margin-bottom: var(--spacing-block-vertical);
+}
+
+aside :is(nav, nav > ul) {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+aside nav {
+  position: sticky;
+  top: calc(var(--spacing-block-vertical));
+}
+
+aside nav ul li a {
+  color: var(--color);
+  padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
+}
+
+nav {
+  justify-content: space-between;
+}
+
+nav > ul {
+  align-items: center;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+nav > ul li {
+  display: inline-block;
+  margin: 0;
+  width: 100%;
+  padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
+  transition: background-color var(--timing) ease-in-out;
+  --background-color: transparent;
+  background-color: var(--background-color);
+}
+
+nav > ul li a {
+  color: var(--header-nav-color);
+  font-size: var(--font-size-larger);
+  transition: color 0s linear;
+}
+
+nav > ul li:has(a:hover) {
+  --background-color: var(--color-primary-hover);
+}
+
+nav > ul li a:hover {
+  --color: var(--color-primary-inverse);
+}

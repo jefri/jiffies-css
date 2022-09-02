@@ -1,0 +1,37 @@
+dl {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(auto, 2fr);
+}
+
+dt {
+  grid-column-start: 1;
+}
+
+dd {
+  grid-column-start: 2;
+  margin: 0;
+}
+
+dl > header {
+  grid-column: 1 / span 2;
+  font-weight: bold;
+  background-color: var(--color-muted);
+  color: var(--color-primary-inverse);
+  padding: var(--spacing-form-element-vertical)
+    var(--spacing-form-element-horizontal);
+}
+
+dd,
+dt {
+  padding: var(--spacing-form-element-vertical)
+    var(--spacing-form-element-horizontal);
+  border: 1px solid var(--color-muted-border-color);
+}
+
+:is(dd, dt):nth-of-type(odd) {
+  background-color: var(--table-row-stripped-odd-background-color);
+}
+
+:is(dd, dt):nth-of-type(even) {
+  background-color: var(--table-row-stripped-even-background-color);
+}

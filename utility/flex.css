@@ -1,0 +1,60 @@
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex.row {
+  flex-direction: row;
+}
+
+.flex.row.inline > * {
+  display: inline-block;
+}
+
+.flex.justify-around {
+  justify-content: space-around;
+}
+
+.flex.justify-between {
+  justify-content: space-between;
+}
+
+.flex.justify-center {
+  justify-content: center;
+}
+
+.flex.align-baseline {
+  align-items: baseline;
+}
+
+.flex.align-center {
+  align-items: center;
+}
+
+.flex.align-stretch {
+  align-items: stretch;
+}
+
+.flex.align-end {
+  align-items: end;
+}
+
+.flex > .flex-0 {
+  flex-basis: 0;
+}
+
+.flex > .flex-1 {
+  flex: 1;
+}
+
+.flex > .flex-2 {
+  flex: 2;
+}
+
+.flex > .flex-3 {
+  flex: 3;
+}
+
+.flex > .flex-4 {
+  flex: 4;
+}
