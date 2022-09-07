@@ -561,8 +561,15 @@ public:
             }
 
             #swatches main {
-              min-height: 300px;
-              --grid-collumn-count: 2;
+              min-height: 150px;
+              --grid-column-count: 1;
+            }
+
+            @media (min-width: 425px) {
+              #swatches main {
+                min-height: 300px;
+                --grid-column-count: 2;
+              }
             }
 
             @media (min-width: 768px) {

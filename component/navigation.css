@@ -11,8 +11,8 @@
   color: var(--header-nav-color);
   border-bottom: var(--header-border-width) var(--header-border-style)
     var(--header-border-color);
-
   box-shadow: var(--box-shadow-elevation-2);
+  padding: 0 var(--spacing-block-horizontal);
 }
 
 :is(body, #body) > footer:has(> nav) {
@@ -20,6 +20,7 @@
   --color: var(--header-nav-color);
   border-top: var(--header-border-width) var(--header-border-style)
     var(--header-border-color);
+  padding: 0 var(--spacing-block-horizontal);
 }
 
 :is(body, #body):has(> aside) {
@@ -99,6 +100,15 @@ nav > ul li {
   transition: background-color var(--timing) ease-in-out;
   --background-color: transparent;
   background-color: var(--background-color);
+  padding: 0 var(--spacing-typography-horizontal);
+}
+
+nav > ul li:first-of-type {
+  padding-left: 0;
+}
+
+nav > ul li:last-of-type {
+  padding-right: 0;
 }
 
 nav > ul li a {
