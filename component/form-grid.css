@@ -1,14 +1,7 @@
-fieldset {
-  --grid-column-count: 2;
-  display: grid;
-  grid-template-columns: repeat(var(--grid-column-count), 1fr);
-  gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
-}
-
-fieldset input[type="submit"] {
+fieldset.grid input[type="submit"] {
   grid-row: -1;
 }
 
-fieldset > :has(textarea) {
+fieldset.grid > :has(textarea) {
   grid-column: 1 / -1;
 }

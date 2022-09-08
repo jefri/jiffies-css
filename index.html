@@ -460,7 +460,7 @@ public:
 
         <main>
           <form onsubmit="event.preventDefault(); return false;">
-            <fieldset style="--grid-column-count: 3">
+            <fieldset class="grid" grid>
               <label>
                 Text Input <input type="text" placeholder="Text Input" />
               </label>
@@ -514,6 +514,7 @@ public:
                     role="switch"
                     name="switch"
                     checked="checked"
+                    aria-checked="false"
                   />
                   Switch 1
                 </label>
@@ -523,19 +524,21 @@ public:
                 <textarea rows="5" cols="30" placeholder="Message"></textarea>
               </label>
             </fieldset>
-            <input type="button" value="Button" />
-            <input type="submit" value="Submit" />
-            <input type="reset" value="Reset" />
-            <button>Button element</button>
+            <fieldset>
+              <input type="button" value="Button" />
+              <input type="submit" value="Submit" />
+              <input type="reset" value="Reset" />
+              <button type="button">Button element</button>
+            </fieldset>
           </form>
 
           <form onsubmit="event.preventDefault(); return false;">
-            <fieldset style="--grid-column-count: 4">
+            <fieldset>
               <legend>Form States</legend>
               <input type="text" placeholder="Valid" aria-invalid="false" />
               <input type="text" placeholder="Invalid" aria-invalid="true" />
               <input type="text" placeholder="Disabled" disabled />
-              <input type="text" value="Readonly" readonly />
+              <input type="text" placeholder="Readonly" readonly />
             </fieldset>
           </form>
 
@@ -562,21 +565,6 @@ public:
 
             #swatches main {
               min-height: 150px;
-              --grid-column-count: 1;
-            }
-
-            @media (min-width: 425px) {
-              #swatches main {
-                min-height: 300px;
-                --grid-column-count: 2;
-              }
-            }
-
-            @media (min-width: 768px) {
-              #swatches main {
-                min-height: 150px;
-                --grid-column-count: 4;
-              }
             }
           </style>
         </header>

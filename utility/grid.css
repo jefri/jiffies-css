@@ -1,5 +1,32 @@
+:root {
+  --grid-column-count: 1;
+}
+
+@media (min-width: 425px) {
+  :root {
+    --grid-column-count: 2;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --grid-column-count: 3;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --grid-column-count: 4;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --grid-column-count: 5;
+  }
+}
+
 .grid {
-  --grid-column-count: 2;
   display: grid;
   grid-template-columns: repeat(var(--grid-column-count), 1fr);
   gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
