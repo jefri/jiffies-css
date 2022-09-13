@@ -450,6 +450,20 @@ public:
             <input type="reset" value="Reset" class="outline" />
             <input type="submit" value="Submit" class="contrast outline" />
           </section>
+
+          <section>
+            <h3>Groups</h3>
+            <p>
+              Wrapping inputs in <code>&lt;fieldset role="group"&gt;</code> will
+              create an flex row with no internal borders.
+            </p>
+            <fieldset role="group">
+              <button type="button">Button A</button>
+              <button type="button">Button B</button>
+              <input type="text" placeholder="Text" />
+              <button type="button">Button C</button>
+            </fieldset>
+          </section>
         </main>
       </article>
 

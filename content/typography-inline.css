@@ -1,7 +1,7 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 a,
 [role="link"] {
-  --color: var(--color-primary);
+  --color: var(--color-primary-text);
   --background-color: transparent;
   outline: none;
   background-color: var(--background-color);

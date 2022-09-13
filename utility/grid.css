@@ -1,5 +1,7 @@
 :root {
   --grid-column-count: 1;
+  --grid-spacing-horizontal: var(--spacing-block-horizontal);
+  --grid-spacing-vertical: var(--spacing-block-vertical);
 }
 
 @media (min-width: 425px) {
@@ -29,5 +31,5 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(var(--grid-column-count), 1fr);
-  gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  gap: var(--grid-spacing-vertical) var(--grid-spacing-horizontal);
 }

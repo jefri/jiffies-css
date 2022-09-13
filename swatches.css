@@ -1,0 +1,89 @@
+section > div {
+  --grid-column-count: 6;
+  --spacing: 5px;
+  height: 500px;
+  width: 500px;
+
+  margin: 0 auto;
+}
+section > div > div {
+  height: 100%;
+  width: 100%;
+  background-color: hsl(var(--hue) var(--sat) var(--lit));
+}
+
+main:nth-of-type(2) > section::before {
+  content: counter(hue);
+  /** From h2 */
+  --font-weight: 700;
+  --font-size: 1.602;
+  --color: var(--color-h2);
+  margin-top: 0;
+  margin-bottom: var(--spacing-typography-vertical);
+  color: var(--color);
+  font-weight: var(--font-weight);
+  font-size: calc(var(--font-size) * 1rem);
+  font-family: var(--font-family);
+}
+
+main:nth-of-type(2) > section {
+  counter-increment: hue 60;
+}
+
+main:nth-of-type(2) > section:nth-of-type(1) {
+  --hue: 0deg;
+  counter-set: hue 0;
+}
+main:nth-of-type(2) > section:nth-of-type(2) {
+  --hue: 60deg;
+}
+main:nth-of-type(2) > section:nth-of-type(3) {
+  --hue: 120deg;
+}
+main:nth-of-type(2) > section:nth-of-type(4) {
+  --hue: 180deg;
+}
+main:nth-of-type(2) > section:nth-of-type(5) {
+  --hue: 240deg;
+}
+main:nth-of-type(2) > section:nth-of-type(6) {
+  --hue: 300deg;
+}
+
+section > div > div:nth-of-type(6n + 1) {
+  --sat: 100%;
+}
+section > div > div:nth-of-type(6n + 2) {
+  --sat: 80%;
+}
+section > div > div:nth-of-type(6n + 3) {
+  --sat: 60%;
+}
+section > div > div:nth-of-type(6n + 4) {
+  --sat: 40%;
+}
+section > div > div:nth-of-type(6n + 5) {
+  --sat: 20%;
+}
+section > div > div:nth-of-type(6n + 6) {
+  --sat: 0%;
+}
+
+section > div > div:nth-of-type(n + 1):nth-of-type(-n + 6) {
+  --lit: 100%;
+}
+section > div > div:nth-of-type(n + 7):nth-of-type(-n + 12) {
+  --lit: 80%;
+}
+section > div > div:nth-of-type(n + 13):nth-of-type(-n + 18) {
+  --lit: 60%;
+}
+section > div > div:nth-of-type(n + 19):nth-of-type(-n + 24) {
+  --lit: 40%;
+}
+section > div > div:nth-of-type(n + 25):nth-of-type(-n + 30) {
+  --lit: 20%;
+}
+section > div > div:nth-of-type(n + 31):nth-of-type(-n + 36) {
+  --lit: 0%;
+}

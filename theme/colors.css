@@ -32,6 +32,16 @@
       var(--color-opacity)
   );
 
+  --color-hue: var(--grey-hue);
+  --color-saturation: var(--saturation);
+  --color-lightness: var(--lightness);
+  --color-opacity: 1;
+  --color-focus-opacity: 0.125;
+  --color: hsl(
+    var(--color-hue) var(--color-saturation) var(--color-lightness) /
+      var(--color-opacity)
+  );
+
   --color-background-hue: var(--grey-hue);
   --color-background-saturation: 5%;
   --color-background-lightness: 95%;
@@ -75,6 +85,15 @@
   --color-primary: hsl(
     var(--color-primary-hue) var(--color-primary-saturation)
       var(--color-primary-lightness) / var(--color-primary-opacity)
+  );
+
+  --color-primary-text-hue: var(--color-primary-hue);
+  --color-primary-text-saturation: var(--color-primary-saturation);
+  --color-primary-text-lightness: 15%;
+  --color-primary-text-opacity: var(--color-primary-opacity);
+  --color-primary-text: hsl(
+    var(--color-primary-text-hue) var(--color-primary-text-saturation)
+      var(--color-primary-text-lightness) / var(--color-primary-text-opacity)
   );
 
   --color-primary-inverse: var(--white);
