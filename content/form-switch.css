@@ -11,8 +11,7 @@
   --color: var(--switch-color);
   --switch-height: 1.25em;
   --switch-width: 2.25em;
-  --transition-time: 0.2;
-  --switch-transition: var(--transition-time) var(--transition-function);
+  --switch-transition: var(--transition);
 
   width: var(--switch-width);
   height: var(--switch-height);
@@ -47,6 +46,6 @@
 }
 
 [type="checkbox"][role="switch"]:checked::before {
-  margin-left: calc(var(--switch-width) * 0.5 - var(--border-width));
+  /* margin-left: calc(var(--switch-width) * 0.5 - var(--border-width)); */
   margin-inline-start: calc(var(--switch-width) * 0.5 - var(--border-width));
 }
