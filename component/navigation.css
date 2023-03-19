@@ -6,7 +6,7 @@
   --header-border-style: var(--border-style);
 }
 
-:is(body, #body) > header:has(> nav) {
+:is(body, #body, #root) > header:has(> nav) {
   background-color: var(--header-nav-background-color);
   color: var(--header-nav-color);
   border-bottom: var(--header-border-width) var(--header-border-style)
@@ -15,29 +15,30 @@
   padding: 0 var(--spacing-block-horizontal);
 }
 
-:is(body, #body) > footer:has(> nav) {
+:is(body, #body, #root) > footer:has(> nav) {
   background-color: var(--header-nav-background-color);
   --color: var(--header-nav-color);
   border-top: var(--header-border-width) var(--header-border-style)
     var(--header-border-color);
-  padding: 0 var(--spacing-block-horizontal);
+  padding-left: var(--spacing-block-horizontal);
+  padding-right: var(--spacing-block-horizontal);
 }
 
-:is(body, #body):has(> aside) {
+:is(body, #body, #root):has(> aside) {
   display: flex;
   flex-wrap: wrap;
 }
 
-:is(body, #body):has(> aside) :is(header, footer) {
+:is(body, #body, #root):has(> aside) :is(header, footer) {
   flex-basis: 100%;
   flex-grow: 1;
 }
 
-:is(body, #body):has(> aside) main {
+:is(body, #body, #root):has(> aside) main {
   flex: 1;
 }
 
-:is(body, #body) > aside:has(> nav) {
+:is(body, #body, #root) > aside:has(> nav) {
   float: left;
 }
 
