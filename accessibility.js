@@ -12,9 +12,11 @@ function setTab(radio) {
   node.setAttribute("aria-selected", radio.checked ?? false);
 }
 
-[...document.querySelectorAll('[role="tab"] input[type="radio"]')].forEach(
-  (tab) => {
-    tab.addEventListener("change", tabChange);
-    setTab(tab);
-  }
-);
+document.addEventListener("DOMContentLoaded", () => {
+  [...document.querySelectorAll('[role="tab"] input[type="radio"]')].forEach(
+    (tab) => {
+      tab.addEventListener("change", tabChange);
+      setTab(tab);
+    }
+  );
+});
