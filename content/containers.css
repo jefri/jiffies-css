@@ -20,6 +20,30 @@ body,
   padding: 0 var(--spacing-block-horizontal);
 }
 
+:is(body, #body, #root) > :is(header) {
+  order: 10;
+}
+
+:is(body, #body, #root) > :is(aside:has(> nav)) {
+  order: 20;
+}
+
+:is(body, #body, #root) > :is(main) {
+  order: 30;
+}
+
+:is(body, #body, #root) > :is(footer) {
+  order: 40;
+}
+
+:is(body, #body, #root) > :is(main:first-of-type) {
+  padding-top: var(--spacing-block-vertical);
+}
+
+:is(body, #body, #root) > :is(footer:first-of-type) {
+  padding-top: calc(var(--spacing-block-vertical) / 2);
+}
+
 @media (min-width: 0px) {
   :is(body, #body, #root) > :is(main, header, footer) {
     padding: 0;
