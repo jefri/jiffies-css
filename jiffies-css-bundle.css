@@ -255,11 +255,11 @@
   }
 
   html {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-family: var(--font-family);
   }
 
   code, kbd, samp, pre {
-    font-family: ui-monospace, Menlo, Consolas, Roboto Mono, Ubuntu Monospace, Noto Mono, Oxygen Mono, Liberation Mono, monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    font-family: var(--font-family-monospace);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -277,7 +277,7 @@
   hr {
     height: 0;
     border: 0;
-    border-top: var(--sizing-block-border-width) solid var(--color-muted-border);
+    border-top: var(--sizing-border-width) solid var(--color-border-muted);
     color: inherit;
   }
 
@@ -294,8 +294,9 @@
   :root {
     --font-family-base: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-family-monospace: ui-monospace, "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace", "Noto Mono", "Oxygen Mono", "Liberation Mono", monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-family-table: var(--font-family);
     --font-family: var(--font-family-base);
+    --font-family-heading: var(--font-family);
+    --font-family-table: var(--font-family);
     --font-weight: 400;
     --font-size: 16px;
     --font-size-small: .85rem;
@@ -305,13 +306,13 @@
 
   :root {
     color-scheme: light;
-    --grey-hue: 205deg;
+    --white: #fff;
+    --black: #000;
     --blue-hue: 195deg;
     --amber-hue: 45deg;
     --red-hue: 5deg;
     --green-hue: 125deg;
-    --white: #fff;
-    --black: #000;
+    --grey-hue: 205deg;
     --grey-s: 30%;
     --grey-l: 15%;
     --grey: hsl(var(--grey-hue) var(--grey-s) var(--grey-l));
@@ -331,7 +332,7 @@
     --color: hsl( var(--color-hue) var(--color-saturation) var(--color-lightness) / var(--color-opacity));
     --color-background-hue: var(--grey-hue);
     --color-background-saturation: 5%;
-    --color-background-lightness: 95%;
+    --color-background-lightness: 98%;
     --color-background-opacity: 1;
     --color-background: hsl( var(--color-background-hue) var(--color-background-saturation) var(--color-background-lightness) / var(--color-background-opacity));
     --color-muted-hue: var(--grey-hue);
@@ -344,33 +345,28 @@
     --color-border-lightness: 25%;
     --color-border-opacity: 1;
     --color-border: hsl( var(--color-border-hue) var(--color-border-saturation) var(--color-border-lightness) / var(--color-border-opacity));
-    --color-muted-border-hue: var(--color-muted-hue);
-    --color-muted-border-saturation: var(--color-muted-saturation);
-    --color-muted-border-lightness: 80%;
-    --color-muted-border-opacity: 1;
-    --color-muted-border: hsl( var(--color-muted-border-hue) var(--color-muted-border-saturation) var(--color-muted-border-lightness) / var(--color-muted-border-opacity));
+    --color-border-muted-hue: var(--color-muted-hue);
+    --color-border-muted-saturation: var(--color-muted-saturation);
+    --color-border-muted-lightness: 80%;
+    --color-border-muted-opacity: 1;
+    --color-border-muted: hsl( var(--color-border-muted-hue) var(--color-border-muted-saturation) var(--color-border-muted-lightness) / var(--color-border-muted-opacity));
     --color-primary-hue: 115deg;
     --color-primary-saturation: 90%;
     --color-primary-lightness: 30%;
     --color-primary-opacity: 1;
     --color-primary: hsl( var(--color-primary-hue) var(--color-primary-saturation) var(--color-primary-lightness) / var(--color-primary-opacity));
     --color-primary-inverse: var(--white);
-    --color-primary-hover-hue: var(--color-primary-hue);
-    --color-primary-hover-saturation: 90%;
-    --color-primary-hover-lightness: 30%;
-    --color-primary-hover-opacity: var(--color-primary-opacity);
-    --color-primary-hover: hsl( var(--color-primary-hover-hue) var(--color-primary-hover-saturation) var(--color-primary-hover-lightness) / var(--color-primary-hover-opacity));
     --color-primary-focus-hue: var(--color-primary-hue);
     --color-primary-focus-saturation: 90%;
     --color-primary-focus-lightness: 30%;
     --color-primary-focus-opacity: var(--color-focus-opacity);
     --color-primary-focus: hsl( var(--color-primary-focus-hue) var(--color-primary-focus-saturation) var(--color-primary-focus-lightness) / var(--color-primary-focus-opacity));
-    --color-accent-hue: 105deg;
+    --color-accent-hue: var(--color-primary-hue);
     --color-accent-saturation: 100%;
     --color-accent-lightness: 85%;
     --color-accent-opacity: 1;
     --color-accent: hsl( var(--color-accent-hue) var(--color-accent-saturation) var(--color-accent-lightness) / var(--color-accent-opacity));
-    --color-secondary-hue: var(--grey-hue);
+    --color-secondary-hue: calc(var(--color-primary-hue)  + 60deg);
     --color-secondary-saturation: 15%;
     --color-secondary-lightness: 40%;
     --color-secondary-opacity: 1;
@@ -387,9 +383,9 @@
     --color-secondary-focus-opacity: var(--color-focus-opacity);
     --color-secondary-focus: hsl( var(--color-secondary-focus-hue) var(--color-secondary-focus-saturation) var(--color-secondary-focus-lightness) / var(--color-secondary-focus-opacity));
     --color-secondary-inverse: var(--color-primary-inverse);
-    --color-contrast-hue: var(--grey-hue);
-    --color-contrast-saturation: 30%;
-    --color-contrast-lightness: 15%;
+    --color-contrast-hue: calc(var(--color-primary-hue)  - 120deg);
+    --color-contrast-saturation: 55%;
+    --color-contrast-lightness: 30%;
     --color-contrast-opacity: 1;
     --color-contrast: hsl( var(--color-contrast-hue) var(--color-contrast-saturation) var(--color-contrast-lightness) / var(--color-contrast-opacity));
     --color-contrast-hover-hue: var(--color-contrast-hue);
@@ -423,7 +419,7 @@
     --color-mark-background-lightness: 90%;
     --color-mark-background-opacity: 1;
     --color-mark-background: hsl( var(--color-mark-background-hue) var(--color-mark-background-saturation) var(--color-mark-background-lightness) / var(--color-mark-background-opacity));
-    --color-blockquote-border: var(--color-muted-border);
+    --color-blockquote-border: var(--color-border-muted);
     --color-blockquote-footer: var(--color-muted);
     --color-form-element-background: transparent;
     --color-form-element-border: hsl(var(--grey-hue) 14% 68%);
@@ -434,7 +430,7 @@
     --color-form-element-focus: var(--color-primary-focus);
     --color-form-element-disabled-background: hsl(var(--grey-hue) 18% 86%);
     --color-form-element-disabled-border: hsl(var(--grey-hue) 14% 68%);
-    --form-element-disabled-opacity: .5;
+    --opacity-form-element-disabled: .5;
     --color-invalid-hue: var(--red-hue);
     --color-invalid-saturation: 65%;
     --color-invalid-lightness: 45%;
@@ -465,6 +461,11 @@
     --color-valid-focus-lightness: calc(var(--color-valid-lightness)  + 5%);
     --color-valid-focus-opacity: var(--color-focus-opacity);
     --color-valid-focus: hsl( var(--color-valid-focus-hue) var(--color-valid-focus-saturation) / var(--color-valid-focus-lightness) var(--color-valid-focus-opacity));
+    --color-hyperlink: blue;
+    --color-hyperlink-visted: purple;
+    --color-hyperlink-focus: red;
+    --color-hyperlink-hover: red;
+    --hyperlink-text-decoration: underline;
   }
 
   :root {
@@ -509,11 +510,11 @@
     --border-color: var(--card-border-color);
     --border-width: var(--sizing-border-width);
     --border: var(--border-width) var(--border-style) var(--border-color);
-    --border-muted: var(--border-width) var(--border-style) var(--color-muted-border);
+    --border-muted: var(--border-width) var(--border-style) var(--color-border-muted);
     --border-empty: var(--border-width) solid transparent;
     --card-box-shadow: var(--box-shadow-elevation-1);
     --card-background-color: var(--color-background);
-    --card-inner-border-color: var(--color-muted-border);
+    --card-inner-border-color: var(--color-border-muted);
   }
 
   :root {
@@ -534,49 +535,79 @@
     --body-background-color: var(--color-background);
   }
 
-  body, #body {
+  body, #body, #root {
     width: 100%;
     background-color: var(--body-background-color);
   }
 
-  :is(body, #body) > :is(main, header, footer).fluid {
+  :is(body, #body, #root) > :is(main, header, footer).fluid {
     width: 100%;
     max-width: 100%;
   }
 
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     padding: 0 var(--spacing-block-horizontal);
     margin: 0 auto;
   }
 
+  :is(body, #body, #root) > :is(header) {
+    order: 10;
+  }
+
+  :is(body, #body, #root) > :is(aside:has( > nav)) {
+    order: 20;
+  }
+
+  :is(body, #body, #root) > :is(main) {
+    order: 30;
+  }
+
+  :is(body, #body, #root) > :is(footer) {
+    order: 40;
+  }
+
+  :is(body, #body, #root) > :is(main:first-of-type) {
+    padding-top: var(--spacing-block-vertical);
+  }
+
+  :is(body, #body, #root) > :is(footer:first-of-type) {
+    padding-top: calc(var(--spacing-block-vertical) / 2);
+  }
+
   @media (min-width: 0) {
-    :is(body, #body) > :is(main, header, footer) {
+    :is(body, #body, #root) > :is(main, header, footer) {
       padding: 0;
     }
   }
 
   @media (min-width: 425px) {
-    :is(body, #body) > :is(main, header, footer) {
+    :is(body, #body, #root) > :is(main, header, footer) {
       max-width: 425px;
       padding: 0 var(--spacing--block-horizontal);
     }
   }
 
   @media (min-width: 768px) {
-    :is(body, #body) > :is(main, header, footer) {
+    :is(body, #body, #root) > :is(main, header, footer) {
       max-width: 596.5px;
     }
   }
 
   @media (min-width: 1024px) {
-    :is(body, #body) > :is(main, header, footer) {
+    :is(body, #body, #root) > :is(main, header, footer) {
       max-width: 896px;
     }
   }
 
   @media (min-width: 1440px) {
-    :is(body, #body) > :is(main, header, footer) {
+    :is(body, #body, #root) > :is(main, header, footer) {
       max-width: 1232px;
+    }
+  }
+
+  @media (min-width: 2560px) {
+    :is(body, #body, #root) > :is(main, header, footer) {
+      max-width: 2170px;
     }
   }
 
@@ -589,6 +620,10 @@
     font-size: var(--font-size);
   }
 
+  :where(address, blockquote, dl, figure, form, ol, p, pre:not(:has( > code.hljs)), table, ul):last-child {
+    margin-bottom: 0;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     --font-weight: 700;
     margin-top: 0;
@@ -596,7 +631,11 @@
     color: var(--color);
     font-weight: var(--font-weight);
     font-size: calc(var(--font-size) * 1rem);
-    font-family: var(--font-family);
+    font-family: var(--font-family-header);
+  }
+
+  :where(h1, h2, h3, h4, h5, h6):last-child {
+    margin-bottom: 0;
   }
 
   h1 {
@@ -643,11 +682,11 @@
     margin-bottom: var(--spacing-typography-vertical);
   }
 
-  hgroup > * {
+  hgroup > :where(h1, h2, h3, h4, h5, h6) {
     margin-bottom: 0;
   }
 
-  hgroup > :last-child {
+  hgroup > :where(h1, h2, h3, h4, h5, h6):last-child {
     --color: var(--color-muted);
     --font-weight: unset;
     font-family: unset;
@@ -671,8 +710,8 @@
     margin: var(--spacing-typography-vertical) 0;
     padding: var(--spacing);
     border-right: none;
-    border-left: var(--sizing-block-border-width) solid var(--color-blockquote-border);
-    border-inline-start: var(--sizing-block-border-width) solid var(--color-blockquote-border);
+    border-left: var(--sizing-border-width) solid var(--color-blockquote-border);
+    border-inline-start: var(--sizing-border-width) solid var(--color-blockquote-border);
     border-inline-end: none;
     display: block;
   }
@@ -683,21 +722,22 @@
   }
 
   a, [role="link"] {
-    --color: var(--color-primary);
+    --color: var(--color-hyperlink);
     --background-color: transparent;
-    background-color: var(--background-color);
+    --text-decoration: var(--hyperlink-text-decoration);
     color: var(--color);
+    background-color: var(--background-color);
     text-decoration: var(--text-decoration);
     transition: background-color var(--transition), color var(--transition), text-decoration var(--transition), box-shadow var(--transition);
     outline: none;
   }
 
-  a:is([aria-current], :hover, :active, :focus), [role="link"]:is([aria-current], :hover, :active, :focus) {
-    --color: var(--color-primary-hover);
+  a:is([aria-current], :hover, :focus), [role="link"]:is([aria-current], :active, :focus) {
+    --color: var(--color-hyperlink-hover);
   }
 
-  a:is(:focus), [role="link"]:is(:focus) {
-    --background-color: var(--color-primary-focus);
+  a:is(:visited), [role="link"]:is(:visited) {
+    --color: var(--color-hyperlink-visited);
   }
 
   a.secondary, [role="link"].secondary {
@@ -818,11 +858,18 @@
     outline: none;
   }
 
-  button:is([aria-current], :hover, :active, :focus), input[type="submit"]:is([aria-current], :hover, :active, :focus), input[type="button"]:is([aria-current], :hover, :active, :focus), input[type="reset"]:is([aria-current], :hover, :active, :focus), [role="button"] {
-    --background-color: var(--color-primary-hover);
-    --border-color: var(--color-primary-hover);
+  button:is([aria-current], :hover, :focus), input[type="submit"]:is([aria-current], :hover, :focus), input[type="button"]:is([aria-current], :hover, :focus), input[type="reset"]:is([aria-current], :hover, :focus), [role="button"]:is([aria-current], :hover, :focus) {
+    --background-color: var(--color-accent);
+    --border-color: var(--color-accent);
     --box-shadow: var(--box-shadow-button-hover, 0 0 0 #0000);
-    --color: var(--color-primary-inverse);
+    --color: var(--color-accent-inverse);
+  }
+
+  button:is(:active), input[type="submit"]:is(:active), input[type="button"]:is(:active), input[type="reset"]:is(:active), [role="button"]:is(:active) {
+    --background-color: var(--color-secondary);
+    --border-color: var(--color-secondary);
+    --box-shadow: var(--box-shadow-button-hover, 0 0 0 #0000);
+    --color: var(--color-secondary-inverse);
   }
 
   button:focus, input[type="submit"]:focus, input[type="button"]:focus, input[type="reset"]:focus, [role="button"]:focus {
@@ -894,12 +941,15 @@
   }
 
   :root {
-    --form-element-invalid-border-color: var(--color-invalid);
-    --form-element-invalid-active-border-color: var(--color-invalid-active);
-    --form-element-invalid-focus-color: var(--color-invalid-focus);
     --form-element-valid-border-color: var(--color-valid);
     --form-element-valid-active-border-color: var(--color-valid-active);
     --form-element-valid-focus-color: var(--color-valid-focus);
+    --form-element-invalid-border-color: var(--color-invalid);
+    --form-element-invalid-active-border-color: var(--color-invalid-active);
+    --form-element-invalid-focus-color: var(--color-invalid-focus);
+    --form-element-disabled-border-color: var(--color-disabled);
+    --form-element-disabled-active-border-color: var(--color-disabled-active);
+    --form-element-disabled-focus-color: var(--color-disabled-focus);
   }
 
   input:not(:is([type="checkbox"], [type="radio"], [type="range"], [type="submit"], [type="reset"], [type="button"])) {
@@ -935,7 +985,7 @@
   input, select, textarea {
     --background-color: var(--color-form-element-background);
     --border-color: var(--color-form-element-border);
-    --color: var(--color-form-element-color);
+    --color: var(--color-form-element);
     --box-shadow: none;
     border: var(--border-width) solid var(--border-color);
     border-radius: var(--sizing-border-radius);
@@ -957,9 +1007,9 @@
   }
 
   input:not([type="submit"]):not([type="button"]):not([type="reset"])[disabled], select[disabled], textarea[disabled], :where(fieldset[disabled]) :is(input:not([type="submit"]):not([type="button"]):not([type="reset"]), select, textarea) {
-    --background-color: var(--form-element-disabled-background-color);
-    --border-color: var(--form-element-disabled-border-color);
-    opacity: var(--form-element-disabled-opacity);
+    --background-color: var(--color-form-element-disabled-background);
+    --border-color: var(--color-form-element-disabled-border);
+    opacity: var(--opacity-form-element-disabled);
     pointer-events: none;
   }
 
@@ -1074,8 +1124,7 @@
     --color: var(--switch-color);
     --switch-height: 1.25em;
     --switch-width: 2.25em;
-    --transition-time: .2;
-    --switch-transition: var(--transition-time) var(--transition-function);
+    --switch-transition: var(--transition);
     width: var(--switch-width);
     height: var(--switch-height);
     border: var(--border-width) solid var(--border-color);
@@ -1109,7 +1158,6 @@
   }
 
   [type="checkbox"][role="switch"]:checked:before {
-    margin-left: calc(var(--switch-width) * .5 - var(--border-width));
     margin-inline-start: calc(var(--switch-width) * .5 - var(--border-width));
   }
 
@@ -1175,12 +1223,16 @@
 
   article > header {
     padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    padding-bottom: calc(var(--spacing-block-vertical) / 2);
     border-bottom: var(--card-inner-border);
-    padding-bottom: 0;
   }
 
   article > main {
-    padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    padding: calc(var(--spacing-block-vertical) / 2) var(--spacing-block-horizontal);
+  }
+
+  article > main:last-child {
+    padding-bottom: var(--spacing-block-vertical);
   }
 
   article > footer {
@@ -1189,11 +1241,19 @@
     padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
   }
 
+  :root {
+    --accordion-border-color: var(--color-border-muted);
+  }
+
   details {
-    margin-bottom: var(--spacing);
-    padding-bottom: var(--spacing);
+    margin-bottom: calc(var(--spacing-block-vertical) / 2);
+    padding-bottom: calc(var(--spacing-block-vertical) / 2);
     border-bottom: var(--border-width) solid var(--accordion-border-color);
     display: block;
+  }
+
+  details:last-child {
+    margin-bottom: 0;
   }
 
   details summary {
@@ -1373,52 +1433,67 @@
     --header-border-style: var(--border-style);
   }
 
-  :is(body, #body) > header:has( > nav) {
+  :is(body, #body, #root) > header:has( > nav) {
     background-color: var(--header-nav-background-color);
     color: var(--header-nav-color);
     border-bottom: var(--header-border-width) var(--header-border-style) var(--header-border-color);
     box-shadow: var(--box-shadow-elevation-2);
+    padding: 0 var(--spacing-block-horizontal);
   }
 
-  :is(body, #body) > footer:has( > nav) {
+  :is(body, #body, #root) > footer:has( > nav) {
     background-color: var(--header-nav-background-color);
     --color: var(--header-nav-color);
     border-top: var(--header-border-width) var(--header-border-style) var(--header-border-color);
+    padding-left: var(--spacing-block-horizontal);
+    padding-right: var(--spacing-block-horizontal);
   }
 
-  :is(body, #body):has( > aside) {
+  :is(body, #body, #root):has( > aside) {
     flex-wrap: wrap;
     display: flex;
   }
 
-  :is(body, #body):has( > aside) :is(header, footer) {
+  :is(body, #body, #root):has( > aside) :is(header, footer) {
     flex-grow: 1;
     flex-basis: 100%;
   }
 
-  :is(body, #body):has( > aside) main {
+  :is(body, #body, #root):has( > aside) main {
     flex: 1;
   }
 
-  :is(body, #body) > aside:has( > nav) {
+  :is(body, #body, #root) > aside:has( > nav) {
     float: left;
   }
 
   nav, nav > ul {
+    flex-wrap: wrap;
     display: flex;
   }
 
-  nav > ul:first-of-type {
+  nav > ul:first-child {
     margin-top: var(--spacing-block-vertical);
   }
 
-  nav > ul:not(:last-of-type) {
+  nav > ul:not(:last-child) {
     margin-bottom: var(--spacing-block-vertical);
   }
 
-  aside :is(nav, nav > ul) {
-    flex-direction: column;
-    align-items: flex-start;
+  aside nav > ul {
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 768px) {
+    aside :is(nav, nav > ul) {
+      flex-flow: column;
+      align-items: flex-start;
+    }
+
+    nav > ul li {
+      width: 100%;
+      padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
+    }
   }
 
   aside nav {
@@ -1427,7 +1502,6 @@
   }
 
   aside nav ul li a {
-    color: var(--color);
     padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
   }
 
@@ -1444,18 +1518,24 @@
   }
 
   nav > ul li {
-    width: 100%;
-    padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
     transition: background-color var(--timing) ease-in-out;
     --background-color: transparent;
     background-color: var(--background-color);
+    padding: 0 var(--spacing-typography-horizontal);
+    transition: padding var(--transition);
     margin: 0;
     display: inline-block;
   }
 
+  nav > ul li:hover {
+    padding-left: calc(2 * var(--spacing-typography-horizontal));
+    padding-right: 0;
+  }
+
   nav > ul li a {
-    color: var(--header-nav-color);
+    --color: var(--color-primary);
     font-size: var(--font-size-larger);
+    --text-decoration: none;
     transition: color linear;
   }
 
@@ -1464,7 +1544,16 @@
   }
 
   nav > ul li a:hover {
-    --color: var(--color-primary-inverse);
+    --color: var(--color-secondary);
+  }
+
+  :where(header, footer) > nav > ul li a {
+    --color: var(--header-nav-color);
+  }
+
+  :where(header, footer) > nav > :where(h1, h2, h3, h4, h5, h6) a {
+    --color: var(--header-nav-color);
+    --text-decoration: none;
   }
 
   dl {
@@ -1491,7 +1580,7 @@
 
   dd, dt {
     padding: var(--spacing-form-element-vertical) var(--spacing-form-element-horizontal);
-    border: 1px solid var(--color-muted-border-color);
+    border: 1px solid var(--color-border-muted-color);
   }
 
   :is(dd, dt):nth-of-type(2n+1) {
