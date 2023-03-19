@@ -47,11 +47,11 @@ nav > ul {
   flex-wrap: wrap;
 }
 
-nav > ul:first-of-type {
+nav > ul:first-child {
   margin-top: var(--spacing-block-vertical);
 }
 
-nav > ul:not(:last-of-type) {
+nav > ul:not(:last-child) {
   margin-bottom: var(--spacing-block-vertical);
 }
 
