@@ -101,13 +101,11 @@ nav > ul li {
   --background-color: transparent;
   background-color: var(--background-color);
   padding: 0 var(--spacing-typography-horizontal);
+  transition: padding var(--transition);
 }
 
-nav > ul li:first-of-type {
-  padding-left: 0;
-}
-
-nav > ul li:last-of-type {
+nav > ul li:hover {
+  padding-left: calc(2 * var(--spacing-typography-horizontal));
   padding-right: 0;
 }
 
@@ -122,5 +120,5 @@ nav > ul li:has(a:hover) {
 }
 
 nav > ul li a:hover {
-  --color: var(--color-primary-inverse);
+  --color: var(--color-secondary);
 }
