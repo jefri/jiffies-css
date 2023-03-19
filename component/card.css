@@ -15,12 +15,17 @@ article {
 article > header {
   /* margin-bottom: var(--spacing-block-vertical); */
   padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
-  padding-bottom: 0;
+  padding-bottom: calc(var(--spacing-block-vertical) / 2);
   border-bottom: var(--card-inner-border);
 }
 
 article > main {
-  padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  padding: calc(var(--spacing-block-vertical) / 2)
+    var(--spacing-block-horizontal);
+}
+
+article > main:last-child {
+  padding-bottom: var(--spacing-block-vertical);
 }
 
 article > footer {

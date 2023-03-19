@@ -4,9 +4,13 @@
 
 details {
   display: block;
-  margin-bottom: var(--spacing);
-  padding-bottom: var(--spacing);
+  margin-bottom: calc(var(--spacing-block-vertical) / 2);
+  padding-bottom: calc(var(--spacing-block-vertical) / 2);
   border-bottom: var(--border-width) solid var(--accordion-border-color);
+}
+
+details:last-child {
+  margin-bottom: 0;
 }
 
 details summary {

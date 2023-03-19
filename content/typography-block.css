@@ -15,6 +15,20 @@ ul {
   font-weight: var(--font-weight);
   font-size: var(--font-size);
 }
+:where(
+    address,
+    blockquote,
+    dl,
+    figure,
+    form,
+    ol,
+    p,
+    pre:not(:has(> code.hljs)),
+    table,
+    ul
+  ):last-child {
+  margin-bottom: 0;
+}
 
 h1,
 h2,
@@ -31,6 +45,10 @@ h6 {
   font-weight: var(--font-weight);
   font-size: calc(var(--font-size) * 1rem);
   font-family: var(--font-family);
+}
+
+:where(h1, h2, h3, h4, h5, h6):last-child {
+  margin-bottom: 0;
 }
 
 h1 {
@@ -72,10 +90,10 @@ h6 {
 hgroup {
   margin-bottom: var(--spacing-typography-vertical);
 }
-hgroup > * {
+hgroup > :where(h1, h2, h3, h4, h5, h6) {
   margin-bottom: 0;
 }
-hgroup > *:last-child {
+hgroup > :where(h1, h2, h3, h4, h5, h6):last-child {
   --color: var(--color-muted);
   --font-weight: unset;
   font-size: 1rem;
