@@ -57,3 +57,9 @@ label:has([type="checkbox"], [type="radio"]) {
 :is([type="checkbox"], [type="radio"]):checked[aria-invalid="true"] {
   --border-color: var(--form-element-invalid-border-color);
 }
+
+/* TODO range
+https://css-tricks.com/styling-cross-browser-compatible-range-inputs-css/
+https://codepen.io/vsync/pen/mdEJMLv?editors=1100
+https://github.com/picocss/pico/blob/master/scss/content/_form-alt-input-types.scss
+*/

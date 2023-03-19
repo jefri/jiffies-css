@@ -92,11 +92,31 @@
                 background-color: var(--card-background-color);
               "
             ><code>:root {
-  --color-primary-hue: 225deg;
-  --sizing: 0.8;
+  --color-primary-hue: <input id="primary-hue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg;
+  --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizing-out">1</span>;
 }</code></pre>
           </li>
         </ul>
+        <style id="primary-hue-style"></style>
+        <script type="application/javascript">
+          var primaryHueInput = document.getElementById("primary-hue");
+          var primaryHueStyle = document.getElementById("primary-hue-style");
+          primaryHueInput.addEventListener("change", () => {
+            const hue = Number(primaryHueInput.value);
+            primaryHueStyle.textContent = `:root { --color-primary-hue: ${hue}deg; }`;
+          });
+        </script>
+        <style id="sizing-style"></style>
+        <script type="application/javascript">
+          var sizingInput = document.getElementById("sizing");
+          var sizingStyle = document.getElementById("sizing-style");
+          var sizingOut = document.getElementById("sizing-out");
+          sizingInput.addEventListener("change", () => {
+            const sizing = Number(sizingInput.value);
+            sizingStyle.textContent = `:root { --sizing: ${sizing}; }`;
+            sizingOut.textContent = sizing;
+          });
+        </script>
       </section>
 
       <article id="overview">
