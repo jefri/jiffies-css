@@ -1,13 +1,14 @@
 :root {
   color-scheme: light;
 
-  --grey-hue: 205deg;
+  --white: hsl(0, 100%, 100%);
+  --black: hsl(0, 100%, 0%);
+
   --blue-hue: 195deg;
   --amber-hue: 45deg;
   --red-hue: 5deg;
   --green-hue: 125deg;
-  --white: hsl(0, 100%, 100%);
-  --black: hsl(0, 100%, 0%);
+  --grey-hue: 205deg;
   --grey-s: 30%;
   --grey-l: 15%;
   --grey: hsl(var(--grey-hue) var(--grey-s) var(--grey-l));
@@ -34,7 +35,7 @@
 
   --color-background-hue: var(--grey-hue);
   --color-background-saturation: 5%;
-  --color-background-lightness: 95%;
+  --color-background-lightness: 98%;
   --color-background-opacity: 1;
   --color-background: hsl(
     var(--color-background-hue) var(--color-background-saturation)
@@ -88,7 +89,7 @@
       var(--color-primary-focus-lightness) / var(--color-primary-focus-opacity)
   );
 
-  --color-accent-hue: 105deg;
+  --color-accent-hue: var(--color-primary-hue);
   --color-accent-saturation: 100%;
   --color-accent-lightness: 85%;
   --color-accent-opacity: 1;
@@ -97,7 +98,7 @@
       var(--color-accent-lightness) / var(--color-accent-opacity)
   );
 
-  --color-secondary-hue: var(--grey-hue);
+  --color-secondary-hue: calc(var(--color-primary-hue) + 60deg);
   --color-secondary-saturation: 15%;
   --color-secondary-lightness: 40%;
   --color-secondary-opacity: 1;
@@ -129,9 +130,9 @@
 
   --color-secondary-inverse: var(--color-primary-inverse);
 
-  --color-contrast-hue: var(--grey-hue);
-  --color-contrast-saturation: 30%;
-  --color-contrast-lightness: 15%;
+  --color-contrast-hue: calc(var(--color-primary-hue) - 120deg);
+  --color-contrast-saturation: 55%;
+  --color-contrast-lightness: 30%;
   --color-contrast-opacity: 1;
   --color-contrast: hsl(
     var(--color-contrast-hue) var(--color-contrast-saturation)
