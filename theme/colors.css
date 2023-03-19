@@ -79,15 +79,6 @@
 
   --color-primary-inverse: var(--white);
 
-  --color-primary-hover-hue: var(--color-primary-hue);
-  --color-primary-hover-saturation: 90%;
-  --color-primary-hover-lightness: 30%;
-  --color-primary-hover-opacity: var(--color-primary-opacity);
-  --color-primary-hover: hsl(
-    var(--color-primary-hover-hue) var(--color-primary-hover-saturation)
-      var(--color-primary-hover-lightness) / var(--color-primary-hover-opacity)
-  );
-
   --color-primary-focus-hue: var(--color-primary-hue);
   --color-primary-focus-saturation: 90%;
   --color-primary-focus-lightness: 30%;
@@ -218,7 +209,7 @@
   --color-form-element-focus: var(--color-primary-focus);
   --color-form-element-disabled-background: hsl(var(--grey-hue) 18% 86%);
   --color-form-element-disabled-border: hsl(var(--grey-hue) 14% 68%);
-  --form-element-disabled-opacity: 0.5;
+  --opacity-form-element-disabled: 0.5;
 
   --color-invalid-hue: var(--red-hue);
   --color-invalid-saturation: 65%;

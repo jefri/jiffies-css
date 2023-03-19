@@ -1,13 +1,26 @@
 :root {
-  --form-element-invalid-border-color: var(--color-invalid);
-  --form-element-invalid-active-border-color: var(--color-invalid-active);
-  --form-element-invalid-focus-color: var(--color-invalid-focus);
   --form-element-valid-border-color: var(--color-valid);
   --form-element-valid-active-border-color: var(--color-valid-active);
   --form-element-valid-focus-color: var(--color-valid-focus);
+  --form-element-invalid-border-color: var(--color-invalid);
+  --form-element-invalid-active-border-color: var(--color-invalid-active);
+  --form-element-invalid-focus-color: var(--color-invalid-focus);
+  --form-element-disabled-border-color: var(--color-disabled);
+  --form-element-disabled-active-border-color: var(--color-disabled-active);
+  --form-element-disabled-focus-color: var(--color-disabled-focus);
 }
 
-input:not(:is([type="checkbox"], [type="radio"], [type="range"], [type="submit"], [type="reset"], [type="button"], )) {
+input:not(
+    :is(
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="submit"],
+        [type="reset"],
+        [type="button"],
+
+      )
+  ) {
   height: calc(
     (1rem * var(--line-height)) + (var(--spacing-form-element-vertical) * 2) +
       (var(--sizing-border-width) * 2)
@@ -28,7 +41,16 @@ fieldset legend {
   font-weight: var(--form-label-font-weight, var(--font-weight));
 }
 
-input:not(:is([type="checkbox"], [type="radio"], [type="submit"], [type="reset"], [type="button"], )),
+input:not(
+    :is(
+        [type="checkbox"],
+        [type="radio"],
+        [type="submit"],
+        [type="reset"],
+        [type="button"],
+
+      )
+  ),
 select,
 textarea {
   width: 100%;
@@ -38,7 +60,9 @@ textarea {
   font-family: var(--font-family-monospace);
 }
 
-input:not(:is([type="checkbox"], [type="radio"], [type="range"], [type="file"], ))
+input:not(
+    :is([type="checkbox"], [type="radio"], [type="range"], [type="file"], )
+  )
   select,
 textarea {
   appearance: none;
@@ -51,7 +75,7 @@ select,
 textarea {
   --background-color: var(--color-form-element-background);
   --border-color: var(--color-form-element-border);
-  --color: var(--color-form-element-color);
+  --color: var(--color-form-element);
   --box-shadow: none;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--sizing-border-radius);
@@ -64,13 +88,38 @@ textarea {
     color var(--transition), box-shadow var(--transition);
 }
 
-:where(input:not(:is([type="submit"], [type="button"], [type="reset"], [type="checkbox"], [type="radio"], [readonly])), select, textarea):is(:active, :focus) {
+:where(
+    input:not(
+        :is(
+            [type="submit"],
+            [type="button"],
+            [type="reset"],
+            [type="checkbox"],
+            [type="radio"],
+            [readonly]
+          )
+      ),
+    select,
+    textarea
+  ):is(:active, :focus) {
   --background-color: var(--color-form-element-active-background);
   --border-color: var(--color-form-element-active-border);
 }
 
-:where(input:not(:is([type="submit"], [type="button"], [type="reset"], [type="range"], [type="file"], [readonly]))
-    select, textarea):focus {
+:where(
+    input:not(
+        :is(
+            [type="submit"],
+            [type="button"],
+            [type="reset"],
+            [type="range"],
+            [type="file"],
+            [readonly]
+          )
+      )
+      select,
+    textarea
+  ):focus {
   --box-shadow: 0 0 0 var(--sizing-outline-width)
     var(--color-form-element-focus);
 }
@@ -79,14 +128,20 @@ input:not([type="submit"]):not([type="button"]):not([type="reset"])[disabled],
 select[disabled],
 textarea[disabled],
 :where(fieldset[disabled])
-  :is(input:not([type="submit"]):not([type="button"]):not([type="reset"]), select, textarea) {
-  --background-color: var(--form-element-disabled-background-color);
-  --border-color: var(--form-element-disabled-border-color);
-  opacity: var(--form-element-disabled-opacity);
+  :is(
+    input:not([type="submit"]):not([type="button"]):not([type="reset"]),
+    select,
+    textarea
+  ) {
+  --background-color: var(--color-form-element-disabled-background);
+  --border-color: var(--color-form-element-disabled-border);
+  opacity: var(--opacity-form-element-disabled);
   pointer-events: none;
 }
 
-:where(input, select, textarea):not(:is([type="checkbox"], [type="radio"]))[aria-invalid] {
+:where(input, select, textarea):not(
+    :is([type="checkbox"], [type="radio"])
+  )[aria-invalid] {
   padding-right: calc(var(--spacing-form-element-horizontal) + 1.5rem);
   padding-left: var(--spacing-form-element-horizontal);
   padding-inline-start: var(--spacing-form-element-horizontal);
@@ -96,11 +151,15 @@ textarea[disabled],
   background-repeat: no-repeat;
 }
 
-:where(input, select, textarea):not(:is([type="checkbox"], [type="radio"]))[aria-invalid="false"] {
+:where(input, select, textarea):not(
+    :is([type="checkbox"], [type="radio"])
+  )[aria-invalid="false"] {
   background-image: var(--icon-valid);
 }
 
-:where(input, select, textarea):not(:is([type="checkbox"], [type="radio"]))[aria-invalid="true"] {
+:where(input, select, textarea):not(
+    :is([type="checkbox"], [type="radio"])
+  )[aria-invalid="true"] {
   background-image: var(--icon-invalid);
 }
 
@@ -125,6 +184,10 @@ textarea[disabled],
 
 [dir="rtl"]
   :where(input, select, textarea)
-  :not(:is([type="checkbox"], [type="radio"])):is([aria-invalid], [aria-invalid="true"], [aria-invalid="false"]) {
+  :not(:is([type="checkbox"], [type="radio"])):is(
+    [aria-invalid],
+    [aria-invalid="true"],
+    [aria-invalid="false"]
+  ) {
   background-position: center left 0.75rem;
 }
