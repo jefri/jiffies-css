@@ -4,49 +4,56 @@
 
 /* Containers body (> #root) > { main, header, footer, aside }(.fluid) */
 body,
-#body {
+#body,
+#root {
   width: 100%;
   background-color: var(--body-background-color);
 }
 
-:is(body, #body) > :is(main, header, footer).fluid {
+:is(body, #body, #root) > :is(main, header, footer).fluid {
   width: 100%;
   max-width: 100%;
 }
 
-:is(body, #body) > :is(main, header, footer) {
+:is(body, #body, #root) > :is(main, header, footer) {
   margin: 0 auto;
   padding: 0 var(--spacing-block-horizontal);
 }
 
 @media (min-width: 0px) {
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     padding: 0;
   }
 }
 
 @media (min-width: 425px) {
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     max-width: 425px;
     padding: 0 var(--spacing--block-horizontal);
   }
 }
 
 @media (min-width: 768px) {
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     max-width: 596.5px;
   }
 }
 
 @media (min-width: 1024px) {
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     max-width: 896px;
   }
 }
 
 @media (min-width: 1440px) {
-  :is(body, #body) > :is(main, header, footer) {
+  :is(body, #body, #root) > :is(main, header, footer) {
     max-width: 1232px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :is(body, #body, #root) > :is(main, header, footer) {
+    max-width: 2170px;
   }
 }
 
@@ -57,11 +64,13 @@ $breakpoints: (
   md: 768px,
   lg: 1024px,
   xl: 1440px,
+  4k: 2560px,
 
 $viewports: (
   // 'null' disable the viewport on a breakpoint
   sm: 510px,
   md: 700px,
   lg: 920px,
-  xl: 1130px
+  xl: 1130px,
+  4k: 2170px
 */
