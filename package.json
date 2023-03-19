@@ -1,0 +1,17 @@
+{
+  "name": "@davidsouther/jiffies-css",
+  "version": "1.0.0",
+  "description": "Post-modern full-app CSS reset.",
+  "main": "index.css",
+  "unpkg": "jiffies-css-bundle.min.css",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jefri/jiffies-css.git"
+  },
+  "author": "David Souther <davidsouther+github@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jefri/jiffies-css/issues"
+  },
+  "homepage": "https://github.com/jefri/jiffies-css#readme"
+}
