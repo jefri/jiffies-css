@@ -1,6 +1,6 @@
 /* Card & Panel {article, section} > {main, header, footer} */
 @import "./card.css";
-@import "./accordian.css"; /* Accordion details, summary */
+@import "./accordion.css"; /* Accordion details, summary */
 @import "./tabs.css"; /* Tab details[role=tablist] summary[role=tab] */
 @import "./form-grid.css";
 /* Modal dialog */

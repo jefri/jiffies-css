@@ -1,3 +1,7 @@
+:root {
+  --accordion-border-color: var(--color-border-muted);
+}
+
 details {
   display: block;
   margin-bottom: var(--spacing);

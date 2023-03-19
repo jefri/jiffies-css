@@ -15,10 +15,10 @@
   --border-width: var(--sizing-border-width);
   --border: var(--border-width) var(--border-style) var(--border-color);
   --border-muted: var(--border-width) var(--border-style)
-    var(--color-muted-border);
+    var(--color-border-muted);
   --border-empty: var(--border-width) solid transparent;
 
   --card-box-shadow: var(--box-shadow-elevation-1);
   --card-background-color: var(--color-background);
-  --card-inner-border-color: var(--color-muted-border);
+  --card-inner-border-color: var(--color-border-muted);
 }

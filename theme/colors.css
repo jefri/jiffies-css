@@ -59,13 +59,13 @@
       var(--color-border-lightness) / var(--color-border-opacity)
   );
 
-  --color-muted-border-hue: var(--color-muted-hue);
-  --color-muted-border-saturation: var(--color-muted-saturation);
-  --color-muted-border-lightness: 80%;
-  --color-muted-border-opacity: 1;
-  --color-muted-border: hsl(
-    var(--color-muted-border-hue) var(--color-muted-border-saturation)
-      var(--color-muted-border-lightness) / var(--color-muted-border-opacity)
+  --color-border-muted-hue: var(--color-muted-hue);
+  --color-border-muted-saturation: var(--color-muted-saturation);
+  --color-border-muted-lightness: 80%;
+  --color-border-muted-opacity: 1;
+  --color-border-muted: hsl(
+    var(--color-border-muted-hue) var(--color-border-muted-saturation)
+      var(--color-border-muted-lightness) / var(--color-border-muted-opacity)
   );
 
   --color-primary-hue: 115deg;
@@ -197,7 +197,7 @@
       var(--color-mark-background-opacity)
   );
 
-  --color-blockquote-border: var(--color-muted-border);
+  --color-blockquote-border: var(--color-border-muted);
   --color-blockquote-footer: var(--color-muted);
 
   --color-form-element-background: transparent;
