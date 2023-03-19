@@ -264,4 +264,11 @@
     var(--color-valid-focus-hue) var(--color-valid-focus-saturation) /
       var(--color-valid-focus-lightness) var(--color-valid-focus-opacity)
   );
+
+  --color-hyperlink: blue;
+  --color-hyperlink-visted: purple;
+  /* --color-hyperlink-active: red; */
+  --color-hyperlink-focus: red;
+  --color-hyperlink-hover: red;
+  --hyperlink-text-decoration: underline;
 }

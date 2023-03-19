@@ -79,7 +79,6 @@ aside nav {
 }
 
 aside nav ul li a {
-  color: var(--color);
   padding: var(--spacing-nav-item-vertical) var(--spacing-nav-item-horizontal);
 }
 
@@ -111,9 +110,10 @@ nav > ul li:hover {
 }
 
 nav > ul li a {
-  color: var(--header-nav-color);
+  --color: var(--color-primary);
   font-size: var(--font-size-larger);
   transition: color 0s linear;
+  --text-decoration: none;
 }
 
 nav > ul li:has(a:hover) {
@@ -122,4 +122,13 @@ nav > ul li:has(a:hover) {
 
 nav > ul li a:hover {
   --color: var(--color-secondary);
+}
+
+:where(header, footer) > nav > ul li a {
+  --color: var(--header-nav-color);
+}
+
+:where(header, footer) > nav > :where(h1, h2, h3, h4, h5, h6) a {
+  --color: var(--header-nav-color);
+  --text-decoration: none;
 }

@@ -1,23 +1,30 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 a,
 [role="link"] {
-  --color: var(--color-primary);
+  --color: var(--color-hyperlink);
   --background-color: transparent;
+  --text-decoration: var(--hyperlink-text-decoration);
   outline: none;
-  background-color: var(--background-color);
   color: var(--color);
+  background-color: var(--background-color);
   text-decoration: var(--text-decoration);
   transition: background-color var(--transition), color var(--transition),
     text-decoration var(--transition), box-shadow var(--transition);
 }
 
-a:is([aria-current], :hover, :active, :focus),
-[role="link"]:is([aria-current], :hover, :active, :focus) {
-  --color: var(--color-primary-hover);
+a:is([aria-current], :hover, :focus),
+[role="link"]:is([aria-current], :active, :focus) {
+  --color: var(--color-hyperlink-hover);
 }
+
+a:is(:visited),
+[role="link"]:is(:visited) {
+  --color: var(--color-hyperlink-visited);
+}
+
 a:is(:focus),
 [role="link"]:is(:focus) {
-  --background-color: var(--color-primary-focus);
+  /* --background-color: var(--color-hyperlink-focus); */
 }
 
 a.secondary,
