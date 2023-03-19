@@ -44,7 +44,7 @@ h6 {
   color: var(--color);
   font-weight: var(--font-weight);
   font-size: calc(var(--font-size) * 1rem);
-  font-family: var(--font-family);
+  font-family: var(--font-family-header);
 }
 
 :where(h1, h2, h3, h4, h5, h6):last-child {
@@ -118,9 +118,8 @@ blockquote {
   margin: var(--spacing-typography-vertical) 0;
   padding: var(--spacing);
   border-right: none;
-  border-left: var(--sizing-block-border-width) solid
-    var(--color-blockquote-border);
-  border-inline-start: var(--sizing-block-border-width) solid
+  border-left: var(--sizing-border-width) solid var(--color-blockquote-border);
+  border-inline-start: var(--sizing-border-width) solid
     var(--color-blockquote-border);
   border-inline-end: none;
 }

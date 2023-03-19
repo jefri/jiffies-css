@@ -11,7 +11,7 @@
 hr {
   height: 0;
   border: 0;
-  border-top: var(--sizing-block-border-width) solid var(--color-border-muted);
+  border-top: var(--sizing-border-width) solid var(--color-border-muted);
   color: inherit;
 }
 
