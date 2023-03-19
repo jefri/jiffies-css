@@ -8,12 +8,13 @@
     <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#000000" />
     <!-- <link rel="stylesheet" href="./index.css" /> -->
-    <link rel="stylesheet" href="./jiffies-css-bundle.min.css" />
-    <!-- <link
+    <!-- <link rel="stylesheet" href="./jiffies-css-bundle.min.css" /> -->
+    <link
       rel="stylesheet"
       type="text/css"
-      href="https://github.com/jefri/jiffies-css/releases/download/v0.8.0/jiffies-css-bundle.min.css"
-    /> -->
+      href="https://unpkg.com/@davidsouther/jiffies-css"
+    />
+    <script src="./accessibility.js"></script>
   </head>
   <body>
     <header class="fluid">
@@ -40,26 +41,36 @@
       </nav>
     </header>
     <main>
+      <section id="overview">
+        <h1>About Jiffies CSS</h1>
+        <p>
+          <b>Jiffies CSS</b>
+          is a "postmodern" CSS full-page reset. It uses "cutting edge" 100%
+          pure CSS standards, including layers, native css nesting, and a
+          variable structure to define user and application specific overrides.
+        </p>
+      </section>
       <section id="usage">
         <h1>Usage</h1>
         <ul>
-          <li>
-            Download and save
-            <a
-              href="https://raw.githubusercontent.com/jefri/jiffies-css/main/jiffies-css-bundle.min.css"
-              ><code>jiffies-css-bundle.min.css</code></a
-            >
-            in your project.
-          </li>
-          <li>
-            Add overrides to custom properties in a <code>:root {}</code> block.
-          </li>
           <li>
             For appropriate semantic markup, view the
             <a href="https://github.com/jefri/jiffies-css/blob/main/index.html"
               >source</a
             >
             of this file.
+          </li>
+          <li>
+            <p>Link to the bundle from unpkg.</p>
+            <pre><code class="language-html">&lt;link
+  rel="stylesheet"
+  type="text/css"
+  href="https://unpkg.com/@davidsouther/jiffies-css"
+/>
+&lt;script src="./accessibility.js">&lt;/script></code></pre>
+          </li>
+          <li>
+            Add overrides to custom properties in a <code>:root {}</code> block.
           </li>
           <li>
             Sample customization block: <br />
@@ -685,7 +696,6 @@ public:
         </ul>
       </nav>
     </footer>
-    <script src="./accessibility.js"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
