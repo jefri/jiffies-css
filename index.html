@@ -63,17 +63,55 @@
           </li>
           <li>
             Sample customization block: <br />
-            <pre
-              style="
-                display: inline-block;
-                background-color: var(--card-background-color);
-              "
-            ><code>:root {
+            <pre style="display: inline-block"><code>:root {
   --color-primary-hue: <input id="primary-hue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg;
   --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizing-out">1</span>;
+  <input type="checkbox" id="font-base" style="margin-left: -1.1rem; margin-right: -0.5rem;" /> --font-family-base: Poppins;
+  <input type="checkbox" id="font-header" style="margin-left: -1.1rem; margin-right: -0.5rem;" /> --font-family-header: "Libre Baskerville";
+  <input type="checkbox" id="font-monospace" style="margin-left: -1.1rem; margin-right: -0.5rem;" /> --font-family-monospace: "JetBrains Mono";
 }</code></pre>
           </li>
         </ul>
+        <style>
+          @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Libre+Baskerville:wght@700&family=Crimson+Text:wght@700&family=Poppins&display=swap");
+        </style>
+        <!--
+          :root {
+            --font-family-base: Poppins;
+            --font-family-header: "Libre Baskerville";
+            --font-family-monospace: "JetBrains Mono";
+          }
+          -->
+        <style id="font-base-style"></style>
+        <script type="application/javascript">
+          var baseCheck = document.getElementById("font-base");
+          var fontBaseStyle = document.getElementById("font-base-style");
+          baseCheck.addEventListener("change", () => {
+            fontBaseStyle.textContent = baseCheck.checked
+              ? `:root { --font-family-base: "Poppins"; }`
+              : "";
+          });
+        </script>
+        <style id="font-header-style"></style>
+        <script type="application/javascript">
+          var headerCheck = document.getElementById("font-header");
+          var headerStyle = document.getElementById("font-header-style");
+          headerCheck.addEventListener("change", () => {
+            headerStyle.textContent = headerCheck.checked
+              ? `:root { --font-family-header: "Libre Baskerville"; }`
+              : "";
+          });
+        </script>
+        <style id="font-monospace-style"></style>
+        <script type="application/javascript">
+          var monospaceCheck = document.getElementById("font-monospace");
+          var monospaceStyle = document.getElementById("font-monospace-style");
+          monospaceCheck.addEventListener("change", () => {
+            monospaceStyle.textContent = monospaceCheck.checked
+              ? `:root { --font-family-monospace: "JetBrains Mono"; }`
+              : "";
+          });
+        </script>
         <style id="primary-hue-style"></style>
         <script type="application/javascript">
           var primaryHueInput = document.getElementById("primary-hue");
