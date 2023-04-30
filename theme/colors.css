@@ -1,8 +1,8 @@
 :root {
   color-scheme: light;
 
-  --white: hsl(0, 100%, 100%);
-  --black: hsl(0, 100%, 0%);
+  --white: hwb(0, 100%, 0%);
+  --black: hwb(0, 0%, 1000%);
 
   --blue-hue: 195deg;
   --amber-hue: 45deg;
@@ -11,26 +11,42 @@
   --grey-hue: 205deg;
   --grey-s: 30%;
   --grey-l: 15%;
-  --grey: hsl(var(--grey-hue) var(--grey-s) var(--grey-l));
+  --grey-w: 10%;
+  --grey-b: 90%;
+  /* --grey: hsl(var(--grey-hue) var(--grey-s) var(--grey-l)); */
+  --grey: hwb(var(--grey-hue) var(--grey-w) var(--grey-b));
 
   --saturation: 30%;
   --lightness: 15%;
 
-  --color-h1: hsl(var(--grey-hue) 30% 15%);
-  --color-h2: hsl(var(--grey-hue) 27.5% 20%);
-  --color-h3: hsl(var(--grey-hue) 25% 25%);
-  --color-h4: hsl(var(--grey-hue) 22.5% 30%);
-  --color-h5: hsl(var(--grey-hue) 20% 35%);
-  --color-h6: hsl(var(--grey-hue) 17.5% 40%);
+  /* --color-h1: hsl(var(--grey-hue) 30% 15%); */
+  /* --color-h2: hsl(var(--grey-hue) 27.5% 20%); */
+  /* --color-h3: hsl(var(--grey-hue) 25% 25%); */
+  /* --color-h4: hsl(var(--grey-hue) 22.5% 30%); */
+  /* --color-h5: hsl(var(--grey-hue) 20% 35%); */
+  /* --color-h6: hsl(var(--grey-hue) 17.5% 40%); */
 
-  --color-hue: var(--grey-hue);
-  --color-saturation: var(--saturation);
-  --color-lightness: var(--lightness);
-  --color-opacity: 1;
-  --color-focus-opacity: 0.125;
-  --color: hsl(
-    var(--color-hue) var(--color-saturation) var(--color-lightness) /
-      var(--color-opacity)
+  --color-h1: hwb(var(--grey-hue) 0% 80%);
+  --color-h2: hwb(var(--grey-hue) 5% 75%);
+  --color-h3: hwb(var(--grey-hue) 10% 70%);
+  --color-h4: hwb(var(--grey-hue) 15% 65%);
+  --color-h5: hwb(var(--grey-hue) 20% 60%);
+  --color-h6: hwb(var(--grey-hue) 25% 55%);
+
+  --color-text:-hue: var(--grey-hue);
+  --color-text:-saturation: var(--saturation);
+  --color-text:-lightness: var(--lightness);
+  --color-text:-whiteness: var(--whiteness);
+  --color-text:-blackness: var(--blackness);
+  --color-text:-opacity: 1;
+  --color-text:-focus-opacity: 0.125;
+  /* --text-color: hsl(
+    var(--color-text:-hue) var(--color-text:-saturation) var(--color-text:-lightness) /
+      var(--color-text:-opacity)
+  ); */
+  --text-color: hwb(
+    var(--color-text:-hue) var(--color-text:-whiteness)
+      var(--color-text:-blackness) / var(--color-text:-opacity)
   );
 
   --color-background-hue: var(--grey-hue);
@@ -203,7 +219,7 @@
 
   --color-form-element-background: transparent;
   --color-form-element-border: hsl(var(--grey-hue) 14% 68%);
-  --color-form-element: var(--color);
+  --color-form-element: var(--text-color);
   --color-form-element-placeholder: var(--color-muted);
   --color-form-element-active-background: transparent;
   --color-form-element-active-border: var(--color-primary);

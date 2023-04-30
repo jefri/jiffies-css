@@ -80,21 +80,3 @@ body,
     max-width: 2170px;
   }
 }
-
-/*
-$breakpoints: (
-  xs: 0,
-  sm: 425px,
-  md: 768px,
-  lg: 1024px,
-  xl: 1440px,
-  4k: 2560px,
-
-$viewports: (
-  // 'null' disable the viewport on a breakpoint
-  sm: 510px,
-  md: 700px,
-  lg: 920px,
-  xl: 1130px,
-  4k: 2170px
-*/

@@ -1,11 +1,11 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 a,
 [role="link"] {
-  --color: var(--color-hyperlink);
+  --color-text: var(--color-hyperlink);
   --background-color: transparent;
   --text-decoration: var(--hyperlink-text-decoration);
   outline: none;
-  color: var(--color);
+  color: var(--text-color);
   background-color: var(--background-color);
   text-decoration: var(--text-decoration);
   transition: background-color var(--transition), color var(--transition),
@@ -14,12 +14,12 @@ a,
 
 a:is([aria-current], :hover, :focus),
 [role="link"]:is([aria-current], :active, :focus) {
-  --color: var(--color-hyperlink-hover);
+  --color-text: var(--color-hyperlink-hover);
 }
 
 a:is(:visited),
 [role="link"]:is(:visited) {
-  --color: var(--color-hyperlink-visited);
+  --color-text: var(--color-hyperlink-visited);
 }
 
 a:is(:focus),
@@ -29,12 +29,12 @@ a:is(:focus),
 
 a.secondary,
 [role="link"].secondary {
-  --color: var(--color-secondary);
+  --color-text: var(--color-secondary);
 }
 
 a.secondary:is([aria-current], :hover, :active, :focus),
 [role="link"].secondary:is([aria-current], :hover, :active, :focus) {
-  --color: var(--color-secondary-hover);
+  --color-text: var(--color-secondary-hover);
 }
 a.secondary:is(:focus),
 [role="link"].secondary:is(:focus) {
@@ -43,12 +43,12 @@ a.secondary:is(:focus),
 
 a.contrast,
 [role="link"].contrast {
-  --color: var(--color-contrast);
+  --color-text: var(--color-contrast);
 }
 
 a.contrast:is([aria-current], :hover, :active, :focus),
 [role="link"].contrast:is([aria-current], :hover, :active, :focus) {
-  --color: var(--color-contrast-hover);
+  --color-text: var(--color-contrast-hover);
 }
 a.contrast:is(:focus),
 [role="link"].contrast:is(:focus) {

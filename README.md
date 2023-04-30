@@ -7,19 +7,23 @@ Post-Modern CSS Full-Page Reset
 ## Principles
 
 - Beautiful styles for semantic base elements
-- Componentes via relationships of semantic elements
+- Components via relationships of semantic elements
 - Aria roles for selecting between component modalities
-- User configuration via a limited number of CSS Variables
+- Express DOM states in visual style
+- User configuration via CSS Variables
 - User extension with targeted layers
 - Opinionated tables, whitespace, & nav
 - Responsive typography & container layouts; flexbox & css grid native utilities
 - Pure-CSS Accordions, Tabs
+- Accessible & Responsive
 
 ## Inspiration
 
 - [Pico.css](http://picocss.com)
 - [Primitive UI](https://taniarascia.github.io/primitive/)
 - [Skeleton](http://getskeleton.com/)
+- [Cloudscape foundations](https://cloudscape.design/foundation/)
+- [Material design tokens](https://m3.material.io/foundations/design-tokens/overview)
 
 ## 2023 Standards
 
@@ -46,25 +50,6 @@ Post-Modern CSS Full-Page Reset
 - `components` Opinionated, robust components
 - `utility` Class-based helper utilities.
 - `user` Untouched layer for users to override all properties.
-
-## Variables
-
-- Create a “variable hierarchy tree”. At the `:root` level, document several “core” variables that dictate the broad behaviors of the app.
-- `--font-size`
-- `--font-family`
-  - `--font-family-monospace`
-  - `--font-family-heading`
-- `--spacing`
-  - `--spacing-block-horizontal`
-  - `--spacing-block-vertical`
-  - `--font-family-table`
-- `--color-primary-hue`
-- `-–color-accent-hue`
-- `--color-form-base`
-  - `--color-form-invalid`
-  - `--color-form-disabled`
-  - `--color-form-required`
-- `--transition-timing`
 
 ## Reset
 
@@ -94,10 +79,108 @@ Post-Modern CSS Full-Page Reset
 - Property Sheet `dl, dt, dd`
 - Form group `fieldset\[role=group]`
 
-## Utilities
+## Layout
 
 - Loading `\[aria-busy=true]`
 - Tooltip `\[data-tooltip][data-direction]`
 - Flex `.flex` `.row` `.inline` `.flex-{0-4}` `.justify-{around, between, center}` `.align-{baseline, center, stretch, end}`
 - Grid
-- Accessility
+
+## Accessibility
+
+## Responsive
+
+| Size | Breakpoint | Viewport | Columns | base |
+| ---- | ---------- | -------- | ------- | ---- |
+| xs   | 0          |          | 1       | 12px |
+| sm   | 510px      | 425px    | 1       | 14px |
+| md   | 768px      | 700px    | 1       | 16px |
+| lg   | 1024px     | 920px    | 2       | 18px |
+| xl   | 1440px     | 1130px   | 2       | 20px |
+| 4k   | 2560px     | 2170px   | 4       | 24px |
+
+## Selectors
+
+### component
+
+### element
+
+### state
+
+## Theming
+
+Override variables.
+
+- Color (`color`)
+- Density
+  - Spacing (`spacing`)
+- Typography (`font`)
+  - Iconography
+- Motion
+
+<!-- --{color, sizing, box}-{} -->
+<!-- --{component: accordian, card, form, link}[-{state: inactive, hover, disabled, focused, validation, error}][-{variant: }] -->
+
+### Constants
+
+`--phi-quart: 6.854`
+`--phi-cube: 4.236`
+`--phi-square: 2.618`
+`--phi-3-2: 2.058`
+`--phi: 1.618`
+`--phi-half: 1.272`
+`--phi-zero: 1`
+`--phi-root: 0.786`
+
+### Sizing
+
+`--sizing-base` (responsive)
+`--sizing-
+`--spacing-block`
+
+### Typography
+
+- `--font-size: --sizing-base`: (1rem), `--font-height: calc(var(--phi) * 1em)`
+  - `--font-size-heading-title` `--phi-cube` \<h1>
+  - `--font-size-heading-container` `--phi-square` \<h2>
+  - `--font-size-heading-section` `--phi-3-2` \<h3>
+  - `--font-size-body` `--phi-zero` \<p>
+  - `--font-size-figure` `--phi-half` \<figure> \<figcaption>
+- `--font-weight` 400 Normal
+  - `--font-weight-heavy` 700 Bold
+  - `--font-weight-light` 300 Light
+- `--font-family` Poppins
+
+  - `--font-family-heading` Jet-Brains Mono
+  - `--font-family-monospace` Libre Baskerville
+  - `--font-family-table` Trebuchet
+
+- `--spacing` Unitless spacing multiplier for margins and paddings. 1 = comfortable, .5 = compact
+  - `--spacing-block-horizontal`, `--spacing-block-vertical` Modify vertical and horizontal density separately
+- `--border-radius-container` .5rem
+- `--border-radius-item` .25rem
+  - `--border-radius-button`
+  - `--border-radius-input`
+- `--border-radius-inline` .125rem
+  - `--border-radius-badge`
+
+### Color
+
+- `--white`
+- `--black`
+
+- `--color-primary-hue`
+- `-–color-accent-hue`
+- `--color-form-base`
+  - `--color-form-invalid`
+  - `--color-form-disabled`
+  - `--color-form-required`
+
+### Motion
+
+- `--motion-duration-snap` 115MS
+- `--motion-duration-shake` 165MS
+- `--motion-duration-draw` 250MS
+- `--motion-curve-smooth` (0.00, 0.00, 0.00, 1.00)
+- `--motion-curve-sticky` (1.00, 0.00, 0.83, 1.00)
+- `--motion-curve-draw` (0.84, 0.00, 0.16, 1.00)

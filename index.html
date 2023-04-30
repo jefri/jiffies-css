@@ -7,14 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#000000" />
-    <!-- <link rel="stylesheet" href="./index.css" /> -->
+    <link rel="stylesheet" href="./index.css" />
     <!-- <link rel="stylesheet" href="./jiffies-css-bundle.min.css" /> -->
-    <link
+    <!-- <link
       rel="stylesheet"
       type="text/css"
       href="https://unpkg.com/@davidsouther/jiffies-css"
-    />
-    <script src="https://unpkg.com/@davidsouther/jiffies-css/accessibility.js"></script>
+    /> -->
   </head>
   <body>
     <header class="fluid">
@@ -238,7 +237,7 @@ If you can wait and not be tired by waiting,
 Or being hated, don’t give way to hating,
     And yet don’t look too good, nor talk too wise:
 
-- Ruryard Kipling, If-
+- Rudyard Kipling, If-
           </pre>
           <h3>Code</h3>
           <pre><code class="language-cpp">class Voila {
@@ -622,7 +621,7 @@ public:
               height: 100%;
               padding: var(--spacing-block);
               border-radius: var(--spacing-block);
-              --color: var(--color-primary-inverse);
+              --text-color: var(--color-primary-inverse);
             }
 
             #swatches main {
@@ -652,7 +651,7 @@ public:
           <p
             style="
               background-color: var(--color-accent);
-              --color: var(--color-accent-inverse);
+              --text-color: var(--color-accent-inverse);
             "
           >
             <strong>Accent Color</strong>
@@ -704,7 +703,9 @@ public:
         </ul>
       </nav>
     </footer>
-    <link
+    <script src="./accessibility.js"></script>
+    <!-- <script src="https://unpkg.com/@davidsouther/jiffies-css/accessibility.js"></script> -->
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
     />
@@ -718,6 +719,6 @@ public:
             hljs.highlightElement(el);
           });
       });
-    </script>
+    </script> -->
   </body>
 </html>

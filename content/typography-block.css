@@ -10,7 +10,7 @@ table,
 ul {
   margin-top: 0;
   margin-bottom: var(--spacing-typography-vertical);
-  color: var(--color);
+  color: var(--text-color);
   font-style: normal;
   font-weight: var(--font-weight);
   font-size: var(--font-size);
@@ -41,9 +41,9 @@ h6 {
   /* --font-size: calc(1rem * pow(var(--font-scale), var(--h-level) - 2)); */
   margin-top: 0;
   margin-bottom: var(--spacing-typography-vertical);
-  color: var(--color);
+  color: var(--text-color);
   font-weight: var(--font-weight);
-  font-size: calc(var(--font-size) * 1rem);
+  font-size: var(--font-size);
   font-family: var(--font-family-header);
 }
 
@@ -53,33 +53,33 @@ h6 {
 
 h1 {
   --h-level: 1;
-  --font-size: 1.802;
-  --color: var(--color-h1);
+  --font-size: 1.802rem;
+  --color-text: var(--color-h1);
 }
 h2 {
   --h-level: 2;
-  --font-size: 1.602;
-  --color: var(--color-h2);
+  --font-size: 1.602rem;
+  --color-text: var(--color-h2);
 }
 h3 {
   --h-level: 3;
-  --font-size: 1.424;
-  --color: var(--color-h3);
+  --font-size: 1.424rem;
+  --color-text: var(--color-h3);
 }
 h4 {
   --h-level: 4;
-  --font-size: 1.266;
-  --color: var(--color-h4);
+  --font-size: 1.266rem;
+  --color-text: var(--color-h4);
 }
 h5 {
   --h-level: 5;
-  --font-size: 1.125;
-  --color: var(--color-h5);
+  --font-size: 1.125rem;
+  --color-text: var(--color-h5);
 }
 h6 {
   --h-level: 6;
-  --font-size: 1;
-  --color: var(--color-h6);
+  --font-size: 1rem;
+  --color-text: var(--color-h6);
 }
 
 :where(address, blockquote, dl, figure, form, ol, p, pre, table, ul)
@@ -94,7 +94,7 @@ hgroup > :where(h1, h2, h3, h4, h5, h6) {
   margin-bottom: 0;
 }
 hgroup > :where(h1, h2, h3, h4, h5, h6):last-child {
-  --color: var(--color-muted);
+  --color-text: var(--color-muted);
   --font-weight: unset;
   font-size: 1rem;
   font-family: unset;

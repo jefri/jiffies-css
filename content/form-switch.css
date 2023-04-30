@@ -8,7 +8,7 @@
   --border-width: 3px;
   --background-color: var(--switch-background-color);
   --border-color: var(--switch-background-color);
-  --color: var(--switch-color);
+  --color-text: var(--switch-color);
   --switch-height: 1.25em;
   --switch-width: 2.25em;
   --switch-transition: var(--transition);
@@ -37,7 +37,7 @@
   width: calc(var(--switch-height) - (var(--border-width) * 2));
   height: 100%;
   border-radius: 50%;
-  background-color: var(--color);
+  background-color: var(--text-color);
   transition: margin var(--switch-transition);
 }
 

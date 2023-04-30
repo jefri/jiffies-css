@@ -17,7 +17,7 @@
 
 :is(body, #body, #root) > footer:has(> nav) {
   background-color: var(--header-nav-background-color);
-  --color: var(--header-nav-color);
+  --text-color: var(--header-nav-color);
   border-top: var(--header-border-width) var(--header-border-style)
     var(--header-border-color);
   padding-left: var(--spacing-block-horizontal);
@@ -110,7 +110,7 @@ nav > ul li:hover {
 }
 
 nav > ul li a {
-  --color: var(--color-primary);
+  --text-color: var(--color-primary);
   font-size: var(--font-size-larger);
   transition: color 0s linear;
   --text-decoration: none;
@@ -121,14 +121,14 @@ nav > ul li:has(a:hover) {
 }
 
 nav > ul li a:hover {
-  --color: var(--color-secondary);
+  --text-color: var(--color-secondary);
 }
 
 :where(header, footer) > nav > ul li a {
-  --color: var(--header-nav-color);
+  --text-color: var(--header-nav-color);
 }
 
 :where(header, footer) > nav > :where(h1, h2, h3, h4, h5, h6) a {
-  --color: var(--header-nav-color);
+  --text-color: var(--header-nav-color);
   --text-decoration: none;
 }
