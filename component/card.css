@@ -2,13 +2,18 @@
   --card-background-color: var(--white);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+    --card-background-color: var(--black);
+  }
+}
+
 /** Articles are Material cards */
 
 article {
   box-shadow: var(--card-box-shadow);
   border-radius: var(--sizing-border-radius);
   margin: var(--spacing-block-vertical) 0;
-  --card-inner-border: var(--border-muted);
   background-color: var(--card-background-color);
 }
 

@@ -1,14 +1,17 @@
 :root {
   --table-row-stripped-head-color: var(--white);
-  --table-row-stripped-head-background-color: hsl(
-    var(--grey-hue) calc(var(--grey-s) - 10%) 30% / 97%
-  );
-  --table-row-stripped-odd-background-color: hsl(
-    var(--grey-hue) var(--grey-s) 98% / 97%
-  );
-  --table-row-stripped-even-background-color: hsl(
-    var(--grey-hue) var(--grey-s) 88% / 97%
-  );
+  --table-row-stripped-head-background-color: hsl(var(--grey-hue) 20% 30%);
+  --table-row-stripped-odd-background-color: hsl(var(--grey-hue) 30% 98%);
+  --table-row-stripped-even-background-color: hsl(var(--grey-hue) 30% 88%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --table-row-stripped-head-color: var(--black);
+    --table-row-stripped-head-background-color: hsl(var(--grey-hue) 20% 70%);
+    --table-row-stripped-odd-background-color: hsl(var(--grey-hue) 30% 02%);
+    --table-row-stripped-even-background-color: hsl(var(--grey-hue) 30% 12%);
+  }
 }
 
 :where(table) {

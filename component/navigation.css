@@ -1,27 +1,26 @@
 :root {
-  --header-nav-background-color: var(--color-primary);
+  --header-nav-background-color: var(--color);
   --header-nav-color: var(--color-primary-inverse);
   --header-border-color: var(--color-accent);
   --header-border-width: calc(var(--border-width) * 2);
   --header-border-style: var(--border-style);
 }
 
-:is(body, #body, #root) > header:has(> nav) {
+:is(body, #body, #root) > :is(header, footer):has(> nav) {
+  --border: var(--header-border-width) var(--header-border-style)
+    var(--header-border-color);
   background-color: var(--header-nav-background-color);
   color: var(--header-nav-color);
-  border-bottom: var(--header-border-width) var(--header-border-style)
-    var(--header-border-color);
   box-shadow: var(--box-shadow-elevation-2);
   padding: 0 var(--spacing-block-horizontal);
 }
 
+:is(body, #body, #root) > header:has(> nav) {
+  border-bottom: var(--border);
+}
+
 :is(body, #body, #root) > footer:has(> nav) {
-  background-color: var(--header-nav-background-color);
-  --text-color: var(--header-nav-color);
-  border-top: var(--header-border-width) var(--header-border-style)
-    var(--header-border-color);
-  padding-left: var(--spacing-block-horizontal);
-  padding-right: var(--spacing-block-horizontal);
+  border-top: var(--border);
 }
 
 :is(body, #body, #root):has(> aside) {

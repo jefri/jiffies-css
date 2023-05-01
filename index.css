@@ -1,4 +1,4 @@
-@layer reset, theme, layout, content, component, utility, user;
+@layer reset, layout, content, component, utility, user, theme;
 
 @import "./sanitize/index.css" layer(reset);
 @import "./theme/theme.css" layer(theme);

@@ -25,7 +25,7 @@ dd,
 dt {
   padding: var(--spacing-form-element-vertical)
     var(--spacing-form-element-horizontal);
-  border: 1px solid var(--color-border-muted-color);
+  border: 1px solid var(--color-border-color);
 }
 
 :is(dd, dt):nth-of-type(odd) {

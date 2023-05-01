@@ -60,7 +60,18 @@
             of this file.
           </li>
           <li>
-            <p>Link to the bundle from unpkg.</p>
+            <p>
+              Link to the bundle from unpkg.
+              <a href="#usage" onclick="javascript:copyHead()">Copy</a>
+              <script type="application/javascript" async>
+                <!--
+                function copyHead() {
+                  navigator.clipboard.writeText(`<link rel="stylesheet" type="text/css" href="https://unpkg.com/@davidsouther/jiffies-css" />
+<script src="https://unpkg.com/@davidsouther/jiffies-css/accessibility.js" async></script>`);
+                }
+                  -->
+              </script>
+            </p>
             <pre><code class="language-html">&lt;link
   rel="stylesheet"
   type="text/css"
@@ -72,7 +83,9 @@
             Add overrides to custom properties in a <code>:root {}</code> block.
           </li>
           <li>
-            Sample customization block: <br />
+            Sample customization block
+            (<a href="#usage" onclick="javascript:copyRoot()">Copy</a>):
+            <br />
             <pre style="display: inline-block"><code>:root {
   --color-primary-hue: <input id="primary-hue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg; /* Default 115deg in bundle */
   --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizing-out">1</span>;
@@ -80,6 +93,25 @@
   <label><input type="checkbox" id="font-header" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-header: "Libre Baskerville";</label>
   <label><input type="checkbox" id="font-monospace" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-monospace: "JetBrains Mono";</label>
 }</code></pre>
+            <script type="application/javascript" async>
+              <!--
+              function copyRoot() {
+                const root = [':root {'];
+                const hue = document.getElementById("primary-hue").value;
+                const sizing = document.getElementById("sizing").value;
+                root.push(`  --color-primary-hue: ${hue}deg;`);
+                root.push(`  --sizing: ${sizing};`);
+                document.getElementById("font-base").checked && 
+                  root.push(`  --font-family-base: Poppins;`);
+                document.getElementById("font-header").checked && 
+                  root.push(`  --font-family-header: "Libre Baskerville";`);
+                document.getElementById("font-monospace").checked && 
+                  root.push(`  --font-family-monospace: "JetBrains Mono";`);
+                root.push("}");
+                navigator.clipboard.writeText(root.join("\n"));
+              }
+            -->
+            </script>
           </li>
         </ul>
         <style>
@@ -96,7 +128,7 @@
         <p style="display: hidden; font-family: 'Libre Baskerville'"></p>
         <p style="display: hidden; font-family: 'JetBrains Mono'"></p>
         <style id="font-base-style"></style>
-        <script type="application/javascript">
+        <script type="application/javascript" async>
           var baseCheck = document.getElementById("font-base");
           var fontBaseStyle = document.getElementById("font-base-style");
           baseCheck.addEventListener("change", () => {
@@ -106,7 +138,7 @@
           });
         </script>
         <style id="font-header-style"></style>
-        <script type="application/javascript">
+        <script type="application/javascript" async>
           var headerCheck = document.getElementById("font-header");
           var headerStyle = document.getElementById("font-header-style");
           headerCheck.addEventListener("change", () => {
@@ -116,7 +148,7 @@
           });
         </script>
         <style id="font-monospace-style"></style>
-        <script type="application/javascript">
+        <script type="application/javascript" async>
           var monospaceCheck = document.getElementById("font-monospace");
           var monospaceStyle = document.getElementById("font-monospace-style");
           monospaceCheck.addEventListener("change", () => {
@@ -476,6 +508,7 @@ public:
             <button>Button</button>
             <input type="submit" value="Submit" />
             <input type="button" value="Input" />
+            <input type="reset" value="Reset" />
             <a role="button">Link</a>
           </section>
 
@@ -500,6 +533,7 @@ public:
             </p>
             <button class="contrast">Button</button>
             <input type="submit" value="Submit" class="contrast" />
+            <input type="reset" value="Reset" class="contrast" />
             <input type="button" value="Input" class="contrast" />
             <a role="button" class="contrast">Link</a>
           </section>
@@ -621,6 +655,7 @@ public:
               height: 100%;
               padding: var(--spacing-block);
               border-radius: var(--spacing-block);
+              background-color: var(--color);
               --text-color: var(--color-primary-inverse);
             }
 
@@ -644,22 +679,17 @@ public:
             }
           </style>
         </header>
-        <main class="grid">
-          <p style="background-color: var(--color-primary)">
+        <main class="grid swatches">
+          <p style="--color-hue: var(--color-primary-hue);">
             <strong>Primary Color</strong>
           </p>
-          <p
-            style="
-              background-color: var(--color-accent);
-              --text-color: var(--color-accent-inverse);
-            "
-          >
+          <p style="--color-hue: var(--color-accent-hue);">
             <strong>Accent Color</strong>
           </p>
-          <p style="background-color: var(--color-secondary)">
+          <p style="--color-hue: var(--color-secondary-hue);">
             <strong>Secondary Color</strong>
           </p>
-          <p style="background-color: var(--color-contrast)">
+          <p style="--color-hue: var(--color-contrast-hue);">
             <strong>Contrast Color</strong>
           </p>
         </main>

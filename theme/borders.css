@@ -11,14 +11,15 @@
     0 15px 20px rgba(0, 0, 0, 0.21);
 
   --border-style: solid;
-  --border-color: var(--card-border-color);
+  --border-color: var(--color-border);
+  --border-color-muted: color-mix(
+    in oklab,
+    var(--border-color) 20%,
+    var(--card-background-color)
+  );
   --border-width: var(--sizing-border-width);
   --border: var(--border-width) var(--border-style) var(--border-color);
   --border-muted: var(--border-width) var(--border-style)
-    var(--color-border-muted);
+    var(--border-color-muted);
   --border-empty: var(--border-width) solid transparent;
-
-  --card-box-shadow: var(--box-shadow-elevation-1);
-  --card-background-color: var(--color-background);
-  --card-inner-border-color: var(--color-border-muted);
 }

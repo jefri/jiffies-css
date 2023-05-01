@@ -3,8 +3,8 @@ input[type="submit"],
 input[type="button"],
 input[type="reset"],
 [role="button"] {
-  --background-color: var(--color-primary);
-  --border-color: var(--color-primary);
+  --background-color: var(--color);
+  --border-color: var(--color);
   --color-text: var(--color-primary-inverse);
   --box-shadow: var(--shadow-button, 0 0 0 rgba(0, 0, 0, 0));
   --button-roundness: var(--sizing-border-radius);
@@ -31,7 +31,7 @@ input[type="submit"]:is([aria-current], :hover, :focus),
 input[type="button"]:is([aria-current], :hover, :focus),
 input[type="reset"]:is([aria-current], :hover, :focus),
 [role="button"]:is([aria-current], :hover, :focus) {
-  --background-color: var(--color-accent);
+  --background-color: var(--color-focus);
   --border-color: var(--color-accent);
   --box-shadow: var(--box-shadow-button-hover, 0 0 0 rgba(0, 0, 0, 0));
   --color-text: var(--color-accent-inverse);
@@ -42,7 +42,7 @@ input[type="submit"]:is(:active),
 input[type="button"]:is(:active),
 input[type="reset"]:is(:active),
 [role="button"]:is(:active) {
-  --background-color: var(--color-secondary);
+  --background-color: var(--color-active);
   --border-color: var(--color-secondary);
   --box-shadow: var(--box-shadow-button-hover, 0 0 0 rgba(0, 0, 0, 0));
   --color-text: var(--color-secondary-inverse);
@@ -65,33 +65,7 @@ input[type="reset"]:focus,
     [role="button"]
   ).secondary,
 input[type="reset"] {
-  --background-color: var(--color-secondary);
-  --border-color: var(--color-secondary);
-  --color-text: var(--color-secondary-inverse);
-  cursor: pointer;
-}
-
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).secondary:is([aria-current], :hover, :active, :focus),
-input[type="reset"]:is([aria-current], :hover, :active, :focus) {
-  --background-color: var(--color-secondary-hover);
-  --border-color: var(--color-secondary-hover);
-  --color-text: var(--color-secondary-inverse);
-}
-
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).secondary:focus,
-input[type="reset"]:focus {
-  --box-shadow: var(--box-shadow-button-hover, 0 0 0 rgba(0, 0, 0, 0)),
-    0 0 0 var(--sizing-outline-width) var(--color-secondary-focus);
+  --color-hue: var(--color-secondary-hue);
 }
 
 /** Contrast */
@@ -101,33 +75,10 @@ input[type="reset"]:focus {
     input[type="button"],
     [role="button"]
   ).contrast {
-  --background-color: var(--color-contrast);
-  --border-color: var(--color-contrast);
-  --color-text: var(--color-contrast-inverse);
+  --color-hue: var(--color-contrast-hue);
 }
 
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).contrast:is([aria-current], :hover, :active, :focus) {
-  --background-color: var(--color-contrast-hover);
-  --border-color: var(--color-contrast-hover);
-  --color-text: var(--color-contrast-inverse);
-}
-
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).contrast:focus {
-  --box-shadow: var(--box-shadow-button-hover, 0 0 0 rgba(0, 0, 0, 0)),
-    0 0 0 var(--sizing-outline-width) var(--color-contrast-focus);
-}
-
-/* Outline (primary) */
+/* Outline */
 :is(
     button,
     input[type="submit"],
@@ -136,7 +87,7 @@ input[type="reset"]:focus {
   ).outline,
 input[type="reset"].outline {
   --background-color: transparent;
-  --color-text: var(--color-primary);
+  --color-text: var(--color-base);
 }
 :is(
     button,
@@ -146,47 +97,7 @@ input[type="reset"].outline {
   ).outline:is([aria-current], :hover, :active, :focus),
 input[type="reset"].outline:is([aria-current], :hover, :active, :focus) {
   --background-color: transparent;
-  --color-text: var(--color-primary-hover);
-}
-
-/* Outline (secondary) */
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).outline.secondary,
-input[type="reset"].outline {
-  --color-text: var(--secondary);
-}
-
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).outline.secondary:is([aria-current], :hover, :active, :focus),
-input[type="reset"].outline:is([aria-current], :hover, :active, :focus) {
-  --color-text: var(--secondary-hover);
-}
-
-/* Outline (contrast) */
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).outline.contrast {
-  --color-text: var(--contrast);
-}
-
-:is(
-    button,
-    input[type="submit"],
-    input[type="button"],
-    [role="button"]
-  ).outline.contrast:is([aria-current], :hover, :active, :focus) {
-  --color-text: var(--contrast-hover);
+  --color-text: var(--color-base-hover);
 }
 
 /** Disabled */

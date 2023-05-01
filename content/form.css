@@ -142,13 +142,13 @@ textarea[disabled],
 :where(input, select, textarea):not(
     :is([type="checkbox"], [type="radio"])
   )[aria-invalid] {
-  padding-right: calc(var(--spacing-form-element-horizontal) + 1.5rem);
-  padding-left: var(--spacing-form-element-horizontal);
-  padding-inline-start: var(--spacing-form-element-horizontal);
-  padding-inline-end: calc(var(--spacing-form-element-horizontal) + 1.5rem);
-  background-position: center right 0.75rem;
-  background-size: 1rem auto;
-  background-repeat: no-repeat;
+  /* padding-right: calc(var(--spacing-form-element-horizontal) + 1.5rem); */
+  /* padding-left: var(--spacing-form-element-horizontal); */
+  /* padding-inline-start: var(--spacing-form-element-horizontal); */
+  /* padding-inline-end: calc(var(--spacing-form-element-horizontal) + 1.5rem); */
+  /* background-position: center right 0.75rem; */
+  /* background-size: 1rem auto; */
+  /* background-repeat: no-repeat; */
 }
 
 :where(input, select, textarea):not(

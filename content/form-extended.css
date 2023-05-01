@@ -8,7 +8,7 @@
   margin-left: 0;
   margin-inline-start: 0;
   margin-inline-end: 0.375rem;
-  border-width: var(--border-width);
+  /* border-width: var(--border-width); */
   padding: 0;
   font-size: inherit;
   vertical-align: middle;
@@ -17,7 +17,6 @@
 
 :is([type="checkbox"], [type="radio"]):checked {
   --background-color: var(--color-primary);
-  --border-color: var(--color-primary);
   background-image: var(--icon-checkbox);
   background-position: center;
   background-size: 0.75em auto;

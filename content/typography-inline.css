@@ -1,6 +1,7 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 a,
 [role="link"] {
+  --hyperlink-text-decoration: underline;
   --color-text: var(--color-hyperlink);
   --background-color: transparent;
   --text-decoration: var(--hyperlink-text-decoration);
@@ -99,7 +100,7 @@ small {
 }
 
 ::selection {
-  background-color: var(--color-primary-focus);
+  /* background-color: var(--color-primary-focus); */
 }
 
 @media (min-width: 0px) {
