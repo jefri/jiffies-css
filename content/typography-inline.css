@@ -2,7 +2,7 @@
 a,
 [role="link"] {
   --hyperlink-text-decoration: underline;
-  --color-text: var(--color-hyperlink);
+  --text-color: var(--color-hyperlink);
   --background-color: transparent;
   --text-decoration: var(--hyperlink-text-decoration);
   outline: none;
@@ -15,12 +15,12 @@ a,
 
 a:is([aria-current], :hover, :focus),
 [role="link"]:is([aria-current], :active, :focus) {
-  --color-text: var(--color-hyperlink-hover);
+  --text-color: var(--color-hyperlink-hover);
 }
 
 a:is(:visited),
 [role="link"]:is(:visited) {
-  --color-text: var(--color-hyperlink-visited);
+  --text-color: var(--color-hyperlink-visited);
 }
 
 a:is(:focus),
@@ -30,12 +30,12 @@ a:is(:focus),
 
 a.secondary,
 [role="link"].secondary {
-  --color-text: var(--color-secondary);
+  --text-color: var(--color-secondary);
 }
 
 a.secondary:is([aria-current], :hover, :active, :focus),
 [role="link"].secondary:is([aria-current], :hover, :active, :focus) {
-  --color-text: var(--color-secondary-hover);
+  --text-color: var(--color-secondary-hover);
 }
 a.secondary:is(:focus),
 [role="link"].secondary:is(:focus) {
@@ -44,12 +44,12 @@ a.secondary:is(:focus),
 
 a.contrast,
 [role="link"].contrast {
-  --color-text: var(--color-contrast);
+  --text-color: var(--color-contrast);
 }
 
 a.contrast:is([aria-current], :hover, :active, :focus),
 [role="link"].contrast:is([aria-current], :hover, :active, :focus) {
-  --color-text: var(--color-contrast-hover);
+  --text-color: var(--color-contrast-hover);
 }
 a.contrast:is(:focus),
 [role="link"].contrast:is(:focus) {

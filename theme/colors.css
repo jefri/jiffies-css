@@ -1,6 +1,11 @@
 :root {
   color-scheme: light;
 
+  --chroma: 0.2;
+  --base-chroma: 0.004;
+  --base-luminance: 98%;
+  --text-luminance: 0%;
+
   --white: hwb(0 100% 0%);
   --black: hwb(0 0% 100%);
   --grey-hue: 205deg;
@@ -11,13 +16,18 @@
   --red-hue: 5deg;
   --green-hue: 125deg;
 
-  --text-color: hsl(var(--grey-hue) 30% 15%);
-  --color-background: hsl(var(--grey-hue) 5% 98%);
+  --color-text: black;
+  --color-background: oklch(
+    var(--base-luminance) var(--base-chroma, 0) var(--grey-hue)
+  );
+  /* --color-background: hsl(var(--grey-hue) 5% 98%); */
   --color-muted: hsl(var(--grey-hue) 10% 50%);
   --color-border: hsl(var(--grey-hue) 20% 25%);
 
   --color-base-amount: 20%;
-  --color-primary: var(--color);
+  --color-primary: oklch(
+    var(--base-luminance) var(--chroma) var(--color-primary-hue)
+  );
 
   --color-primary-hue: 115deg;
   --color-accent-amount: 10%;
@@ -69,19 +79,10 @@
   --color-hyperlink-hover: red;
 }
 
-* {
-  --color: color-mix(
-    in oklab,
-    hsl(var(--color-hue, var(--color-primary-hue)) 100% 50%)
-      var(--color-base-amount),
-    white
-  );
-
-  --color-accent: color-mix(
-    in oklab,
-    hsl(var(--color-hue, var(--color-primary-hue)) 100% 50%)
-      calc(1 - var(--color-base-amount)),
-    black
+:where(*) {
+  --color: oklch(
+    var(--luminance, var(--base-luminance)) var(--chroma)
+      var(--color-hue, var(--color-primary-hue))
   );
 
   --color-hover: color-mix(in oklab, var(--color) 85%, white);
@@ -93,25 +94,9 @@
   :root {
     color-scheme: light;
 
-    --text-color: hsl(var(--grey-hue) 30% 85%);
-    --color-background: hsl(var(--grey-hue) 5% 20%);
-    --color-muted: hsl(var(--grey-hue) 10% 50%);
-    --color-border: hsl(var(--grey-hue) 20% 75%);
-  }
-
-  * {
-    --color: color-mix(
-      in oklab,
-      hsl(var(--color-hue, var(--color-primary-hue)) 100% 50%)
-        calc(100% - var(--color-base-amount)),
-      black
-    );
-
-    --color-accent: color-mix(
-      in oklab,
-      hsl(var(--color-hue, var(--color-primary-hue)) 100% 50%)
-        calc(100% - var(--color-base-amount)),
-      black
-    );
+    --chroma: 0.3;
+    --base-luminance: 30%;
+    --color-text: white;
+    --color-form-element-disabled-background: hsl(var(--grey-hue) 18% 30%);
   }
 }

@@ -87,26 +87,21 @@
             (<a href="#usage" onclick="javascript:copyRoot()">Copy</a>):
             <br />
             <pre style="display: inline-block"><code>:root {
-  --color-primary-hue: <input id="primary-hue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg; /* Default 115deg in bundle */
-  --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizing-out">1</span>;
-  <label><input type="checkbox" id="font-base" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-base: Poppins;</label>
-  <label><input type="checkbox" id="font-header" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-header: "Libre Baskerville";</label>
-  <label><input type="checkbox" id="font-monospace" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-monospace: "JetBrains Mono";</label>
+  --color-primary-hue: <input id="primaryHue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg; /* Default 115deg in bundle */
+  --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizingOut">1</span>;
+  <label><input type="checkbox" id="fontBase" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-base: Poppins;</label>
+  <label><input type="checkbox" id="fontHeader" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-header: "Libre Baskerville";</label>
+  <label><input type="checkbox" id="fontMonospace" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-monospace: "JetBrains Mono";</label>
 }</code></pre>
             <script type="application/javascript" async>
               <!--
               function copyRoot() {
                 const root = [':root {'];
-                const hue = document.getElementById("primary-hue").value;
-                const sizing = document.getElementById("sizing").value;
-                root.push(`  --color-primary-hue: ${hue}deg;`);
-                root.push(`  --sizing: ${sizing};`);
-                document.getElementById("font-base").checked && 
-                  root.push(`  --font-family-base: Poppins;`);
-                document.getElementById("font-header").checked && 
-                  root.push(`  --font-family-header: "Libre Baskerville";`);
-                document.getElementById("font-monospace").checked && 
-                  root.push(`  --font-family-monospace: "JetBrains Mono";`);
+                root.push(`  --color-primary-hue: ${primaryHue.value}deg;`);
+                root.push(`  --sizing: ${sizing.value};`);
+                fontBase.checked && root.push(`  --font-family-base: Poppins;`);
+                fontHeader.checked && root.push(`  --font-family-header: "Libre Baskerville";`);
+                fontMonospace.checked && root.push(`  --font-family-monospace: "JetBrains Mono";`);
                 root.push("}");
                 navigator.clipboard.writeText(root.join("\n"));
               }
@@ -127,60 +122,44 @@
         <p style="display: hidden; font-family: 'Poppins'"></p>
         <p style="display: hidden; font-family: 'Libre Baskerville'"></p>
         <p style="display: hidden; font-family: 'JetBrains Mono'"></p>
-        <style id="font-base-style"></style>
+        <style id="fontBaseStyle"></style>
         <script type="application/javascript" async>
-          var baseCheck = document.getElementById("font-base");
-          var fontBaseStyle = document.getElementById("font-base-style");
-          baseCheck.addEventListener("change", () => {
-            fontBaseStyle.textContent = baseCheck.checked
+          fontBase.onchange = () =>
+            fontBaseStyle.textContent = fontBase.checked
               ? `:root { --font-family-base: "Poppins"; }`
               : "";
-          });
         </script>
-        <style id="font-header-style"></style>
+        <style id="fontHeaderStyle"></style>
         <script type="application/javascript" async>
-          var headerCheck = document.getElementById("font-header");
-          var headerStyle = document.getElementById("font-header-style");
-          headerCheck.addEventListener("change", () => {
-            headerStyle.textContent = headerCheck.checked
+          fontHeader.onchange = () => 
+            fontHeaderStyle.textContent = fontHeader.checked
               ? `:root { --font-family-header: "Libre Baskerville"; }`
               : "";
-          });
         </script>
-        <style id="font-monospace-style"></style>
+        <style id="fontMonospaceStyle"></style>
         <script type="application/javascript" async>
-          var monospaceCheck = document.getElementById("font-monospace");
-          var monospaceStyle = document.getElementById("font-monospace-style");
-          monospaceCheck.addEventListener("change", () => {
-            monospaceStyle.textContent = monospaceCheck.checked
+          fontMonospace.onchange = () => 
+            fontMonospaceStyle.textContent = fontMonospace.checked
               ? `:root { --font-family-monospace: "JetBrains Mono"; }`
               : "";
-          });
         </script>
-        <style id="primary-hue-style"></style>
+        <style id="primaryHueStyle"></style>
         <script type="application/javascript">
-          var primaryHue = Math.floor((Math.random() * 360) / 5) * 5;
-          var primaryHueInput = document.getElementById("primary-hue");
-          var primaryHueStyle = document.getElementById("primary-hue-style");
           var setPrimaryHue = (hue) => {
             primaryHueStyle.textContent = `:root { --color-primary-hue: ${hue}deg; }`;
           };
-          setPrimaryHue(primaryHue);
-          primaryHueInput.value = primaryHue;
-          primaryHueInput.addEventListener("change", () => {
-            setPrimaryHue(primaryHueInput.value);
-          });
+          primaryHue.onchange = () => setPrimaryHue(primaryHue.value);
+          var hue = Math.floor((Math.random() * 360) / 5) * 5;
+          setPrimaryHue(hue);
+          primaryHue.value = hue;
         </script>
-        <style id="sizing-style"></style>
+        <style id="sizingStyle"></style>
         <script type="application/javascript">
-          var sizingInput = document.getElementById("sizing");
-          var sizingStyle = document.getElementById("sizing-style");
-          var sizingOut = document.getElementById("sizing-out");
-          sizingInput.addEventListener("change", () => {
-            const sizing = Number(sizingInput.value);
-            sizingStyle.textContent = `:root { --sizing: ${sizing}; }`;
-            sizingOut.textContent = sizing;
-          });
+          sizing.onchange = () => {
+            var size = Number(sizing.value);
+            sizingStyle.textContent = `:root { --sizing: ${size}; }`;
+            sizingOut.textContent = size;
+          };
         </script>
       </section>
 
@@ -646,7 +625,7 @@ public:
         </main>
       </article>
 
-      <article id="swatches">
+      <article>
         <header>
           <h2>Color Swatches</h2>
           <style>
@@ -659,27 +638,37 @@ public:
               --text-color: var(--color-primary-inverse);
             }
 
-            #swatches main {
+            #rainbow p {
+              width: 100%;
+              height: 10px;
+              padding: 0;
+              margin: 0;
+              border-radius: 0;
+              background-color: var(--color);
+              min-height: 5px;
+            }
+
+            #swatches {
               min-height: 150px;
               --grid-column-count: 1;
             }
 
             @media (min-width: 425px) {
-              #swatches main {
+              #swatches {
                 min-height: 300px;
                 --grid-column-count: 2;
               }
             }
 
             @media (min-width: 768px) {
-              #swatches main {
+              #swatches {
                 min-height: 150px;
                 --grid-column-count: 4;
               }
             }
           </style>
         </header>
-        <main class="grid swatches">
+        <main class="grid" id="swatches">
           <p style="--color-hue: var(--color-primary-hue);">
             <strong>Primary Color</strong>
           </p>
@@ -692,6 +681,22 @@ public:
           <p style="--color-hue: var(--color-contrast-hue);">
             <strong>Contrast Color</strong>
           </p>
+        </main>
+
+        <main id="rainbow" class="grid swatches" style="
+          --grid-column-count: 73;
+          --spacing-block-horizontal: 0;
+          --spacing-block-vertical: 0;">
+          <script type="application/javascript" async>
+            for (let j = 0; j <= 100; j++) {
+              for (let i = 0; i <= 72; i++) {
+                const p = document.createElement('p');
+                p.style.setProperty('--color-hue', `${i * 5}deg`);
+                p.style.setProperty('--chroma', `${j * 0.4 / 10}`);
+                rainbow.append(p);
+              }
+            }
+          </script>
         </main>
       </article>
     </main>

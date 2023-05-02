@@ -1,6 +1,6 @@
 :root {
   --header-nav-background-color: var(--color);
-  --header-nav-color: var(--color-primary-inverse);
+  --header-nav-color: color-mix(in srgb, black 70%, var(--color));
   --header-border-color: var(--color-accent);
   --header-border-width: calc(var(--border-width) * 2);
   --header-border-style: var(--border-style);
@@ -109,7 +109,11 @@ nav > ul li:hover {
 }
 
 nav > ul li a {
-  --text-color: var(--color-primary);
+  --text-color: color-mix(
+    in oklch,
+    var(--color-text) 55%,
+    var(--header-nav-background-color)
+  );
   font-size: var(--font-size-larger);
   transition: color 0s linear;
   --text-decoration: none;
@@ -120,14 +124,18 @@ nav > ul li:has(a:hover) {
 }
 
 nav > ul li a:hover {
-  --text-color: var(--color-secondary);
+  --text-color: color-mix(
+    in oklab,
+    var(--color-text) 65%,
+    var(--header-nav-color)
+  );
 }
 
 :where(header, footer) > nav > ul li a {
-  --text-color: var(--header-nav-color);
+  --text-color: var(--color-text);
 }
 
 :where(header, footer) > nav > :where(h1, h2, h3, h4, h5, h6) a {
-  --text-color: var(--header-nav-color);
+  --text-color: var(--color-text);
   --text-decoration: none;
 }

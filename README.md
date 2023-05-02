@@ -166,15 +166,24 @@ Override variables.
 
 ### Color
 
+Full colors
+
 - `--white`
 - `--black`
 
+Color part variables
+
+- `--primary-luminance`
+- `--primary-chroma`
 - `--color-primary-hue`
-- `-–color-accent-hue`
 - `--color-form-base`
   - `--color-form-invalid`
   - `--color-form-disabled`
   - `--color-form-required`
+
+Color Functions
+
+- `--color`
 
 ### Motion
 
