@@ -1,12 +1,10 @@
 :root {
-  --accordion-border-color: var(--border-muted);
+  --accordion-border-color: var(--border-color-muted);
 }
 
 details {
   display: block;
   margin-bottom: calc(var(--spacing-block-vertical) / 2);
-  padding-bottom: calc(var(--spacing-block-vertical) / 2);
-  border-bottom: var(--border-width) solid var(--accordion-border-color);
 }
 
 details:last-child {
@@ -17,6 +15,8 @@ details summary {
   line-height: 1rem;
   list-style-type: none;
   cursor: pointer;
+  padding-bottom: calc(var(--spacing-block-vertical) / 2);
+  border-bottom: var(--border-width) solid var(--accordion-border-color);
 }
 
 details summary:not([role]) {
@@ -34,7 +34,7 @@ details summary:not([role])::after {
   height: 1rem;
   margin-inline-start: calc(var(--spacing, 1rem) * 0.5);
   float: right;
-  transform: rotate(-90deg);
+  transform: rotate(180deg);
   background-image: var(--icon-chevron);
   background-position: right center;
   background-size: 1rem auto;
@@ -65,6 +65,10 @@ details summary[role="button"]:not(.outline).contrast::after {
   background-image: var(--icon-chevron-button-inverse);
 }
 
+details[open] {
+  padding-bottom: calc(var(--spacing-block-vertical) / 2);
+}
+
 details[open] > summary {
   margin-bottom: var(--spacing);
 }
@@ -74,7 +78,7 @@ details[open] > summary:not(:focus) {
 }
 
 details[open] > summary::after {
-  transform: rotate(0);
+  transform: rotate(90deg);
 }
 
 [dir="rtl"] details summary {
