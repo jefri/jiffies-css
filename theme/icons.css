@@ -1,3 +1,4 @@
 :root {
-  --icon-chevron: url(/theme/icons/chevron.svg);
+  /* --icon-chevron: url("/theme/icons/chevron.svg"); */
+  --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' width='24px' viewbox='0 0 24 24'%3E%3Cpolyline fill='none' stroke='hsl(205 20%25 25%25)' stroke-width='2px' stroke-linecap='round' stroke-linejoin='round' points='7.89,2 16.55,12 7.89,22' /%3E%3C/svg%3E");
 }

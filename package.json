@@ -1,6 +1,6 @@
 {
   "name": "@davidsouther/jiffies-css",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Post-modern full-app CSS reset.",
   "main": "index.css",
   "unpkg": "jiffies-css-bundle.min.css",
