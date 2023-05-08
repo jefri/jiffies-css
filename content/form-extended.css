@@ -43,12 +43,6 @@ label:has([type="checkbox"], [type="radio"]) {
   border-radius: 50%;
 }
 
-[type="radio"]:where(:checked) {
-  --background-color: var(--color-primary-inverse);
-  border-width: 0.35em;
-  background-image: none;
-}
-
 :is([type="checkbox"], [type="radio"]):checked[aria-invalid="false"] {
   --border-color: var(--form-element-valid-border-color);
 }

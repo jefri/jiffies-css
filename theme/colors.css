@@ -30,7 +30,12 @@
   );
 
   --color-primary-hue: 115deg;
-  --color-accent-amount: 10%;
+  --color-accent-amount: 55%;
+  --color-accent: color-mix(
+    in oklch,
+    var(--color-text) var(--color-accent-amount),
+    var(--color-primary)
+  );
 
   --color-secondary-hue: calc(var(--color-primary-hue) + 60deg);
   --color-contrast-hue: calc(var(--color-primary-hue) - 120deg);

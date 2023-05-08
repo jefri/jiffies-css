@@ -39,6 +39,7 @@
   border-radius: 50%;
   background-color: var(--text-color);
   transition: margin var(--switch-transition);
+  margin-inline-start: var(--border-width));
 }
 
 [type="checkbox"][role="switch"]:checked {

@@ -1,0 +1,24 @@
+/* Neumorphic alternative card */
+:root {
+  --card-background-color: var(--body-background);
+}
+article {
+  --light-shadow: color-mix(in oklch, var(--card-background-color) 60%, white);
+  --dark-shadow: color-mix(in oklch, var(--card-background-color) 60%, black);
+  --card-background-color: var(--body-background-color);
+  box-shadow: -5px -5px 20px white, 5px 5px 20px var(--dark-shadow);
+  border-radius: 26px;
+}
+
+/** Buttons */
+button,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+[role="button"] {
+  --light-color: color-mix(in oklch, var(--color) 50%, white);
+  --dark-color: color-mix(in oklch, var(--color) 90%, black);
+  border-radius: 10px;
+  box-shadow: 3px 3px 5px var(--dark-color), -3px -3px 5px var(--light-color);
+  margin: 0 12px;
+}

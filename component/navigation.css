@@ -109,11 +109,7 @@ nav > ul li:hover {
 }
 
 nav > ul li a {
-  --text-color: color-mix(
-    in oklch,
-    var(--color-text) 55%,
-    var(--header-nav-background-color)
-  );
+  --text-color: var(--color-accent);
   font-size: var(--font-size-larger);
   transition: color 0s linear;
   --text-decoration: none;
