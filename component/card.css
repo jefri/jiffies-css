@@ -8,8 +8,6 @@
   }
 }
 
-/** Articles are Material cards */
-
 article {
   box-shadow: var(--card-box-shadow);
   border-radius: var(--sizing-border-radius);
@@ -19,6 +17,7 @@ article {
 
 article > header {
   /* margin-bottom: var(--spacing-block-vertical); */
+  background-color: var(--header-nav-background-color);
   padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
   padding-bottom: calc(var(--spacing-block-vertical) / 2);
   border-bottom: var(--card-inner-border);

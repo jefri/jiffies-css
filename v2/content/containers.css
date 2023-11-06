@@ -1,0 +1,91 @@
+/**
+ * Content root. Either body or #root. Vanilla pages should use body directly as
+ * the root of the page. React pages can mount into a <div id="root" />.
+ */
+body:not(:has(> #root)),
+body > #root {
+  --background-color-page: var(--page-background-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--background-color-page);
+
+  & > main {
+    flex-grow: 1;
+  }
+
+  & > :is(main, header, footer) {
+    --width-content: var(--base-viewport-width);
+    width: var(--width-content);
+    margin: 0 auto;
+
+    &.fluid {
+      width: 100%;
+    }
+  }
+
+  /**
+   * Headers and footers in the base content have a direct nav, and are colored
+   * with the brand's color. Jiffies calles these "page-end"s for easier variable
+   * names.
+   */
+  & > :is(header, footer):has(> nav) {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+
+    --background-color-page-end-brand-primary: var(--brand-primary-color);
+
+    background-color: var(--background-color-page-end-brand-primary);
+    padding: 0 var(--spacing-block-horizontal);
+
+    --border-page-end: var(--page-end-border);
+    --fn-border-color: var(--base-border-color);
+    --fn-border-size: var(--base-border-size);
+
+    &:is(header) {
+      border-bottom: var(--fn-border);
+      align-items: end;
+    }
+
+    &:is(footer) {
+      border-top: var(--fn-border);
+      align-items: baseline;
+    }
+  }
+
+  &:has(> aside) {
+    flex-flow: row wrap;
+
+    & > header {
+      order: var(--layout-header-order);
+      width: 100%;
+    }
+    & > aside {
+      order: var(--layout-aside-order);
+      width: var(--base-aside-width);
+    }
+    & > main {
+      order: var(--layout-main-order);
+      max-width: var(--base-main-width);
+    }
+    & > footer {
+      order: var(--layout-footer-order);
+      with: 100%;
+    }
+  }
+}
+
+:root {
+  --layout-header-order: 1;
+  --layout-main-order: 3;
+  --layout-aside-order: 4;
+  --layout-footer-order: 3;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --layout-aside-order: 2;
+  }
+}

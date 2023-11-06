@@ -1,0 +1,12 @@
+:root {
+  --body-font-family: var(--brand-body-font-family, "unknown"),
+    var(--base-body-font-family);
+  --header-font-family: var(--brand-header-font-family, "unknown"),
+    var(--base-header-font-family);
+  --label-font-family: var(--brand-label-font-family, "unknown"),
+    var(--base-label-font-family);
+  --nav-font-family: var(--brand-nav-font-family, "unknown"),
+    var(--base-nav-font-family);
+  --monospace-font-family: var(--brand-monospace-font-family, "unknown"),
+    var(--base-monospace-font-family);
+}

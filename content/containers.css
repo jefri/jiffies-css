@@ -3,8 +3,7 @@
 }
 
 /* Containers body (> #root) > { main, header, footer, aside }(.fluid) */
-body,
-#body,
+body:not(:has(#root)),
 #root {
   width: 100%;
   background-color: var(--body-background-color);
@@ -78,5 +77,11 @@ body,
 @media (min-width: 2560px) {
   :is(body, #body, #root) > :is(main, header, footer) {
     max-width: 2170px;
+  }
+}
+
+@media print {
+  :is(body, #body, #root) > :is(main, header, footer) {
+    max-width: 100%;
   }
 }

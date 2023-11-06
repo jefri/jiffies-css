@@ -1,0 +1,173 @@
+html,
+body {
+}
+
+/** Base typography blocks */
+address,
+blockquote,
+dl,
+figure,
+form,
+ol,
+p,
+pre,
+table,
+ul {
+  --color-text-base: var(--base-text-color);
+  --font-family-body: var(--body-font-family);
+  --font-size-base: var(--base-font-size);
+  --font-weight-base: var(--base-font-weight);
+  --line-height-base: var(--base-line-height);
+  --margin-size-base: var(--base-margin-size);
+
+  color: var(--text-color-base);
+  font-family: var(--font-family-body-base);
+  font-size: var(--font-size-base);
+  font-style: normal;
+  font-weight: var(--font-weight-base);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--margin-size-base);
+  margin-top: 0;
+}
+:where(
+    address,
+    blockquote,
+    dl,
+    figure,
+    form,
+    ol,
+    p,
+    pre:not(:has(> code.hljs)),
+    table,
+    ul
+  ):last-child {
+  margin-bottom: 0;
+}
+
+header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  --font-family-header: var(--header-font-family);
+  font-family: var(--font-family-header);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  --color-header: color-mix(
+    in srgb,
+    var(--grey) calc(10% + calc(5% * var(--h-level))),
+    black
+  );
+  --font-size-header: calc(
+    1rem * pow(var(--font-scale), calc(7 - var(--h-level)))
+  );
+  --font-weight-header: 700;
+  --margin-bottom-header: var(--base-margin-size);
+  --margin-top-header: 0;
+
+  color: var(--color-header);
+  font-size: var(--font-size-header);
+  font-weight: var(--font-weight-header);
+  margin-bottom: var(--margin-bottom-header);
+  margin-top: var(--margin-top-header);
+}
+
+@media (prefers-color-scheme: dark) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    --color-header: color-mix(
+      in srgb,
+      var(--grey) calc(10% + calc(5% * var(--h-level))),
+      white
+    );
+  }
+}
+
+:where(h1, h2, h3, h4, h5, h6):last-child {
+  margin-bottom: 0;
+}
+
+h1 {
+  --h-level: 1;
+}
+h2 {
+  --h-level: 2;
+}
+h3 {
+  --h-level: 3;
+}
+h4 {
+  --h-level: 4;
+}
+h5 {
+  --h-level: 5;
+}
+h6 {
+  --h-level: 6;
+}
+
+:where(address, blockquote, dl, figure, form, ol, p, pre, table, ul)
+  ~ :is(h1, h2, h3, h4, h5, h6) {
+  --margin-top-trailing-h: var(--base-margin-size);
+  margin-top: var(--margin-top-trailing-h);
+}
+
+hgroup {
+  --margin-bottom-hgroup: var(--base-margin-size);
+  margin-bottom: var(--spacing-typography-vertical);
+
+  & > :where(h1, h2, h3, h4, h5, h6) {
+    margin-bottom: 0;
+  }
+}
+
+:where(dl, ol, ul) :is(dl, ol, ul) {
+  --margin-top-list-nested: calc(var(--base-size) * 0.25);
+  margin: 0;
+  margin-top: var(--margin-top-list-nested);
+}
+
+ul li {
+  list-style: circle;
+}
+
+blockquote {
+  --margin-blockquote: var(--base-size);
+  --padding-blockquote: var(--base-padding-with-border-size);
+  --color-blockquote-border: var(--grey);
+  --size-blockquote-border: var(--base-border-size);
+
+  display: block;
+  margin: var(--margin-blockquote) 0;
+  padding: var(--padding-blockquote);
+  border-right: none;
+  border-left: var(--size-blockquote-border) solid
+    var(--color-blockquote-border);
+  border-inline-start: var(--size-blockquote-border) solid
+    var(--color-blockquote-border);
+  border-inline-end: none;
+}
+
+pre {
+  cursor: text;
+}
+
+code,
+kbd,
+samp,
+pre {
+  --font-family-monospace: var(--monospace-font-family);
+  font-family: var(--font-family-monospace);
+}

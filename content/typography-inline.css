@@ -1,16 +1,18 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 a,
 [role="link"] {
-  --hyperlink-text-decoration: underline;
   --text-color: var(--color-hyperlink);
   --background-color: transparent;
-  --text-decoration: var(--hyperlink-text-decoration);
   outline: none;
   color: var(--text-color);
   background-color: var(--background-color);
-  text-decoration: var(--text-decoration);
+  text-decoration: none;
   transition: background-color var(--transition), color var(--transition),
     text-decoration var(--transition), box-shadow var(--transition);
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 a:is([aria-current], :hover, :focus),

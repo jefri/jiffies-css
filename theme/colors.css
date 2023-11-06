@@ -78,10 +78,12 @@
   --color-valid-focus: hsl(var(--color-valid-hue) 45% 40%);
 
   --color-hyperlink: blue;
-  --color-hyperlink-visted: purple;
+  --color-hyperlink-visted: none;
+  --color-hyperlink-focus: none;
+  --color-hyperlink-hover: none;
   /* --color-hyperlink-active: red; */
-  --color-hyperlink-focus: red;
-  --color-hyperlink-hover: red;
+  /* --color-hyperlink-focus: red; */
+  /* --color-hyperlink-hover: red; */
 }
 
 :where(*) {
@@ -103,5 +105,15 @@
     --base-luminance: 30%;
     --color-text: white;
     --color-form-element-disabled-background: hsl(var(--grey-hue) 18% 30%);
+
+    --color-hyperlink: lightblue;
+  }
+}
+
+@media print {
+  :root {
+    --color-hyperlink: none;
+    --base-chroma: 0;
+    --body-background-color: white;
   }
 }

@@ -1,0 +1,11 @@
+ol.breadcrumbs {
+  justify-content: start;
+  & li::before {
+    content: var(--breadcrumb-marker);
+    padding: 0 var(--nav-item-spacing-horizontal);
+  }
+}
+
+:root {
+  --breadcrumb-marker: "→";
+}

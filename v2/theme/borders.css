@@ -1,0 +1,4 @@
+:root {
+  --page-end-border: var(--base-border-size) solid var(--base-border-color);
+  --card-inner-border: var(--base-border-size) solid var(--base-border-color);
+}

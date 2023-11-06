@@ -7,36 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#000000" />
-    <link rel="stylesheet" href="./v2/index.css" />
     <!-- <link rel="stylesheet" href="./index.css" /> -->
     <!-- <link rel="stylesheet" href="./jiffies-css-bundle.css" /> -->
     <!-- <link rel="stylesheet" href="./jiffies-css-bundle.min.css" /> -->
-    <!-- <link
+    <link
       rel="stylesheet"
       type="text/css"
       href="https://unpkg.com/@davidsouther/jiffies-css@1.0.1"
-    /> -->
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-      :root {
-        --body-font-family: Poppins;
-        --header-font-family: Orbitron;
-        --brand-chroma: 0.2;
-        --brand-hue: 255deg;
-          --brand-luminance: 80%;
-        --hyperlink-color: oklch(50% 0.5 90deg);
-      }
-
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --brand-hue: 255deg;
-          --brand-chroma: 0.35;
-          --brand-luminance: 60%;
-          --hyperlink-color: oklch(100% 0.5 90deg);
-        }
-      }
-    </style>
+    />
   </head>
   <body>
     <header class="fluid">
@@ -109,7 +87,7 @@
             Sample customization block
             (<a href="#usage" onclick="javascript:copyRoot()">Copy</a>):
             <br />
-            <pre><code>:root {
+            <pre style="display: inline-block"><code>:root {
   --color-primary-hue: <input id="primaryHue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg; /* Default 115deg in bundle */
   --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizingOut">1</span>;
   <label><input type="checkbox" id="fontBase" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-base: Poppins;</label>
@@ -211,10 +189,6 @@
             culpa qui officia deserunt mollit anim id est laborum
           </p>
         </main>
-        <footer>
-          <p>Footer content for a card.</p>
-          <button>Ok</button>
-        </footer>
       </article>
 
       <article id="formatting">
@@ -652,7 +626,6 @@ public:
         </main>
       </article>
 
-      <!--
       <article>
         <header>
           <h2>Color Swatches</h2>
@@ -727,7 +700,6 @@ public:
           </script>
         </main>
       </article>
-    -->
     </main>
     <aside>
       <nav>

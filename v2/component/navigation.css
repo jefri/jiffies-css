@@ -1,0 +1,101 @@
+:root {
+  --header-nav-background-color: var(--color);
+  --header-nav-color: color-mix(in srgb, black 70%, var(--color));
+  --header-border-color: var(--color-accent);
+  --header-border-width: calc(var(--border-width) * 2);
+  --header-border-style: var(--border-style);
+  --nav-item-spacing-vertical: var(--size-small);
+  --nav-item-spacing-horizontal: var(--size-base);
+}
+
+nav {
+  & a {
+    --font-family-hyperlink: var(--nav-font-family);
+    --text-decoration-hyperlink: none;
+    &:is([aria-current], :hover, :focus) {
+      --text-decoration-hyperlink: underline;
+    }
+  }
+}
+
+aside > nav {
+  position: sticky;
+  top: calc(var(--spacing-block-vertical));
+  max-height: 100vh;
+  overflow-y: scroll;
+  padding-bottom: var(--nav-item-spacing-vertical);
+
+  & ol li a {
+    display: block;
+    padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
+  }
+
+  & li:hover > ol > li {
+    transition: padding var(--transition);
+    padding-left: var(--toc-left-offset);
+  }
+}
+
+:root {
+  --toc-left-offset: calc(var(--nav-item-spacing-horizontal) * 2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --toc-left-offset: 0;
+  }
+}
+
+:is(header, footer) > nav ol {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav:not(aside > nav) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+
+  & > ol {
+    align-items: center;
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+
+    & li {
+      display: inline-block;
+    }
+  }
+}
+
+nav {
+  & li {
+    margin: 0;
+    transition: background-color var(--transition);
+    --background-color: transparent;
+    background-color: var(--background-color);
+    padding: 0 var(--spacing-typography-horizontal);
+    transition: padding var(--transition);
+
+    &:has(a:hover) {
+      --background-color: var(--color-primary-hover);
+    }
+
+    & a {
+      --text-color: var(--color-accent);
+      font-size: var(--font-size-larger);
+      transition: color 0s linear;
+      --text-decoration: none;
+      &:hover {
+        --text-color: color-mix(
+          in oklab,
+          var(--color-text) 65%,
+          var(--header-nav-color)
+        );
+      }
+    }
+  }
+}

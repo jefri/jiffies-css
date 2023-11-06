@@ -37,8 +37,7 @@ h4,
 h5,
 h6 {
   --font-weight: 700;
-  /* --font-scale: 1.125; /* Major Second */
-  /* --font-size: calc(1rem * pow(var(--font-scale), var(--h-level) - 2)); */
+  --font-size: calc(1rem * pow(var(--font-scale), calc(7 - var(--h-level))));
   --text-color: color-mix(
     in srgb,
     var(--grey) calc(10% + calc(5% * var(--h-level))),
@@ -73,27 +72,27 @@ h6 {
 
 h1 {
   --h-level: 1;
-  --font-size: 1.802rem;
+  /* --font-size: 1.802rem; */
 }
 h2 {
   --h-level: 2;
-  --font-size: 1.602rem;
+  /* --font-size: 1.602rem; */
 }
 h3 {
   --h-level: 3;
-  --font-size: 1.424rem;
+  /* --font-size: 1.424rem; */
 }
 h4 {
   --h-level: 4;
-  --font-size: 1.266rem;
+  /* --font-size: 1.266rem; */
 }
 h5 {
   --h-level: 5;
-  --font-size: 1.125rem;
+  /* --font-size: 1.125rem; */
 }
 h6 {
   --h-level: 6;
-  --font-size: 1rem;
+  /* --font-size: 1rem; */
 }
 
 :where(address, blockquote, dl, figure, form, ol, p, pre, table, ul)

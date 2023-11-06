@@ -1,0 +1,77 @@
+/* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
+a,
+[role="link"] {
+  --color-hyperlink: var(--hyperlink-color);
+  --background-color-hyperlink: transparent;
+
+  color: var(--color-hyperlink);
+  background-color: var(--background-color-hyperlink);
+
+  --text-decoration-hyperlink: underline;
+  outline: none;
+  text-decoration: var(--text-decoration-hyperlink);
+  transition: background-color var(--transition), color var(--transition),
+    text-decoration var(--transition), box-shadow var(--transition);
+
+  &:is([aria-current], :hover, :focus) {
+    --text-color: var(--hyperlink-hover-color);
+    --text-decoration-hyperlink: none;
+  }
+
+  &:is(:visited) {
+    --color-hyperlink: var(--hyperlink-visited-color);
+  }
+
+  &:is(:focus) {
+    --background-color-hyperlink: var(--hyperlink-focus-background-color);
+  }
+}
+
+mark {
+  --background-color-mark: var(--mark-background-color);
+  --color-mark: var(--mark-color);
+  padding: 0.125rem 0.25rem;
+  background-color: var(--background-color-mark);
+  color: var(--color-mark);
+  vertical-align: baseline;
+}
+
+abbr[title] {
+  border-bottom: 1px dotted;
+  text-decoration: none;
+  cursor: help;
+}
+
+ins {
+  --color-ins: var(--ins-color);
+  color: var(--color-ins);
+  text-decoration: none;
+}
+
+del {
+  --color-del: var(--del-color);
+  color: var(--color-del);
+  text-decoration: none;
+}
+
+q::before {
+  content: "“";
+}
+
+q::after {
+  content: "”";
+}
+
+time {
+  --font-family-time: var(--monospace-font-family);
+  font-family: var(--font-family-time);
+}
+
+b,
+bold {
+}
+
+small {
+  --font-size-small: var(--small-font-size);
+  font-size: var(--font-size-small);
+}

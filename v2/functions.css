@@ -1,0 +1,15 @@
+* {
+  --fn-color: oklch(
+    var(--luminance, var(--base-luminance)) var(--chroma)
+      var(--color-hue, var(--color-primary-hue))
+  );
+
+  --color-hover: color-mix(in oklab, var(--color) 85%, white);
+  --color-focus: color-mix(in oklab, var(--color) 90%, white);
+  --color-active: color-mix(in oklab, var(--color) 85%, black);
+
+  --fn-merge: var(--fn-merge-a) ", " var(--fn-merge-b, "");
+
+  --fn-border: var(--fn-border-color) var(--fn-border-style, solid)
+    var(--fn-border-size);
+}
