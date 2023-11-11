@@ -17,8 +17,7 @@ input:not(
         [type="range"],
         [type="submit"],
         [type="reset"],
-        [type="button"],
-
+        [type="button"]
       )
   ) {
   height: calc(
@@ -47,8 +46,7 @@ input:not(
         [type="radio"],
         [type="submit"],
         [type="reset"],
-        [type="button"],
-
+        [type="button"]
       )
   ),
 select,
@@ -60,9 +58,7 @@ textarea {
   font-family: var(--font-family-monospace);
 }
 
-input:not(
-    :is([type="checkbox"], [type="radio"], [type="range"], [type="file"], )
-  )
+input:not(:is([type="checkbox"], [type="radio"], [type="range"], [type="file"]))
   select,
 textarea {
   appearance: none;

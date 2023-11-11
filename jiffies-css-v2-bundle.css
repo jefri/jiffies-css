@@ -1,0 +1,996 @@
+@layer reset, layout, content, component, utility, user, theme;
+
+/* v2/functions.css */
+@layer fns {
+  * {
+    --fn-color: oklch( var(--luminance, var(--base-luminance)) var(--chroma) var(--color-hue, var(--color-primary-hue)) );
+    --color-hover: color-mix(in oklab, var(--color) 85%, white);
+    --color-focus: color-mix(in oklab, var(--color) 90%, white);
+    --color-active: color-mix(in oklab, var(--color) 85%, black);
+    --fn-merge: var(--fn-merge-a) ", " var(--fn-merge-b, "");
+    --fn-border: var(--fn-border-color) var(--fn-border-style, solid) var(--fn-border-size);
+  }
+}
+
+/* v2/sanitize/sanitize.css */
+@layer reset {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+  }
+  ::before,
+  ::after {
+    text-decoration: inherit;
+    vertical-align: inherit;
+  }
+  :where(:root) {
+    cursor: default;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    -moz-tab-size: 4;
+    tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  :where(body) {
+    margin: 0;
+  }
+  :where(h1) {
+    font-size: 2em;
+    margin: 0.67em 0;
+  }
+  :where(dl, ol, ul) :where(dl, ol, ul) {
+    margin: 0;
+  }
+  :where(hr) {
+    color: inherit;
+    height: 0;
+  }
+  :where(nav) :where(ol, ul) {
+    list-style-type: none;
+    padding: 0;
+  }
+  :where(nav li)::before {
+    content: "\200b";
+    float: left;
+  }
+  :where(pre) {
+    font-family: monospace, monospace;
+    font-size: 1em;
+    overflow: auto;
+  }
+  :where(abbr[title]) {
+    text-decoration: underline;
+    text-decoration: underline dotted;
+  }
+  :where(b, strong) {
+    font-weight: bolder;
+  }
+  :where(code, kbd, samp) {
+    font-family: monospace, monospace;
+    font-size: 1em;
+  }
+  :where(small) {
+    font-size: 80%;
+  }
+  :where(audio, canvas, iframe, img, svg, video) {
+    vertical-align: middle;
+  }
+  :where(iframe) {
+    border-style: none;
+  }
+  :where(svg:not([fill])) {
+    fill: currentColor;
+  }
+  :where(table) {
+    border-collapse: collapse;
+    border-color: currentColor;
+    text-indent: 0;
+  }
+  :where(button, input, select) {
+    margin: 0;
+  }
+  :where(button, [type=button i], [type=reset i], [type=submit i]) {
+    -webkit-appearance: button;
+  }
+  :where(fieldset) {
+    border: 1px solid #a0a0a0;
+  }
+  :where(progress) {
+    vertical-align: baseline;
+  }
+  :where(textarea) {
+    margin: 0;
+    resize: vertical;
+  }
+  :where([type=search i]) {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+  }
+  ::-webkit-inner-spin-button,
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+  ::-webkit-input-placeholder {
+    color: inherit;
+    opacity: 0.54;
+  }
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+  ::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+  }
+  :where(dialog) {
+    background-color: white;
+    border: solid;
+    color: black;
+    height: -moz-fit-content;
+    height: fit-content;
+    left: 0;
+    margin: auto;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+    width: -moz-fit-content;
+    width: fit-content;
+  }
+  :where(dialog:not([open])) {
+    display: none;
+  }
+  :where(details > summary:first-of-type) {
+    display: list-item;
+  }
+  :where([aria-busy=true i]) {
+    cursor: progress;
+  }
+  :where([aria-disabled=true i], [disabled]) {
+    cursor: not-allowed;
+  }
+  :where([aria-hidden=false i][hidden]) {
+    display: initial;
+  }
+  :where([aria-hidden=false i][hidden]:not(:focus)) {
+    clip: rect(0, 0, 0, 0);
+    position: absolute;
+  }
+}
+
+/* v2/sanitize/forms.css */
+@layer reset {
+  :where(button, input, select, textarea) {
+    background-color: transparent;
+    border: 1px solid WindowFrame;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    padding: 0.25em 0.375em;
+  }
+  :where(select) {
+    -webkit-appearance: none;
+    appearance: none;
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='4'%3E%3Cpath d='M4 0h6L7 4'/%3E%3C/svg%3E") no-repeat right center / 1em;
+    border-radius: 0;
+    padding-right: 1em;
+  }
+  :where(select[multiple]) {
+    background-image: none;
+  }
+  :where([type=color i], [type=range i]) {
+    border-width: 0;
+    padding: 0;
+  }
+}
+
+/* v2/sanitize/assets.css */
+@layer reset {
+  :where(iframe, img, input, video, select, textarea) {
+    height: auto;
+    max-width: 100%;
+  }
+}
+
+/* v2/sanitize/typography.css */
+@layer reset {
+  html {
+    font-family: var(--base-body-font-family);
+  }
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--base-monospace-font-family);
+  }
+  @font-face {
+    font-family: system-ui;
+    src:
+      local(".AppleSystemUIFont"),
+      local("Segoe UI"),
+      local("Ubuntu"),
+      local("Roboto-Regular"),
+      local("HelveticaNeue");
+  }
+  @font-face {
+    font-family: system-ui;
+    font-style: italic;
+    src:
+      local(".AppleSystemUIFont"),
+      local("Segoe UI Italic"),
+      local("Ubuntu-Italic"),
+      local("Roboto-Italic"),
+      local("HelveticaNeue-Italic");
+  }
+  @font-face {
+    font-family: system-ui;
+    font-weight: bold;
+    src:
+      local(".AppleSystemUIFont"),
+      local("Segoe UI Bold"),
+      local("Ubuntu-Bold"),
+      local("Roboto-Bold"),
+      local("HelveticaNeue-Bold");
+  }
+  @font-face {
+    font-family: system-ui;
+    font-style: italic;
+    font-weight: bold;
+    src:
+      local(".AppleSystemUIFont"),
+      local("Segoe UI Bold Italic"),
+      local("Ubuntu-BoldItalic"),
+      local("Roboto-BoldItalic"),
+      local("HelveticaNeue-BoldItalic");
+  }
+  @font-face {
+    font-family: ui-monospace;
+    src:
+      local(".AppleSystemUIFontMonospaced-Regular"),
+      local("Segoe UI Mono"),
+      local("UbuntuMono"),
+      local("Roboto-Mono"),
+      local("Menlo");
+  }
+  @font-face {
+    font-family: ui-monospace;
+    font-style: italic;
+    src:
+      local(".AppleSystemUIFontMonospaced-RegularItalic"),
+      local("Segoe UI Mono Italic"),
+      local("UbuntuMono-Italic"),
+      local("Roboto-Mono-Italic"),
+      local("Menlo-Italic");
+  }
+  @font-face {
+    font-family: ui-monospace;
+    font-weight: bold;
+    src:
+      local(".AppleSystemUIFontMonospaced-Bold"),
+      local("Segoe UI Mono Bold"),
+      local("UbuntuMono-Bold"),
+      local("Roboto-Mono-Bold"),
+      local("Menlo-Bold");
+  }
+  @font-face {
+    font-family: ui-monospace;
+    font-style: italic;
+    font-weight: bold;
+    src:
+      local(".AppleSystemUIFontMonospaced-BoldItalic"),
+      local("Segoe UI Mono Bold Italic"),
+      local("UbuntuMono-BoldItalic"),
+      local("Roboto-Mono-BoldItalic"),
+      local("Menlo-BoldItalic");
+  }
+  :root {
+    --base-body-font-family:
+      system-ui,
+      -apple-system,
+      "Segoe UI",
+      "Roboto",
+      "Ubuntu",
+      "Cantarell",
+      "Noto Sans",
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji";
+    --base-monospace-font-family:
+      ui-monospace,
+      "Menlo",
+      "Consolas",
+      "Roboto Mono",
+      "Ubuntu Monospace",
+      "Noto Mono",
+      "Oxygen Mono",
+      "Liberation Mono",
+      monospace,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji";
+    --base-header-font-family: var(--base-body-font-family);
+    --base-label-font-family: var(--base-body-font-family);
+    --base-nav-font-family: var(--base-body-font-family);
+  }
+}
+
+/* v2/sanitize/reduce-motion.css */
+@layer reset {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-delay: 0s !important;
+      transition-duration: 0s !important;
+    }
+  }
+}
+
+/* v2/sanitize/index.css */
+@layer reset {
+  hr {
+    height: 0;
+    border: 0;
+    border-top: var(--sizing-border-width) solid var(--color-border);
+    color: inherit;
+  }
+  [hidden],
+  template {
+    display: none !important;
+  }
+  canvas {
+    display: inline-block;
+  }
+}
+
+/* v2/theme/typography.css */
+@layer theme {
+  :root {
+    --body-font-family: var(--brand-body-font-family, "unknown"), var(--base-body-font-family);
+    --header-font-family: var(--brand-header-font-family, "unknown"), var(--base-header-font-family);
+    --label-font-family: var(--brand-label-font-family, "unknown"), var(--base-label-font-family);
+    --nav-font-family: var(--brand-nav-font-family, "unknown"), var(--base-nav-font-family);
+    --monospace-font-family: var(--brand-monospace-font-family, "unknown"), var(--base-monospace-font-family);
+  }
+}
+
+/* v2/theme/colors.css */
+@layer theme {
+  :root {
+    color-scheme: light;
+    --white: hwb(0 100% 0%);
+    --black: hwb(0 0% 100%);
+    --grey-hue: 205deg;
+    --grey: hwb(var(--grey-hue) 80% 10%);
+    --blue-hue: 195deg;
+    --amber-hue: 45deg;
+    --red-hue: 5deg;
+    --green-hue: 125deg;
+    --brand-luminance: 95%;
+    --brand-chroma: 0.2;
+    --brand-hue: 115deg;
+    --brand-primary-color: oklch( var(--brand-luminance) var(--brand-chroma) var(--brand-hue) );
+    --base-luminance: 95%;
+    --base-chroma: 0.01;
+    --page-background-color: oklch( var(--base-luminance) var(--base-chroma, 0) var(--grey-hue) );
+    --base-border-color: black;
+    --base-text-color: black;
+    --mark-background-color: hsl(var(--amber-hue) 100% 90%);
+    --mark-color: hsl(var(--amber-hue) 80% 30%);
+    --ins-color: hsl(var(--green-hue) 60% 40%);
+    --del-color: hsl(var(--red-hue) 65% 45%);
+    --hyperlink-color: var(--base-text-color);
+    --hyperlink-hover-color: none;
+    --hyperlink-visited-color: var(--grey);
+    --hyperlink-focus-background-color: none;
+    --card-background-color: white;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --base-luminance: 30%;
+      --grey: hwb(var(--grey-hue) 80% 60%);
+      --brand-luminance: 58%;
+      --base-border-color: white;
+      --base-text-color: white;
+      --hyperlink-color: lightblue;
+      --card-background-color: black;
+    }
+  }
+  @media print {
+    :root {
+      --hyperlink-color: none;
+    }
+  }
+}
+
+/* v2/theme/sizing.css */
+@layer theme {
+  :root {
+    --base-viewport-width: 100%;
+    --base-main-width: var(--base-viewport-width);
+    --base-aside-width: var(--base-viewport-width);
+    --base-font-size: 16px;
+    --base-line-height: 20px;
+    --content-columns: 1;
+  }
+  @media (min-width: 425px) {
+    :root {
+      --base-viewport-width: 425px;
+    }
+  }
+  @media (min-width: 768px) {
+    :root {
+      --base-viewport-width: 768px;
+      --base-main-width: 425px;
+      --base-aside-width: 256px;
+    }
+  }
+  @media (min-width: 1024px) {
+    :root {
+      --base-viewport-width: 920px;
+      --base-main-width: 728px;
+      --base-font-size: 18px;
+      --base-line-height: 24px;
+    }
+  }
+  @media (min-width: 1440px) {
+    :root {
+      --base-viewport-width: 1130px;
+      --base-main-width: var(--base-viewport-width);
+      --base-aside-width: 310px;
+      --content-columns: 2;
+    }
+  }
+  @media (min-width: 2560px) {
+    :root {
+      --base-viewport-width: 2170px;
+      --base-aside-width: 390px;
+      --content-columns: 3;
+    }
+  }
+  :root {
+    --font-scale: 1.125;
+    --base-size: 8px;
+    &.compact {
+      --base-size: 4px;
+    }
+    &.loose {
+      --base-size: 16px;
+    }
+    --base-border-size: calc(var(--base-size) / 4);
+    --base-padding-with-border-size: calc( var(--base-size) - var(--base-border-size) );
+    --base-margin-size: var(--base-size);
+    --small-font-size: calc(var(--base-font-size) / var(--font-scale));
+    --size-xsmall: calc(var(--base-size) / 4);
+    --size-small: calc(var(--base-size) / 2);
+    --size-base: var(--base-size);
+    --size-medium: calc(var(--base-size) * 2);
+    --size-large: calc(var(--base-size) * 3);
+    --size-xlarge: calc(var(--base-size) * 4);
+    --spacing-block-vertical: var(--size-base);
+    --spacing-block-horizontal: var(--size-medium);
+  }
+}
+
+/* v2/theme/borders.css */
+@layer theme {
+  :root {
+    --page-end-border: var(--base-border-size) solid var(--base-border-color);
+    --card-inner-border: var(--base-border-size) solid var(--base-border-color);
+  }
+}
+
+/* v2/theme/animation.css */
+@layer theme {
+  :root {
+    --transition-time: 0.2s;
+    --transition-function: ease-in-out;
+    --transition: var(--transition-time) var(--transition-function);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --transition-time: 0s;
+    }
+  }
+}
+
+/* v2/theme/icons.css */
+@layer theme {
+  :root {
+    --icon-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24px' width='24px' viewbox='0 0 24 24'%3E%3Cpolyline fill='none' stroke='hsl(205 20%25 25%25)' stroke-width='2px' stroke-linecap='round' stroke-linejoin='round' points='7.89,2 16.55,12 7.89,22' /%3E%3C/svg%3E");
+  }
+}
+
+/* v2/theme/theme.css */
+@layer theme;
+
+/* v2/content/containers.css */
+@layer content {
+  body:not(:has(> #root)),
+  body > #root {
+    --background-color-page: var(--page-background-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color-page);
+    & > main {
+      flex-grow: 1;
+    }
+    & > :is(main, header, footer) {
+      --width-content: var(--base-viewport-width);
+      width: var(--width-content);
+      margin: 0 auto;
+      &.fluid {
+        width: 100%;
+      }
+    }
+    & > :is(header, footer):has(> nav) {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      --background-color-page-end-brand-primary: var(--brand-primary-color);
+      background-color: var(--background-color-page-end-brand-primary);
+      padding: 0 var(--spacing-block-horizontal);
+      --border-page-end: var(--page-end-border);
+      --fn-border-color: var(--base-border-color);
+      --fn-border-size: var(--base-border-size);
+      &:is(header) {
+        border-bottom: var(--fn-border);
+        align-items: end;
+      }
+      &:is(footer) {
+        border-top: var(--fn-border);
+        align-items: baseline;
+      }
+    }
+    &:has(> aside) {
+      flex-flow: row wrap;
+      & > header {
+        order: var(--layout-header-order);
+        width: 100%;
+      }
+      & > aside {
+        order: var(--layout-aside-order);
+        width: var(--base-aside-width);
+      }
+      & > main {
+        order: var(--layout-main-order);
+        max-width: var(--base-main-width);
+      }
+      & > footer {
+        order: var(--layout-footer-order);
+        width: 100%;
+      }
+    }
+  }
+  :root {
+    --layout-header-order: 1;
+    --layout-main-order: 3;
+    --layout-aside-order: 4;
+    --layout-footer-order: 3;
+  }
+  @media (min-width: 768px) {
+    :root {
+      --layout-aside-order: 2;
+    }
+  }
+}
+
+/* v2/content/typography-block.css */
+@layer content {
+  html,
+  body {
+  }
+  address,
+  blockquote,
+  dl,
+  figure,
+  form,
+  ol,
+  p,
+  pre,
+  table,
+  ul {
+    --color-text-base: var(--base-text-color);
+    --font-family-body: var(--body-font-family);
+    --font-size-base: var(--base-font-size);
+    --font-weight-base: var(--base-font-weight);
+    --line-height-base: var(--base-line-height);
+    --margin-size-base: var(--base-margin-size);
+    color: var(--text-color-base);
+    font-family: var(--font-family-body-base);
+    font-size: var(--font-size-base);
+    font-style: normal;
+    font-weight: var(--font-weight-base);
+    line-height: var(--line-height-base);
+    margin-bottom: var(--margin-size-base);
+    margin-top: 0;
+  }
+  :where(address, blockquote, dl, figure, form, ol, p, pre:not(:has(> code.hljs)), table, ul):last-child {
+    margin-bottom: 0;
+  }
+  header,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    --font-family-header: var(--header-font-family);
+    font-family: var(--font-family-header);
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    --color-header: color-mix( in srgb, var(--grey) calc(10% + calc(5% * var(--h-level))), black );
+    --font-size-header: calc( 1rem * pow(var(--font-scale), calc(7 - var(--h-level))) );
+    --font-weight-header: 700;
+    --margin-bottom-header: var(--base-margin-size);
+    --margin-top-header: 0;
+    color: var(--color-header);
+    font-size: var(--font-size-header);
+    font-weight: var(--font-weight-header);
+    margin-bottom: var(--margin-bottom-header);
+    margin-top: var(--margin-top-header);
+  }
+  @media (prefers-color-scheme: dark) {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      --color-header: color-mix( in srgb, var(--grey) calc(10% + calc(5% * var(--h-level))), white );
+    }
+  }
+  :where(h1, h2, h3, h4, h5, h6):last-child {
+    margin-bottom: 0;
+  }
+  h1 {
+    --h-level: 1;
+  }
+  h2 {
+    --h-level: 2;
+  }
+  h3 {
+    --h-level: 3;
+  }
+  h4 {
+    --h-level: 4;
+  }
+  h5 {
+    --h-level: 5;
+  }
+  h6 {
+    --h-level: 6;
+  }
+  :where(address, blockquote, dl, figure, form, ol, p, pre, table, ul) ~ :is(h1, h2, h3, h4, h5, h6) {
+    --margin-top-trailing-h: var(--base-margin-size);
+    margin-top: var(--margin-top-trailing-h);
+  }
+  hgroup {
+    --margin-bottom-hgroup: var(--base-margin-size);
+    margin-bottom: var(--spacing-typography-vertical);
+    & > :where(h1, h2, h3, h4, h5, h6) {
+      margin-bottom: 0;
+    }
+  }
+  :where(dl, ol, ul) :is(dl, ol, ul) {
+    --margin-top-list-nested: calc(var(--base-size) * 0.25);
+    margin: 0;
+    margin-top: var(--margin-top-list-nested);
+  }
+  ul li {
+    list-style: circle;
+  }
+  blockquote {
+    --margin-blockquote: var(--base-size);
+    --padding-blockquote: var(--base-padding-with-border-size);
+    --color-blockquote-border: var(--grey);
+    --size-blockquote-border: var(--base-border-size);
+    display: block;
+    margin: var(--margin-blockquote) 0;
+    padding: var(--padding-blockquote);
+    border-right: none;
+    border-left: var(--size-blockquote-border) solid var(--color-blockquote-border);
+    border-inline-start: var(--size-blockquote-border) solid var(--color-blockquote-border);
+    border-inline-end: none;
+  }
+  pre {
+    cursor: text;
+  }
+  code,
+  kbd,
+  samp,
+  pre {
+    --font-family-monospace: var(--monospace-font-family);
+    font-family: var(--font-family-monospace);
+  }
+}
+
+/* v2/content/typography-inline.css */
+@layer content {
+  a,
+  [role=link] {
+    --color-hyperlink: var(--hyperlink-color);
+    --background-color-hyperlink: transparent;
+    color: var(--color-hyperlink);
+    background-color: var(--background-color-hyperlink);
+    --text-decoration-hyperlink: underline;
+    outline: none;
+    text-decoration: var(--text-decoration-hyperlink);
+    transition:
+      background-color var(--transition),
+      color var(--transition),
+      text-decoration var(--transition),
+      box-shadow var(--transition);
+    &:is([aria-current], :hover, :focus) {
+      --text-color: var(--hyperlink-hover-color);
+      --text-decoration-hyperlink: none;
+    }
+    &:is(:visited) {
+      --color-hyperlink: var(--hyperlink-visited-color);
+    }
+    &:is(:focus) {
+      --background-color-hyperlink: var(--hyperlink-focus-background-color);
+    }
+  }
+  mark {
+    --background-color-mark: var(--mark-background-color);
+    --color-mark: var(--mark-color);
+    padding: 0.125rem 0.25rem;
+    background-color: var(--background-color-mark);
+    color: var(--color-mark);
+    vertical-align: baseline;
+  }
+  abbr[title] {
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    cursor: help;
+  }
+  ins {
+    --color-ins: var(--ins-color);
+    color: var(--color-ins);
+    text-decoration: none;
+  }
+  del {
+    --color-del: var(--del-color);
+    color: var(--color-del);
+    text-decoration: none;
+  }
+  q::before {
+    content: "\201c";
+  }
+  q::after {
+    content: "\201d";
+  }
+  time {
+    --font-family-time: var(--monospace-font-family);
+    font-family: var(--font-family-time);
+  }
+  b,
+  bold {
+  }
+  small {
+    --font-size-small: var(--small-font-size);
+    font-size: var(--font-size-small);
+  }
+}
+
+/* v2/content/content.css */
+@layer content;
+
+/* v2/component/card.css */
+@layer component {
+  article {
+    --background-color-card: var(--card-background-color);
+    --border-radius-card: var(--base-size);
+    --margin-card-vertical: var(--size-large);
+    margin: var(--margin-card-vertical) 0;
+    background-color: var(--background-color-card);
+    border-radius: var(--border-radius-card);
+    & > header {
+      margin-bottom: var(--spacing-block-vertical);
+      padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+      padding-bottom: var(--spacing-block-vertical);
+      border-bottom: var(--card-inner-border);
+    }
+    & > main {
+      padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+      columns: var(--content-columns);
+    }
+    & > main:last-child {
+      padding-bottom: var(--spacing-block-vertical);
+    }
+    & > footer {
+      border-top: var(--card-inner-border);
+      margin-top: var(--spacing-block-vertical);
+      padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    }
+  }
+}
+
+/* v2/component/navigation.css */
+@layer component {
+  :root {
+    --header-nav-background-color: var(--color);
+    --header-nav-color: color-mix(in srgb, black 70%, var(--color));
+    --header-border-color: var(--color-accent);
+    --header-border-width: calc(var(--border-width) * 2);
+    --header-border-style: var(--border-style);
+    --nav-item-spacing-vertical: var(--size-small);
+    --nav-item-spacing-horizontal: var(--size-base);
+  }
+  nav {
+    & a {
+      --font-family-hyperlink: var(--nav-font-family);
+      --text-decoration-hyperlink: none;
+      &:is([aria-current], :hover, :focus) {
+        --text-decoration-hyperlink: underline;
+      }
+    }
+  }
+  aside > nav {
+    position: sticky;
+    top: calc(var(--spacing-block-vertical));
+    max-height: 100vh;
+    overflow-y: scroll;
+    padding-bottom: var(--nav-item-spacing-vertical);
+    & ol li a {
+      display: block;
+      padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
+    }
+    & li:hover > ol > li {
+      transition: padding var(--transition);
+      padding-left: var(--toc-left-offset);
+    }
+  }
+  :root {
+    --toc-left-offset: calc(var(--nav-item-spacing-horizontal) * 2);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --toc-left-offset: 0;
+    }
+  }
+  :is(header, footer) > nav ol {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+  }
+  nav:not(aside > nav) {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    & > ol {
+      align-items: center;
+      margin-bottom: 0;
+      padding: 0;
+      list-style: none;
+      & li {
+        display: inline-block;
+      }
+    }
+  }
+  nav {
+    & li {
+      margin: 0;
+      transition: background-color var(--transition);
+      --background-color: transparent;
+      background-color: var(--background-color);
+      padding: 0 var(--spacing-typography-horizontal);
+      transition: padding var(--transition);
+      &:has(a:hover) {
+        --background-color: var(--color-primary-hover);
+      }
+      & a {
+        --text-color: var(--color-accent);
+        font-size: var(--font-size-larger);
+        transition: color 0s linear;
+        --text-decoration: none;
+        &:hover {
+          --text-color: color-mix( in oklab, var(--color-text) 65%, var(--header-nav-color) );
+        }
+      }
+    }
+  }
+}
+
+/* v2/component/breadcrumb.css */
+@layer component {
+  ol.breadcrumbs {
+    justify-content: start;
+    & li::before {
+      content: var(--breadcrumb-marker);
+      padding: 0 var(--nav-item-spacing-horizontal);
+    }
+  }
+  :root {
+    --breadcrumb-marker: "\2192";
+  }
+}
+
+/* v2/component/component.css */
+@layer component;
+
+/* v2/utility/flex.css */
+@layer utility {
+  .flex {
+    display: flex;
+    flex-direction: column;
+  }
+  .flex.row {
+    flex-direction: row;
+  }
+  .flex.row.inline > * {
+    display: inline-block;
+  }
+  .flex.justify-around {
+    justify-content: space-around;
+  }
+  .flex.justify-between {
+    justify-content: space-between;
+  }
+  .flex.justify-center {
+    justify-content: center;
+  }
+  .flex.align-baseline {
+    align-items: baseline;
+  }
+  .flex.align-center {
+    align-items: center;
+  }
+  .flex.align-stretch {
+    align-items: stretch;
+  }
+  .flex.align-end {
+    align-items: end;
+  }
+  .flex > .flex-0 {
+    flex-basis: 0;
+  }
+  .flex > .flex-1 {
+    flex: 1;
+  }
+  .flex > .flex-2 {
+    flex: 2;
+  }
+  .flex > .flex-3 {
+    flex: 3;
+  }
+  .flex > .flex-4 {
+    flex: 4;
+  }
+}
+
+/* v2/utility/grid.css */
+@layer utility {
+  .grid {
+    --grid-column-count: 2;
+    display: grid;
+    grid-template-columns: repeat(var(--grid-column-count), 1fr);
+    gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  }
+}
+
+/* v2/utility/utility.css */
+@layer utility;
+
+/* v2/index.css */
+/*# sourceMappingURL=jiffies-css-v2-bundle.css.map */

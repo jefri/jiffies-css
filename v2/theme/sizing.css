@@ -1,33 +1,3 @@
-:root {
-  --font-scale: 1.125; /* Minor 2nd */
-
-  --base-size: 8px;
-  &.compact {
-    --base-size: 4px;
-  }
-
-  &.loose {
-    --base-size: 16px;
-  }
-
-  --base-border-size: calc(var(--base-size) / 4);
-  --base-padding-with-border-size: calc(
-    var(--base-size) - var(--base-border-size)
-  );
-  --base-margin-size: var(--base-size);
-  --small-font-size: calc(var(--base-font-size) / var(--font-scale));
-
-  --size-xsmall: calc(var(--base-size) / 4);
-  --size-small: calc(var(--base-size) / 2);
-  --size-base: var(--base-size);
-  --size-medium: calc(var(--base-size) * 2);
-  --size-large: calc(var(--base-size) * 3);
-  --size-xlarge: calc(var(--base-size) * 4);
-
-  --spacing-block-vertical: var(--size-base);
-  --spacing-block-horizontal: var(--size-medium);
-}
-
 /* | xs | 0     |        | 12px | */
 :root {
   --base-viewport-width: 100%;
@@ -79,4 +49,34 @@
     --base-aside-width: 390px;
     --content-columns: 3;
   }
+}
+
+:root {
+  --font-scale: 1.125; /* Minor 2nd */
+
+  --base-size: 8px;
+  &.compact {
+    --base-size: 4px;
+  }
+
+  &.loose {
+    --base-size: 16px;
+  }
+
+  --base-border-size: calc(var(--base-size) / 4);
+  --base-padding-with-border-size: calc(
+    var(--base-size) - var(--base-border-size)
+  );
+  --base-margin-size: var(--base-size);
+  --small-font-size: calc(var(--base-font-size) / var(--font-scale));
+
+  --size-xsmall: calc(var(--base-size) / 4);
+  --size-small: calc(var(--base-size) / 2);
+  --size-base: var(--base-size);
+  --size-medium: calc(var(--base-size) * 2);
+  --size-large: calc(var(--base-size) * 3);
+  --size-xlarge: calc(var(--base-size) * 4);
+
+  --spacing-block-vertical: var(--size-base);
+  --spacing-block-horizontal: var(--size-medium);
 }

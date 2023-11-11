@@ -1,10 +1,15 @@
 @import "./containers.css";
 /* Overflow scrolling figure .scroll-{x,y} */
-@import "./typography-block.css"; /* Block Typography html, hgroup, h*, p, ul, ol, blockquote, textarea */
-@import "./typography-inline.css"; /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
-@import "./button.css"; /* Button button a[role=button] input[type={button,submit,reset] */
-@import "./form.css"; /* Form label input select textarea label fieldset legend */
-@import "./form-extended.css";
-@import "./form-switch.css";
+/* Block Typography html, hgroup, h*, p, ul, ol, blockquote, textarea */
+@import "./typography-block.css";
+/* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
+@import "./typography-inline.css";
+/* Button button a[role=button] input[type={button,submit,reset] */
+/* @import "./button.css"; */
+/* Form label input select textarea label fieldset legend */
+/* @import "./form.css"; */
+/* @import "./form-extended.css"; */
+/* @import "./form-switch.css"; */
 /* Extended Form input[type={color,date,file,search} */
-@import "./table.css"; /* Table table thead tbody tfoot tr th td */
+/* Table table thead tbody tfoot tr th td */
+/* @import "./table.css"; */

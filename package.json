@@ -1,6 +1,6 @@
 {
   "name": "@davidsouther/jiffies-css",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Post-modern full-app CSS reset.",
   "main": "index.css",
   "unpkg": "jiffies-css-bundle.min.css",
@@ -13,5 +13,9 @@
   "bugs": {
     "url": "https://github.com/jefri/jiffies-css/issues"
   },
-  "homepage": "https://github.com/jefri/jiffies-css#readme"
+  "homepage": "https://github.com/jefri/jiffies-css#readme",
+  "devDependencies": {
+    "@parcel/css-cli": "^1.13.1",
+    "esbuild": "^0.19.5"
+  }
 }
