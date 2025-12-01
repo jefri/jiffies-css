@@ -1,10 +1,15 @@
 :root {
   color-scheme: light;
 
-  --white: hwb(0 100% 0%);
-  --black: hwb(0 0% 100%);
-  --grey-hue: 205deg;
-  --grey: hwb(var(--grey-hue) 80% 10%);
+  /* https://anthonyhobday.com/sideprojects/saferules/ */
+  /* https://anthonyhobday.com/sideprojects/containercolours/ */
+
+  --white: oklch(0.96 0 0);
+  --black: oklch(0.25 0 0);
+  --neutral-hue: 205deg;
+  --neutral-saturation: 5%;
+  --neutral: hsl(var(--grey-hue) 80% 10%);
+  --grey: var(--neutral);
 
   --blue-hue: 195deg;
   --amber-hue: 45deg;

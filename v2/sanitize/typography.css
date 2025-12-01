@@ -90,6 +90,7 @@ pre {
 
 :root {
   /* From sanitize.css/typography.css */
+  /** Also consider: Inter, Open Sans, Overpass */
   /* prettier-ignore */
   --base-body-font-family:
     system-ui,

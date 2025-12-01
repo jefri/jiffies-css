@@ -72,12 +72,13 @@ nav:not(aside > nav) {
 }
 
 nav {
-  & li {
+  li {
     margin: 0;
     transition: background-color var(--transition);
     --background-color: transparent;
     background-color: var(--background-color);
-    padding: 0 var(--spacing-typography-horizontal);
+    padding: 0;
+    padding-inline-start: var(--nav-item-spacing-horizontal);
     transition: padding var(--transition);
 
     &:has(a:hover) {

@@ -3,7 +3,7 @@
 /* Accordion details, summary */
 /* @import "./accordion.css"; */
 /* Tab details[role=tablist] summary[role=tab] */
-/* @import "./tabs.css"; */
+@import "./tabs.css";
 /* @import "./form-grid.css"; */
 /* Modal dialog */
 /* Navigation nav > ol, ul */

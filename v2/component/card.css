@@ -28,5 +28,7 @@ article {
     border-top: var(--card-inner-border);
     margin-top: var(--spacing-block-vertical);
     padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    display: flex;
+    justify-content: space-between;
   }
 }

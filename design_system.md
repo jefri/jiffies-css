@@ -2,43 +2,43 @@
 
 ## Variable Naming
 
-Theme variables. Specified in `:root` block.
+Theme variables. Specified in `:root` block. Should be the go-to control point.
 
-- `--{source}[_{variant}][-{state}]_{unit}`
-- `--brand_chroma`
-- `--card_header_color`
-- `--accordion_rounding`
+- `--{source}[-{variant}][-{state}]-{unit}`
+- `--brand-chroma`
+- `--card-header-color`
+- `--accordion-rounding`
 
 Functions & Intermediates. Specified in `*` blocks.
 
 - ``
 
-Finals. Specified in component blocks.
+Finals. Specified in component blocks. Can be overridden to provide specific treatments for elements. Should only be used by the framework, and sparingly otherwise.
 
-- `--{property}-{source}[-{variant}][-{state}]`
+- `--{property}[-{variant}][-{state}]-{source}`
 - `--color-brand-primary`
 - `--box-shadow-article`
 
 **Sources:**
 
-- `page`
+- `base`
 - `brand`
   - `primary`
   - `secondary`
   - `contrast`
-- `card`
+- `card`, an offset area of the page with a visual border.
   - `header`
   - `main`
   - `footer`
-- `accordion`
+- `accordion`, an expanding and contracting element that vertically stacks elements. One or more can be opened at a time.
   - `summary`
   - `details`
-- `tab`
+- `tab` - a horizontal header of short item titles, controlling one-at-a-time access to a single body of content.
   - `tablist`
-  - `body`
+  - `tabbody`
 - `nav`
-- `form`
-  - `controls`
+- `form` - a block of interactive elements.
+  - `controls` - a block of button-based non-input elements.
   - `control`
 - `text`
   - `body`
@@ -47,14 +47,14 @@ Finals. Specified in component blocks.
   - `monospace`
   - `link`
 
-\*\*
-
 **Units:**
 
-- `oklch`: `chroma`, `luminance`, `hue`
-- `length`: `rem`, `em`, `px`, etc
-- `scale`
-- `percent`
+- `color`: 
+- `size`: 
+- `scale`: 
+- `percent`: 
+- `font-family`: 
+- `enum`: 
 
 ## Foundations
 
@@ -76,9 +76,9 @@ Target Devices:
 - Galaxy S8+ . 360 740
 - iPad Pro 10.5" 834 1112
 - iPad Pro 12.9" (6th Gen) 1024 1366
-- MacBook Pro M1 Scaled 1168
-- MacBook Pro M1 Default 1523
-- MacBook Pro M1 Retina 3024
+- MacBook Pro M* Scaled 1168
+- MacBook Pro M* Default 1523
+- MacBook Pro M* Retina 3024
 
 1920×1080 – 9.94%
 1366×768 – 6.22%
@@ -124,19 +124,18 @@ Target Devices:
 - spacing-xsmall: base / 4
 - spacing-small: base / 2
 - spacing-base: base
-- spacing-medium: base \* 2
-- spacing-large: base \* 3
-- spacing-xlarge: base \* 4
+- spacing-medium: base * 2
+- spacing-large: base * 3
+- spacing-xlarge: base * 4
 - spacing-border: xsmall
 
 #### Flexbox
 
 Based on a 12-column grid for flow layout. Variety of helpers, and page CSS is free to specify adaptive overrides.
 
-- .flex
-- .flex-1 through .flex-12
+- .flexbox
+- .flex, .flex-1 through .flex-12
 - .row, .column
--
 
 #### Grid
 
@@ -218,6 +217,12 @@ Groupings and configurations of HTML that implicitly create a "component"
 
 #### Long-form content with left-side contents
 
+#### Brand page with Heros and 3-Cards
+
+#### Application with top & bottom bars, left & right menus, full-size pane behind
+
+#### 
+
 ### Forms
 
 #### Form Fields
@@ -229,6 +234,15 @@ Groupings and configurations of HTML that implicitly create a "component"
 
 #### Form Validations
 
+- Default, Hover, Active, Focused; Disabled, Invalid (inputs only)
+- Default -(mouse over)> Hover -(mouse down)> Active -(mouse up)> Focused -(lose focus)> Default
+- Default -(tab in)> Focused -(key down)> Active -(key up)> Focused -(lose focus)> Default
+
 #### Form Layouts
 
+Stacked: Input controls are full width, labels are smaller, above, and content justified. Width is 100% of container, container should be maxed out at 640px (tablet viewport width).
+Column: Label column content justified with half the container width, inputs on the opposite side.
+
 #### Nesting Forms
+
+## Offline Asset Fallback

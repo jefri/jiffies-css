@@ -5,7 +5,7 @@
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
 @import "./typography-inline.css";
 /* Button button a[role=button] input[type={button,submit,reset] */
-/* @import "./button.css"; */
+@import "./button.css";
 /* Form label input select textarea label fieldset legend */
 /* @import "./form.css"; */
 /* @import "./form-extended.css"; */
