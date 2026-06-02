@@ -2,14 +2,16 @@
 
 When starting any task, begin with research:using-research to explore best practices and common patterns for each component or feature.
 
-## Bugs (concrete defects in shipped v2)
+- [ ] **ci-playwright-install** — Add `npx playwright install chromium` to CI setup
+  step (runs once before `npm test`; separate from `npm install`).
 
+- [ ] **computed-dark-mode** — Add dark-mode computed tests: second `withPage` call
+  with `prefers-color-scheme: dark` emulation; assert body/header colors differ
+  from light-mode values.
 
-- [x] **typography-unknown-sentinel** — Dropped the `"unknown"` sentinel.
-  Each font-family now uses `var(--brand-*-font-family, var(--base-*-font-family))`.
-  Brand fonts are expected to declare their own `@font-face` fallback chains.
-
-- [ ] **Testing** Identify and implement a testing framework.
+- [ ] **computed-thresholds** — Expand seed tests with exact threshold assertions:
+  specific non-zero pixel sizes for padding, exact color comparisons for brand
+  colors. Depends on component tasks landing stable values.
 
 ---
 

@@ -14,8 +14,12 @@
     "url": "https://github.com/jefri/jiffies-css/issues"
   },
   "homepage": "https://github.com/jefri/jiffies-css#readme",
+  "scripts": {
+    "test": "node --test 'test/**/*.test.mjs'"
+  },
   "devDependencies": {
     "@parcel/css-cli": "^1.13.1",
-    "esbuild": "^0.19.5"
+    "esbuild": "^0.19.5",
+    "playwright": "^1.60.0"
   }
 }
