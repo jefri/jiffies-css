@@ -38,20 +38,32 @@ function startServer() {
 }
 
 /**
- * withPage(fn?) — launches Chromium, starts a node:http static server on a
- * random port serving the repo root, opens index.html, then either:
+ * withPage(options?, fn?) — launches Chromium, starts a node:http static server
+ * on a random port serving the repo root, opens index.html, then either:
  *   - if fn is provided: calls fn(page) and tears down both on return or throw
  *   - if fn is omitted: returns { page, close } for use in before/after hooks
  *
+ * @param {{ colorScheme?: 'light' | 'dark' } | ((page: import('playwright').Page) => Promise<void>)=} optionsOrFn
  * @param {((page: import('playwright').Page) => Promise<void>)=} fn
  * @returns {Promise<void | { page: import('playwright').Page, close: () => Promise<void> }>}
  */
-export async function withPage(fn) {
+export async function withPage(optionsOrFn, fn) {
+  let options = {};
+  if (typeof optionsOrFn === "function") {
+    fn = optionsOrFn;
+  } else if (optionsOrFn !== undefined) {
+    options = optionsOrFn;
+  }
+  const { colorScheme } = options;
+
   const server = await startServer();
   const { port } = server.address();
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto(`http://127.0.0.1:${port}/index.html`);
+  if (colorScheme !== undefined) {
+    await page.emulateMedia({ colorScheme });
+  }
 
   const close = async () => {
     await browser.close();
