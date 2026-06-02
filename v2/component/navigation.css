@@ -6,6 +6,13 @@
   --header-border-style: var(--border-style);
   --nav-item-spacing-vertical: var(--size-small);
   --nav-item-spacing-horizontal: var(--size-base);
+  --color: var(--brand-primary-color);
+  --color-accent: oklch(calc(var(--brand-luminance) * 0.6) var(--brand-chroma) var(--brand-hue));
+  --color-primary-hover: color-mix(in oklab, var(--brand-primary-color) 80%, white);
+  --color-text: var(--base-text-color);
+  --border-width: var(--base-border-size);
+  --border-style: solid;
+  --font-size-larger: calc(var(--base-font-size) * var(--font-scale));
 }
 
 nav {
