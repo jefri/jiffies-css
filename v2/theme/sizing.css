@@ -79,4 +79,8 @@
 
   --spacing-block-vertical: var(--size-base);
   --spacing-block-horizontal: var(--size-medium);
+
+  /* Typography spacing — rhythm around heading groups and inline nav items. */
+  --spacing-typography-vertical: var(--size-base);   /* 8px */
+  --spacing-typography-horizontal: var(--size-base); /* 8px */
 }

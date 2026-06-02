@@ -1,11 +1,14 @@
 # Developer Tasks — Jiffies CSS v2
 
+When starting any task, begin with research:using-research to explore best practices and common patterns for each component or feature.
+
+## Refactor / Cleanup
+
+- [ ] **spacing-typography-vars-refactor** — After `spacing-typography-vars` feature lands and all tests pass, run `/simplify` on the changed files (`v2/theme/sizing.css`). Also flag the dead `--margin-bottom-hgroup` Application token in `v2/content/typography-block.css` (defined but never consumed) for the typography cleanup pass.
+
+---
 
 ## Bugs (concrete defects in shipped v2)
-
-- [ ] **spacing-typography-vars** — `--spacing-typography-vertical` (hgroup) and
-  `--spacing-typography-horizontal` (nav) are referenced but never defined.
-  Define in the sizing theme or repoint to `--spacing-block-*`. Ref §3.2.
 
 - [ ] **navigation-undefined-tokens** — Audit `navigation.css` against the v2
   theme; define or repoint `--color`, `--color-accent`, `--color-primary-hover`,
@@ -15,6 +18,8 @@
 - [ ] **typography-unknown-sentinel** — Confirm intent or drop the `"unknown"`
   string sentinel in `theme/typography.css` `--body-font-family` fallback chain.
   Harmless but sloppy. Ref §3.4.
+
+- [ ] **Testing** Identify and implement a testing framework.
 
 ---
 
