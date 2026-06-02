@@ -1,4 +1,5 @@
 :root {
+  --base-font-weight: normal;
   --body-font-family: var(--brand-body-font-family, "unknown"),
     var(--base-body-font-family);
   --header-font-family: var(--brand-header-font-family, "unknown"),
