@@ -1,77 +1,22 @@
-# Jiffies CSS — Design System (aspirational spec)
+# Jiffies CSS — Design System
 
-This is the **aspirational design-level specification** for Jiffies CSS: how the
-library *should* work, researched and internally coherent — the target the
-implementation builds toward. It is written for a **contributor** building or
-extending the library.
+This is the design specification for Jiffies CSS. Each section defines one part
+of the system in detail: the tokens it sets, the rules it derives, and the
+selectors that apply them. It is written for a contributor building or extending
+the library, or a consumer looking for details without reading the code.
 
-It is not a consumer guide and not a rationale essay. For *why* the model is
-shaped this way, read [PHILOSOPHY.md](PHILOSOPHY.md); for *how to install and use*
-the library, read [README.md](README.md). This document states the ideal once and
-cross-links those siblings rather than restating them.
-
-> **Implementation status is never asserted here.** Where the ideal differs from
-> the shipped CSS, the gap is a tracked item in
-> [docs/developer/TASKS.md](docs/developer/TASKS.md), not an edit in this doc.
+For installation and usage, see [README.md](README.md); for the rationale behind
+the model, see [PHILOSOPHY.md](PHILOSOPHY.md).
 
 ---
 
-## 1 Purpose & Scope
+## Foundations
 
-### 1.1 Role vs PHILOSOPHY / README
+The foundations are the **Intent tier** : properties set in `:root` that
+drive the rest of the design. Each subsection defines one value system and the
+prior art it rests on.
 
-`design_system.md` is the aspirational design-level spec — the ideal. Each section
-answers one question: **"what should this part of the system be, in detail?"**
-
-The three contributor- and consumer-facing documents divide cleanly:
-
-| Document | Question it answers | Audience |
-|---|---|---|
-| **`design_system.md`** (this doc) | *What* should each part be, in detail? | Contributor (builds/extends) |
-| **[PHILOSOPHY.md](PHILOSOPHY.md)** | *Why* is the model shaped this way? | Reader of rationale |
-| **[README.md](README.md)** | *How* do I install and use it? | Consumer |
-
-The contract between them:
-
-- This doc **applies** PHILOSOPHY's three-tier variable model
-  (Intent → Derivation → Application) and its classless/semantic conventions to
-  concrete foundations and components. It does **not** re-explain the model; it
-  links to PHILOSOPHY (§3.1, §3.4).
-- This doc gives the contributor-facing detail behind README's consumer-facing
-  responsive table, override-token list, and fonts. It does **not** duplicate
-  README's install/usage material; it links to it.
-- Implementation status — what currently ships versus what is still aspirational —
-  is **never** asserted here. It lives in [TASKS.md](docs/developer/TASKS.md). A
-  reader who wants "is this built yet?" goes to TASKS.md; a reader who wants "what
-  is this supposed to be?" stays here.
-
-### 1.2 Progress tracking via TASKS.md anchors
-
-This document carries a **stable section-numbering scheme**. TASKS.md references
-those numbers (`Ref §4.1`) as the link between an implementation task and the
-spec section it builds toward. The contract:
-
-- **Section numbers are stable identifiers.** A `§`-reference in TASKS.md must
-  always resolve to a real heading here. This is verified mechanically by
-  `test/design-system-anchors.test.mjs`.
-- **Renumbering a section is a breaking change.** It requires a matching edit to
-  every TASKS.md reference in the same change.
-- **Adding a component appends a new `§4.x`.** It never renumbers an existing one,
-  so historical references stay valid.
-- This stable-anchor scheme is the agreed substitute for a separate conformance
-  document; TASKS.md is the single progress tracker.
-
----
-
-## 2 Foundations
-
-The foundations are the **Intent tier** (§3.1): a small set of `:root` dials that
-drive everything downstream. Each subsection states the ideal value system and
-cites the decision or prior art it rests on. Where the ideal differs from shipped
-CSS, the divergence is a tracked gap in [TASKS.md](docs/developer/TASKS.md), never
-an assertion of current state here.
-
-### 2.1 Breakpoints
+### Breakpoints
 
 A **6-step, min-width (mobile-first) ladder**, `xs`–`4k`:
 
@@ -86,20 +31,22 @@ A **6-step, min-width (mobile-first) ladder**, `xs`–`4k`:
 
 Each step resets the content-clamp width and the per-breakpoint type size; the
 `md`+ steps also set the `main`/`aside` split (`--base-main-width`,
-`--base-aside-width`). This replaces the legacy 4-step **max-width** set
-(500/1000/1500/2000) that the 2023 doc carried; the min-width ladder is the v2
-baseline.
+`--base-aside-width`). The ladder is min-width, not max-width: styles layer on as
+the viewport grows, rather than a desktop baseline that is stripped away for
+smaller screens.
 
-*Grounded in:* [`v2-design-system.md`](docs/research/v2-design-system.md) (Sizing
-notes) and the responsive table in [README.md](README.md#responsive); the
-per-breakpoint font sizes landed in commit `a2cf930` and are guarded by
-`test/responsive-fonts.test.mjs`.
+The responsive table's target column counts drive `--content-columns`
+(1·1·1·2·2·4) across the steps.
 
-> **Spec gap:** the responsive table's target column counts (`--content-columns`
-> 1·1·1·2·2·4) are the ideal; `sizing.css` currently ramps to 2 at `xl` and 3 at
-> `4k`. Tracked in [TASKS.md](docs/developer/TASKS.md).
+*Grounded in:* the mobile-first, min-width approach — Ethan Marcotte's
+[*Responsive Web Design*](https://alistapart.com/article/responsive-web-design/)
+(A List Apart, 2010), which introduced media-query-based responsive layout, and
+Luke Wroblewski's [*Mobile First*](https://mobile-first.abookapart.com/)
+(A Book Apart, 2011); see MDN's
+[media-query guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Media_queries)
+for the min-width technique.
 
-### 2.2 Typography
+### Typography
 
 Heading sizes follow a **major-third modular scale**, `--font-scale: 1.25`, over
 the native CSS `pow()` engine:
@@ -119,43 +66,47 @@ Five font roles, each an Intent override that falls back to a base face:
 Body **Poppins**, Text Header **Libre Baskerville**, App Header **Roboto**, Tables
 **Trebuchet MS**, Code **JetBrains Mono**.
 
-*Grounded in:* decision record **DR-3** in
-[`v2-decisions.md`](docs/research/v2-decisions.md) (1.25 lands in the
-evidence-backed 1.2–1.333 band; keeps the one-line `pow()`), and the modular-scale
-prior art DR-3 rests on — Tim Brown, *More Meaningful Typography*, and the same
-band Material 3 and Utopia occupy. The golden-ratio `--phi-*` ladder was a
-**README** claim, removed in `a2cf930`; it never appeared in this file and is not
-part of the ideal.
+*Grounded in:* modular scales — Tim Brown,
+[*More Meaningful Typography*](https://alistapart.com/article/more-meaningful-typography/)
+(A List Apart, 2011); the common 1.2–1.333 ratio band, with the major third
+(1.25) inside it — [Utopia](https://utopia.fyi/blog/css-modular-scales/); and the
+native [`pow()`](https://developer.mozilla.org/en-US/docs/Web/CSS/pow) math
+function (Baseline 2023), which lets the whole scale be one `calc()`.
 
-### 2.3 Color
+### Color
 
 Colors are stored as **parts, not values** — luminance, chroma, hue — and
 assembled at the use site with `oklch()`. The theming contract targets **one brand
 hue per page**: `--brand-hue` drives `--brand-primary-color: oklch(L C H)`, and the
 complementary, accent, and state colors derive from that single hue. Fine control
-is still available by overriding an Application final directly (§3.1).
+is still available by overriding an Application final directly.
 
 - **Dark mode flips parts, not colors.** `prefers-color-scheme: dark` lowers
   `--base-luminance` (95% → 30%) and `--brand-luminance` (95% → 58%); the whole
   palette recomputes from the same hue/chroma.
 - **State hues** are single-hue dials: `--blue-hue` (info), `--green-hue`
   (success/`ins`), `--amber-hue` (warning/`mark`), `--red-hue` (error/`del`).
-- **Interactive states** derive in the Derivation tier (§3.1) via `color-mix`:
+- **Interactive states** derive in the Derivation tier  via `color-mix`:
   `--_color-hover`/`--_color-focus` mix toward white, `--_color-active` toward
   black. `--_fn-color` is the parts-based entry point a component reads to build
   its `oklch()` from local `--luminance`/`--chroma`/`--color-hue`.
 
-*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md) (single-brand-hue scope; invariants
-like contrast live in Derivation), decision record **DR-2** in
-[`v2-decisions.md`](docs/research/v2-decisions.md) (why the derivation
-intermediates stay per-element and lazy), and the Material / Cloudscape token
-foundations cited as inspirations in [README.md](README.md#inspiration).
+*Grounded in:* [OKLCH in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
+(Evil Martians) and Lea Verou's
+[LCH colors in CSS](https://lea.verou.me/blog/2020/04/lch-colors-in-css-what-why-and-how/)
+for the parts-based, perceptually uniform model — because OKLCH separates
+lightness from hue and chroma, dropping lightness alone yields a dark theme;
+[Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
+and [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
+for deriving a full scale from a single hue; and
+[`color-mix()`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix)
+for the toward-white/black state derivations.
 
-### 2.4 Spacing & Sizing
+### Spacing & Sizing
 
 One atom, everything derived. `--base-size: 8px` is the spacing unit; density is a
 single `:root` switch — `.compact` → 4px, `.loose` → 16px — that rescales the
-entire app.
+entire component, page, or app.
 
 A t-shirt scale derives from the atom:
 
@@ -168,15 +119,17 @@ A t-shirt scale derives from the atom:
 | `--size-large` | `--base-size * 3` |
 | `--size-xlarge` | `--base-size * 4` |
 
-The box model is border-box with `--base-border-size` = `--base-size / 4`; block
+The box model is border-box with `--base-border-size` = `--size-xsmall`; block
 rhythm uses `--spacing-block-vertical` (base) and `--spacing-block-horizontal`
 (medium).
 
-*Grounded in:* the Sizing/Density section of [README.md](README.md#sizing) and the
-[`v2-design-system.md`](docs/research/v2-design-system.md) Sizing notes
+*Grounded in:* the 8-point grid — Material Design's
+[8dp spacing grid](https://m2.material.io/design/layout/spacing-methods.html) and
+Elliot Dahl's
+[Intro to the 8-Point Grid System](https://medium.com/built-to-adapt/intro-to-the-8-point-grid-system-d2573cde8632)
 ("one base, everything derived").
 
-### 2.5 Motion & Iconography
+### Motion & Iconography
 
 **Motion** is a single token triple: `--transition-time` (0.2s),
 `--transition-function` (`ease-in-out`), and the composed `--transition`.
@@ -185,29 +138,26 @@ by the reset layer's `reduce-motion` rules — belt and suspenders.
 
 **Iconography** ships as inline data-URI SVGs in the theme so no asset fetch is
 needed: `--icon-chevron` (a stroked chevron) backs the accordion/nav disclosure
-affordance. Icon sources are Feather Icons and Heroicons.
+affordance.
 
-*Grounded in:* [`v2/theme/animation.css`](v2/theme/animation.css),
-[`v2/theme/icons.css`](v2/theme/icons.css), and the Motion token list in
-[README.md](README.md#motion).
-
-> **Spec gap:** README sketches a richer motion vocabulary — named durations
-> (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) —
-> beyond the shipped single `--transition*`. The expanded set is the ideal; the
-> current triple is the floor. Tracked in [TASKS.md](docs/developer/TASKS.md).
+*Grounded in:*
+[`prefers-reduced-motion`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion)
+(MDN; satisfies WCAG technique
+[C39](https://www.w3.org/WAI/WCAG21/Techniques/css/C39)); icons from
+[Feather](https://github.com/feathericons/feather) (Cole Bemis, MIT);
+the inline
+[data-URI SVG](https://developer.mozilla.org/en-US/docs/Web/URI/Reference/Schemes/data)
+technique, which trades a network request for a small inline payload and so suits
+icon-sized assets.
 
 ---
 
-## 3 Architecture
+## Architecture
 
-How the pieces are organized: the variable tiers, how they are named, how the
-stylesheet files stack, and how selectors express component shape. The variable
-model and selector conventions are **owned by [PHILOSOPHY.md](PHILOSOPHY.md)**;
-this section applies them and records the two project-specific rules PHILOSOPHY
-leaves to the spec — the naming grammar (§3.2) and the canonical `@layer` order
-(§3.3).
+How the pieces are organized: the variable tiers , how they are named, how the stylesheet layers stack , and how selectors express
+component shape.
 
-### 3.1 Variable model
+### Variable model
 
 Every custom property lives in one of three tiers, a gradient of meaning from
 author intent to rendered property:
@@ -218,22 +168,25 @@ author intent to rendered property:
 | **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_color-hover` |
 | **Application** | the element's own rule | "what does this change?" | `--color-header`, `--font-size-base` |
 
-Overriding an **Intent** token is coarse control (moves everything downstream);
-overriding an **Application** final is fine control (one property, one element).
-The full treatment — blast radius, why invariants like contrast belong in
-Derivation, laziness of the `*` tier — is in
-[PHILOSOPHY.md](PHILOSOPHY.md#variable-model-intent--derivation--application) and
-is not restated here.
+Overriding an **Intent** token is coarse control: it moves everything downstream.
+Overriding an **Application** final is fine control: one property on one element.
+The **Derivation** tier sits between them on the universal selector `*`, so it
+re-derives per element and stays lazy — a derivation costs nothing until something
+reads it. Invariants that must always hold (contrast floors, the relationship
+between a base color and its hover/active states) live here rather than in Intent,
+so a consumer tuning the public dials cannot override them away. See
+[PHILOSOPHY.md](PHILOSOPHY.md) for the full rationale.
 
-*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md) (owns the model),
-[`v2-tasks.md`](docs/research/v2-tasks.md) §1.3, and the three-tier reading of the
-code in [`v2-design-system.md`](docs/research/v2-design-system.md).
+*Grounded in:* the tiered design-token pattern (global/primitive →
+semantic/alias → component) — Nathan Curtis,
+[Naming Tokens in Design Systems](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676)
+(EightShapes). Jiffies' twist is the middle tier: instead of static alias tokens,
+the Derivation engine lives on `*` and re-computes per element.
 
-### 3.2 Naming grammar
+### Naming grammar
 
-Names are **kebab-case, category/element-first**. The legacy
-`--{source}_{variant}-{state}_{unit}` grammar that encoded tier with mid-name
-underscores is **dropped**.
+Names are **kebab-case, category/element-first**. Tier is not encoded with
+mid-name underscores.
 
 - **Intent and Application** tokens are plain kebab-case: `--brand-hue`,
   `--base-font-size`, `--color-header`, `--margin-card-vertical`.
@@ -241,26 +194,20 @@ underscores is **dropped**.
   pseudo-private prefix — so a reader knows the value is part of the engine, not a
   dial to override: `--_fn-color`, `--_color-hover`, `--_fn-border`.
 
-**Decision D1 — Derivation prefix = `--_`.** The derivation tier uses the
-`--_` private prefix. This aligns with PHILOSOPHY (which already writes
-`--_fn-color`) and with the surveyed practice that no design system encodes tier
-via a mid-name underscore.
+**Decision D1 — Derivation prefix = `--_`.** The leading underscore is a naming
+convention only (CSS enforces no privacy); it signals "internal, do not override."
+No major design system encodes tier via a mid-name underscore.
 
-*Grounded in:* decision record **DR-1** in
-[`v2-decisions.md`](docs/research/v2-decisions.md) (ACCEPTED: plain hyphens,
-category-first; mark tier-2 intermediates private with `--_` per Verou) and
-[PHILOSOPHY.md](PHILOSOPHY.md#variable-model-intent--derivation--application).
+*Grounded in:* Lea Verou,
+[Custom properties with defaults: 3+1 strategies](https://lea.verou.me/blog/2021/10/custom-properties-with-defaults/),
+which names the leading-underscore "pseudo-private custom property" convention,
+and Nathan Curtis,
+[Naming Tokens in Design Systems](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676),
+on category-first token names.
 
-> **Spec gap:** shipped `v2/functions.css` declares the derivations **unprefixed**
-> (`--fn-color`, `--color-hover`/`-focus`/`-active`, `--fn-merge`, `--fn-border`),
-> and callers (`navigation.css`) read the unprefixed names. Renaming them to
-> `--_` is tracked in [TASKS.md](docs/developer/TASKS.md).
+### @layer order
 
-### 3.3 @layer order
-
-This section is the **single authority for the specific `@layer` order**. README
-and PHILOSOPHY describe the layering *concept* (cascade order is reading order);
-the exact sequence is fixed here:
+This section is the **single authority for the specific `@layer` order**:
 
 ```
 @layer fns, reset, layout, content, component, utility, user, theme;
@@ -270,7 +217,7 @@ the exact sequence is fixed here:
 |---|---|
 | `fns` | Derivation engine (`* { --_fn-* }`) — declared first, defined before any consumer; lazy, so it costs nothing until read |
 | `reset` | Browser normalize (vendored sanitize.css, wrapped in `:where()` for zero specificity) |
-| `layout` | Page-level structure (container, page-end). Reserved slot today — see the `layout-layer` task |
+| `layout` | Page-level structure (container, page-end) |
 | `content` | Semantic element styles (typography, tables, links) |
 | `component` | DOM + ARIA components (§4) |
 | `utility` | Class-based helpers (`.flex`, `.grid`) |
@@ -279,34 +226,24 @@ the exact sequence is fixed here:
 
 Two sub-questions are settled:
 
-- **(a) `theme` last is intentional.** Custom properties resolve by normal
-  cascade regardless of layer, so layer-last does not change inheritance; it
-  guarantees the `theme` `:root` token declarations win against any stray `:root`
-  rule in an earlier layer, protecting the token contract. This matches the
-  shipped order — no code gap for the `theme` position.
+- **(a) `theme` last is intentional.** Custom properties are ordinary properties,
+  so they participate in the cascade like any other. Declaring `theme` last therefore makes its `:root` token
+  declarations win against any conflicting `:root` rule in an earlier layer,
+  protecting the token contract. (Layers do not affect inheritance; this is purely
+  about which declaration wins.)
 - **(b) `fns` stays a separate layer, declared first.** The Derivation tier lives
   on `*` and is distinct from `theme`'s `:root` Intent tier; it is not merged into
-  `theme`. The shipped code already declares `fns` first.
+  `theme`, and it must be defined before any consumer reads it.
 
-The shipped `v2/index.css` already matches this order (`fns` first, `theme` last).
-The one open structural item is the `layout` layer: its import targets a
-not-yet-existing `layout/layout.css` while page layout lives in
-`content/containers.css` — that is the existing `layout-layer` task, not a new gap.
+*Grounded in:* [`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)
+(MDN) and [CSS Cascading and Inheritance Level 5](https://www.w3.org/TR/css-cascade-5/):
+for normal declarations, the declaration whose cascade layer is last wins;
+the first `@layer` statement fixes the order.
 
-*Grounded in:* [`v2-tasks.md`](docs/research/v2-tasks.md) §1.5 (add `fns` first),
-the cascade-layer-spine analysis in
-[`v2-design-system.md`](docs/research/v2-design-system.md) (the `theme`-last
-rationale), and [`v2/index.css`](v2/index.css).
-
-> **Spec gap:** README and PHILOSOPHY currently list their own layer orderings.
-> Reducing those to the layering *concept* (leaving the canonical order to this
-> §3.3) is tracked in [TASKS.md](docs/developer/TASKS.md).
-
-### 3.4 Selector & nesting conventions
+### Selector & nesting conventions
 
 Components are built from patterns of DOM nodes: one component is one nested
-selector tree whose shape matches the subtree it styles. The conventions —
-summarized here, **owned by [PHILOSOPHY.md](PHILOSOPHY.md#selectors--nesting)**:
+selector tree whose shape matches the subtree it styles.
 
 - **`& >`** child combinator for structural ownership, so a rule cannot leak into
   a nested instance of the same element.
@@ -320,37 +257,34 @@ summarized here, **owned by [PHILOSOPHY.md](PHILOSOPHY.md#selectors--nesting)**:
 
 Two organizing rules: Application finals are declared at the top of the block that
 consumes them and re-set in nested state blocks (state lives next to structure);
-and one file per component, with the `@layer` order (§3.3) doing the assembly.
+and one file per component, with the `@layer` order  doing the assembly.
 
-*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md#selectors--nesting) (owns the
-conventions) and the selector survey in
-[`v2-design-system.md`](docs/research/v2-design-system.md).
+*Grounded in:* MDN —
+[`:where()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where) (always 0
+specificity), [`:is()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:is)
+(takes the specificity of its most specific argument),
+[`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) (the relational
+"parent" selector), and the
+[child combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator).
 
 ---
 
-## 4 Components
+## Components
 
-Each `§4.x` is the **contract** its `component-*` task in
-[TASKS.md](docs/developer/TASKS.md) implements against. A component is a DOM shape
-plus an ARIA contract (§3.4), never a class; the only sanctioned edge-classes are
-the closed list `.secondary`, `.contrast`, `.outline`. Each entry uses one format:
+Each entry is the **contract** for one component. A component is a DOM shape plus
+an ARIA contract, never a class. Some necessary edge-classes add subtle additional intent: `.secondary`, `.contrast`, `.outline`. Each component description uses one format:
 
 - **DOM shape** — the element tree / nesting the rule targets.
 - **ARIA** — roles/attributes that select modalities or states.
-- **Tokens** — the Application finals (§3.1) it consumes.
+- **Tokens** — the Application finals  it consumes.
 - **States** — the interactive/ARIA states it styles.
 - **Edge-classes** — sanctioned classes, if any.
 
-Token names follow the §3.2 grammar; some are aspirational finals the component
-introduces. Build status is in TASKS.md, never asserted here.
+### Buttons
 
-### 4.1 Buttons
-
-The reference component — first consumer of the parts-based color engine
-(`--_fn-color`). Proves the philosophy the rest follow.
 
 - **DOM shape:** `button, a[role=button], input[type=button|submit|reset]`
-- **ARIA:** `[role=button]` promotes a link; `[aria-disabled]`, `[aria-busy]`
+- **ARIA:** `[role=button]` promotes a link to a button; `[aria-disabled]`, `[aria-busy]` allow for disabled states and loading spinners in buttons.
 - **Tokens:** `--_fn-color` (built from local `--color`/`--luminance`/`--chroma`),
   `--_color-hover`/`--_color-focus`/`--_color-active`, `--label-font-family`,
   `--font-size-base`, `--border-radius-button`, `--size-small`/`--size-base`
@@ -359,9 +293,9 @@ The reference component — first consumer of the parts-based color engine
   `[aria-busy]`
 - **Edge-classes:** `.secondary`, `.contrast`, `.outline`
 
-### 4.2 Forms
+### Forms
 
-The largest component. Controls share a border/radius/focus language; validity and
+Form controls share a border/radius/focus language; validity and
 editability are read from ARIA and native attributes, not classes.
 
 - **DOM shape:** `label`, `input`, `select`, `textarea`, `fieldset`, `legend`
@@ -375,7 +309,7 @@ editability are read from ARIA and native attributes, not classes.
   `[disabled]`, `[readonly]`
 - **Edge-classes:** none
 
-### 4.3 Form switch
+### Form switch
 
 A pure-CSS toggle: a checkbox or radio painted as a sliding switch via
 `appearance: none` and a `::before` knob.
@@ -389,9 +323,9 @@ A pure-CSS toggle: a checkbox or radio painted as a sliding switch via
 - **States:** `:checked`, `:focus-visible`, `[disabled]`
 - **Edge-classes:** none
 
-### 4.4 Tables
+### Tables
 
-Opinionated tables with zebra striping and their own type face.
+Opinionated tables with zebra striping and a type face separate from body or code text.
 
 - **DOM shape:** `table > thead, tbody, tfoot > tr > th, td`
 - **ARIA:** `[aria-sort]` on sortable `th`; `scope` on header cells
@@ -399,9 +333,9 @@ Opinionated tables with zebra striping and their own type face.
   `--table-row-odd-color`, `--_fn-border`, `--spacing-block-vertical`/
   `--spacing-block-horizontal` (cell padding)
 - **States:** `tr:nth-child(even|odd)`, `th[aria-sort]`, `tr:hover`
-- **Edge-classes:** none
+- **Edge-classes:** `.compact`, `.loose` to change cell padding. 
 
-### 4.5 Accordion
+### Accordion
 
 Pure-CSS disclosure using native `details`; the chevron is the theme icon.
 
@@ -413,11 +347,9 @@ Pure-CSS disclosure using native `details`; the chevron is the theme icon.
 - **States:** `[open]`, `summary:hover`, `summary:focus-visible`
 - **Edge-classes:** none
 
-### 4.6 Tabs
+### Tabs
 
-A tablist whose selected state is driven by `accessibility.js` — accessible tab
-selection cannot be expressed in pure CSS, so this supersedes the README's
-"pure-CSS tabs" framing.
+A tablist whose selected state is driven entirely accessibly. 
 
 - **DOM shape:** `[role=tablist] > [role=tab]` paired with `[role=tabpanel]`
   (commonly inside a `section`)
@@ -428,7 +360,7 @@ selection cannot be expressed in pure CSS, so this supersedes the README's
 - **States:** `[aria-selected=true]`, `:hover`, `:focus-visible`
 - **Edge-classes:** none
 
-### 4.7 Modal
+### Modal
 
 Native `dialog`; the reset gives the base, the component styles the surface and
 backdrop.
@@ -440,7 +372,7 @@ backdrop.
 - **States:** `[open]`, `::backdrop`
 - **Edge-classes:** none
 
-### 4.8 Property sheet
+### Property sheet
 
 A `dl` rendered as aligned label/value rows; shares the table striping language.
 
@@ -451,10 +383,9 @@ A `dl` rendered as aligned label/value rows; shares the table striping language.
 - **States:** `dt`/`dd` row pairing, `:hover` row
 - **Edge-classes:** none
 
-### 4.9 Progress
+### Progress
 
-The smallest component: a styled native `progress`, both determinate and
-indeterminate.
+A styled native `progress`, both determinate and indeterminate in line and round.
 
 - **DOM shape:** `progress` (`progress[value]` determinate; valueless =
   indeterminate)
@@ -463,9 +394,9 @@ indeterminate.
   `--border-radius-inline`, `--base-line-height` (bar height basis)
 - **States:** `[value]` (determinate) vs indeterminate; `::-webkit-progress-value`/
   `::-moz-progress-bar`
-- **Edge-classes:** none
+- **Edge-classes:** `.round`
 
-### 4.10 Form group
+### Form group
 
 A `fieldset[role=group]` that joins adjacent controls into one segmented row,
 flattening interior borders and radii.
@@ -479,15 +410,12 @@ flattening interior borders and radii.
 
 ---
 
-## 5 Patterns
+## Patterns
 
-Patterns are compositions of components (§4) and semantic elements into recurring
-page structures. They use the same contract template as §4. The card, navigation,
-and breadcrumb patterns already ship; their entries state the **ideal** shape, and
-where the shipped CSS diverges that is a tracked gap in
-[TASKS.md](docs/developer/TASKS.md), consistent with the rest of this doc.
+Patterns are compositions of components and semantic elements into recurring
+page structures.
 
-### 5.1 Card & Panel
+### Card & Panel
 
 A surface with optional header/footer rails around a main body. `article` is the
 elevated card; `section` is the flat panel.
@@ -502,7 +430,7 @@ elevated card; `section` is the flat panel.
   bottom padding
 - **Edge-classes:** none (`.fluid` is a layout utility, see §5.4)
 
-### 5.2 Navigation
+### Navigation
 
 `nav > ol` in two modes selected by ancestor, not by class.
 
@@ -516,11 +444,11 @@ elevated card; `section` is the flat panel.
   `li:has(a:hover)` (background); aside TOC hover-indent
 - **Edge-classes:** none
 
-### 5.3 Breadcrumb
+### Breadcrumb
 
-A trail rendered from a nav list with a separator glyph. The ideal is **classless**
-— the `Breadcrumb` ARIA label selects it, not a class — so it stays within the §4
-closed edge-class list.
+A trail rendered from a nav list with a separator glyph. It is **classless**: the
+`Breadcrumb` ARIA label selects it, not a class, so it stays within the §4 closed
+edge-class list.
 
 - **DOM shape:** `nav[aria-label="Breadcrumb"] > ol > li`
 - **ARIA:** `nav[aria-label="Breadcrumb"]`, `[aria-current=page]` on the last crumb
@@ -528,17 +456,11 @@ closed edge-class list.
 - **States:** `li::before` separator (omit the first item)
 - **Edge-classes:** none
 
-> **Spec gap:** shipped `breadcrumb.css` selects `ol.breadcrumbs` (a class); the
-> classless ideal selects the `Breadcrumb`-labelled nav. Tracked in
-> [TASKS.md](docs/developer/TASKS.md).
-
-### 5.4 Page layout & page-ends
+### Page layout & page-ends
 
 The page spine: a flex-column root that centers content to the responsive clamp,
 turns header/footer into brand "page-ends" when they contain a nav, and reflows an
-optional `aside` by `order`. This composite is aspirational in the `layout` layer
-(§3.3); it ships today in `content/containers.css` — the `layout-layer` task is the
-move.
+optional `aside` by `order`. It belongs to the `layout` layer.
 
 - **DOM shape:** `body:not(:has(> #root)), body > #root` then
   `& > :is(header, main, footer, aside)`
