@@ -1,4 +1,7 @@
 * {
+  /* Scaffolding: --fn-color is the first consumer entry-point for the
+     parts-based color system. No v2 component reads it yet; component-buttons
+     will be the first consumer when ported. */
   --fn-color: oklch(
     var(--luminance, var(--base-luminance)) var(--chroma)
       var(--color-hue, var(--color-primary-hue))

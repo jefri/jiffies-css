@@ -8,17 +8,6 @@ When starting any task, begin with research:using-research to explore best pract
 
 Discuss each drift as a decision, not an automatic rewrite.
 
-- [ ] **type-scale-apply** — Apply accepted DR-3: set `--font-scale: 1.25` (major
-  third), drop the φ claim from README. Keep the `pow()` engine. Ref DR-3.
-
-- [ ] **[DECIDE] responsive-fonts** — Pick: single-bump (rewrite README table),
-  full per-breakpoint ladder, or fluid `clamp()`. README promises
-  12/14/16/18/20/24; code bumps once at 1024→18px. Ref §2.2.
-
-- [ ] **fn-color-callers** — Decide when porting buttons/forms: wire `--fn-color`
-  into the color system or mark it explicitly as scaffolding. Currently defined,
-  no v2 consumers. Ref §2.3.
-
 - [ ] **rewrite-design-system-md** — Rewrite `design_system.md` once philosophy
   and type-scale decisions land. Most misleading file in the repo. Hold until
   upstream tasks clear. Ref §2.4.

@@ -93,8 +93,8 @@ Post-Modern CSS Full-Page Reset
 | Size | Breakpoint | Viewport | Columns | base |
 | ---- | ---------- | -------- | ------- | ---- |
 | xs   | 0          |          | 1       | 12px |
-| sm   | 510px      | 425px    | 1       | 14px |
-| md   | 768px      | 700px    | 1       | 16px |
+| sm   | 425px      | 425px    | 1       | 14px |
+| md   | 768px      | 768px    | 1       | 16px |
 | lg   | 1024px     | 920px    | 2       | 18px |
 | xl   | 1440px     | 1130px   | 2       | 20px |
 | 4k   | 2560px     | 2170px   | 4       | 24px |
@@ -121,39 +121,18 @@ Override variables.
 <!-- --{color, sizing, box}-{} -->
 <!-- --{component: accordian, card, form, link}[-{state: inactive, hover, disabled, focused, validation, error}][-{variant: }] -->
 
-### Constants
-
-`--phi-quart: 6.854`
-`--phi-cube: 4.236`
-`--phi-square: 2.618`
-`--phi-3-2: 2.058`
-`--phi: 1.618`
-`--phi-half: 1.272`
-`--phi-zero: 1`
-`--phi-root: 0.786`
-
 ### Sizing
 
-`--sizing-base` (responsive)
-`--sizing-
-`--spacing-block`
+`--base-size` (spacing unit, 8px default; `.compact` = 4px, `.loose` = 16px)
+`--spacing-block-horizontal`, `--spacing-block-vertical`
 
 ### Typography
 
-- `--font-size: --sizing-base`: (1rem), `--font-height: calc(var(--phi) * 1em)`
-  - `--font-size-heading-title` `--phi-cube` \<h1>
-  - `--font-size-heading-container` `--phi-square` \<h2>
-  - `--font-size-heading-section` `--phi-3-2` \<h3>
-  - `--font-size-body` `--phi-zero` \<p>
-  - `--font-size-figure` `--phi-half` \<figure> \<figcaption>
-- `--font-weight` 400 Normal
-  - `--font-weight-heavy` 700 Bold
-  - `--font-weight-light` 300 Light
-- `--font-family` Poppins
-
-  - `--font-family-heading` Jet-Brains Mono
-  - `--font-family-monospace` Libre Baskerville
-  - `--font-family-table` Trebuchet
+- `--font-scale: 1.25` (major third) — heading sizes derive from `calc(1rem * pow(var(--font-scale), calc(7 - n)))` where n = 1–6
+- `--base-font-size` — responsive base; see the breakpoint table above
+- `--base-font-weight` — body weight (normal)
+- `--body-font-family`, `--header-font-family`, `--label-font-family`, `--nav-font-family`, `--monospace-font-family`
+- `--brand-body-font-family`, `--brand-header-font-family` — Intent-tier overrides; set these to apply custom fonts
 
 - `--spacing` Unitless spacing multiplier for margins and paddings. 1 = comfortable, .5 = compact
   - `--spacing-block-horizontal`, `--spacing-block-vertical` Modify vertical and horizontal density separately

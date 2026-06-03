@@ -15,6 +15,7 @@
   },
   "homepage": "https://github.com/jefri/jiffies-css#readme",
   "scripts": {
+    "pretest": "npx playwright install chromium",
     "test": "node --test 'test/**/*.test.mjs'"
   },
   "devDependencies": {
