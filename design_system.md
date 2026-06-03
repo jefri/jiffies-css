@@ -108,7 +108,8 @@ the native CSS `pow()` engine:
 font-size = calc(1rem * pow(var(--font-scale), 7 - n))   /* n = 1…6 for h1…h6 */
 ```
 
-So `h1` ≈ 3.05rem and the ladder steps down by a constant ratio to `h6` ≈ 1rem.
+So `h1` = `1.25^6` ≈ 3.81rem (≈ 61px at a 16px root) and the ladder steps down by
+a constant 1.25 ratio to `h6` = `1.25^1` = 1.25rem (≈ 20px, just above body text).
 `--small-font-size` is `calc(--base-font-size / --font-scale)`. The single dial is
 `--font-scale`; changing it re-tunes the whole hierarchy.
 
@@ -120,10 +121,11 @@ Body **Poppins**, Text Header **Libre Baskerville**, App Header **Roboto**, Tabl
 
 *Grounded in:* decision record **DR-3** in
 [`v2-decisions.md`](docs/research/v2-decisions.md) (1.25 lands in the
-evidence-backed 1.2–1.333 band; keeps the one-line `pow()`), and the
-modular-scale / Open Props prior art DR-3 cites (Tim Brown, *More Meaningful
-Typography*). The golden-ratio `--phi-*` ladder was a **README** claim, removed in
-`a2cf930`; it never appeared in this file and is not part of the ideal.
+evidence-backed 1.2–1.333 band; keeps the one-line `pow()`), and the modular-scale
+prior art DR-3 rests on — Tim Brown, *More Meaningful Typography*, and the same
+band Material 3 and Utopia occupy. The golden-ratio `--phi-*` ladder was a
+**README** claim, removed in `a2cf930`; it never appeared in this file and is not
+part of the ideal.
 
 ### 2.3 Color
 
@@ -516,13 +518,19 @@ elevated card; `section` is the flat panel.
 
 ### 5.3 Breadcrumb
 
-A trail rendered from a nav list with a separator glyph.
+A trail rendered from a nav list with a separator glyph. The ideal is **classless**
+— the `Breadcrumb` ARIA label selects it, not a class — so it stays within the §4
+closed edge-class list.
 
-- **DOM shape:** `ol.breadcrumbs > li` (within `nav`)
+- **DOM shape:** `nav[aria-label="Breadcrumb"] > ol > li`
 - **ARIA:** `nav[aria-label="Breadcrumb"]`, `[aria-current=page]` on the last crumb
 - **Tokens:** `--breadcrumb-marker` (`"→"`), `--nav-item-spacing-horizontal`
-- **States:** `li::before` separator (omit on the first item)
-- **Edge-classes:** `.breadcrumbs` is the one structural hook this pattern needs
+- **States:** `li::before` separator (omit the first item)
+- **Edge-classes:** none
+
+> **Spec gap:** shipped `breadcrumb.css` selects `ol.breadcrumbs` (a class); the
+> classless ideal selects the `Breadcrumb`-labelled nav. Tracked in
+> [TASKS.md](docs/developer/TASKS.md).
 
 ### 5.4 Page layout & page-ends
 
@@ -541,4 +549,5 @@ move.
   `--background-color-page-end-brand-primary`
 - **States:** `:is(header, footer):has(> nav)` (brand page-end);
   `:has(> aside)` (row-wrap reflow); responsive `order` swap at `md`
-- **Edge-classes:** `.fluid` (full-bleed, opt out of the content clamp)
+- **Edge-classes:** none — `.fluid` (full-bleed opt-out of the content clamp) is a
+  layout utility, not a component variant

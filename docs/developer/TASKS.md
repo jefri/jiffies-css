@@ -71,3 +71,6 @@ no-edit-in-spec rule.
 - [ ] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
   the layering *concept*; `design_system.md` §3.3 owns the canonical
   `fns, reset, layout, content, component, utility, user, theme` order. Ref §3.3.
+- [ ] **breadcrumb-classless** — Reselect breadcrumbs by the `Breadcrumb` ARIA
+  label rather than the `ol.breadcrumbs` class, keeping the pattern classless.
+  Shipped `v2/component/breadcrumb.css` uses `ol.breadcrumbs`. Ref §5.3.
