@@ -64,3 +64,10 @@ no-edit-in-spec rule.
 - [ ] **motion-vocabulary** — Expand motion tokens to the named durations
   (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) the
   README sketches; shipped code has only the single `--transition*` triple. Ref §2.5.
+- [ ] **derivation-private-prefix** — Rename shipped Derivation intermediates to the
+  `--_` private prefix (D1). `v2/functions.css`: `--fn-color`, `--color-hover`/
+  `-focus`/`-active`, `--fn-merge`, `--fn-border`; update callers (`navigation.css`).
+  Ref §3.2.
+- [ ] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
+  the layering *concept*; `design_system.md` §3.3 owns the canonical
+  `fns, reset, layout, content, component, utility, user, theme` order. Ref §3.3.

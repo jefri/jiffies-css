@@ -198,23 +198,131 @@ affordance. Icon sources are Feather Icons and Heroicons.
 
 ## 3 Architecture
 
-*Filled in Step 3.*
+How the pieces are organized: the variable tiers, how they are named, how the
+stylesheet files stack, and how selectors express component shape. The variable
+model and selector conventions are **owned by [PHILOSOPHY.md](PHILOSOPHY.md)**;
+this section applies them and records the two project-specific rules PHILOSOPHY
+leaves to the spec — the naming grammar (§3.2) and the canonical `@layer` order
+(§3.3).
 
 ### 3.1 Variable model
 
-*Filled in Step 3.*
+Every custom property lives in one of three tiers, a gradient of meaning from
+author intent to rendered property:
+
+| Tier | Lives on | Answers | Example |
+|---|---|---|---|
+| **Intent** | `:root` (public API) | "how will this be used?" | `--brand-hue`, `--base-size`, `--font-scale` |
+| **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_color-hover` |
+| **Application** | the element's own rule | "what does this change?" | `--color-header`, `--font-size-base` |
+
+Overriding an **Intent** token is coarse control (moves everything downstream);
+overriding an **Application** final is fine control (one property, one element).
+The full treatment — blast radius, why invariants like contrast belong in
+Derivation, laziness of the `*` tier — is in
+[PHILOSOPHY.md](PHILOSOPHY.md#variable-model-intent--derivation--application) and
+is not restated here.
+
+*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md) (owns the model),
+[`v2-tasks.md`](docs/research/v2-tasks.md) §1.3, and the three-tier reading of the
+code in [`v2-design-system.md`](docs/research/v2-design-system.md).
 
 ### 3.2 Naming grammar
 
-*Filled in Step 3.*
+Names are **kebab-case, category/element-first**. The legacy
+`--{source}_{variant}-{state}_{unit}` grammar that encoded tier with mid-name
+underscores is **dropped**.
+
+- **Intent and Application** tokens are plain kebab-case: `--brand-hue`,
+  `--base-font-size`, `--color-header`, `--margin-card-vertical`.
+- **Derivation** intermediates carry a leading **`--_`** — Lea Verou's
+  pseudo-private prefix — so a reader knows the value is part of the engine, not a
+  dial to override: `--_fn-color`, `--_color-hover`, `--_fn-border`.
+
+**Decision D1 — Derivation prefix = `--_`.** The derivation tier uses the
+`--_` private prefix. This aligns with PHILOSOPHY (which already writes
+`--_fn-color`) and with the surveyed practice that no design system encodes tier
+via a mid-name underscore.
+
+*Grounded in:* decision record **DR-1** in
+[`v2-decisions.md`](docs/research/v2-decisions.md) (ACCEPTED: plain hyphens,
+category-first; mark tier-2 intermediates private with `--_` per Verou) and
+[PHILOSOPHY.md](PHILOSOPHY.md#variable-model-intent--derivation--application).
+
+> **Spec gap:** shipped `v2/functions.css` declares the derivations **unprefixed**
+> (`--fn-color`, `--color-hover`/`-focus`/`-active`, `--fn-merge`, `--fn-border`),
+> and callers (`navigation.css`) read the unprefixed names. Renaming them to
+> `--_` is tracked in [TASKS.md](docs/developer/TASKS.md).
 
 ### 3.3 @layer order
 
-*Filled in Step 3.*
+This section is the **single authority for the specific `@layer` order**. README
+and PHILOSOPHY describe the layering *concept* (cascade order is reading order);
+the exact sequence is fixed here:
+
+```
+@layer fns, reset, layout, content, component, utility, user, theme;
+```
+
+| Layer | Role |
+|---|---|
+| `fns` | Derivation engine (`* { --_fn-* }`) — declared first, defined before any consumer; lazy, so it costs nothing until read |
+| `reset` | Browser normalize (vendored sanitize.css, wrapped in `:where()` for zero specificity) |
+| `layout` | Page-level structure (container, page-end). Reserved slot today — see the `layout-layer` task |
+| `content` | Semantic element styles (typography, tables, links) |
+| `component` | DOM + ARIA components (§4) |
+| `utility` | Class-based helpers (`.flex`, `.grid`) |
+| `user` | Untouched layer reserved for consumer overrides |
+| `theme` | `:root` Intent tokens — declared **last** |
+
+Two sub-questions are settled:
+
+- **(a) `theme` last is intentional.** Custom properties resolve by normal
+  cascade regardless of layer, so layer-last does not change inheritance; it
+  guarantees the `theme` `:root` token declarations win against any stray `:root`
+  rule in an earlier layer, protecting the token contract. This matches the
+  shipped order — no code gap for the `theme` position.
+- **(b) `fns` stays a separate layer, declared first.** The Derivation tier lives
+  on `*` and is distinct from `theme`'s `:root` Intent tier; it is not merged into
+  `theme`. The shipped code already declares `fns` first.
+
+The shipped `v2/index.css` already matches this order (`fns` first, `theme` last).
+The one open structural item is the `layout` layer: its import targets a
+not-yet-existing `layout/layout.css` while page layout lives in
+`content/containers.css` — that is the existing `layout-layer` task, not a new gap.
+
+*Grounded in:* [`v2-tasks.md`](docs/research/v2-tasks.md) §1.5 (add `fns` first),
+the cascade-layer-spine analysis in
+[`v2-design-system.md`](docs/research/v2-design-system.md) (the `theme`-last
+rationale), and [`v2/index.css`](v2/index.css).
+
+> **Spec gap:** README and PHILOSOPHY currently list their own layer orderings.
+> Reducing those to the layering *concept* (leaving the canonical order to this
+> §3.3) is tracked in [TASKS.md](docs/developer/TASKS.md).
 
 ### 3.4 Selector & nesting conventions
 
-*Filled in Step 3.*
+Components are built from patterns of DOM nodes: one component is one nested
+selector tree whose shape matches the subtree it styles. The conventions —
+summarized here, **owned by [PHILOSOPHY.md](PHILOSOPHY.md#selectors--nesting)**:
+
+- **`& >`** child combinator for structural ownership, so a rule cannot leak into
+  a nested instance of the same element.
+- **`:is(…)`** to group equivalent variants; **`:where(…)`** for zero-specificity
+  defaults that stay overridable (this is how the Intent tier remains the real
+  control surface).
+- **`:has(…)`** to select a parent by what it contains (`header:has(> nav)` is a
+  page-end); **`:not(…)`** to carve exceptions.
+- **attribute/role selectors** (`[role=tab]`, `[aria-current]`) to match the ARIA
+  contract that selects between component modalities.
+
+Two organizing rules: Application finals are declared at the top of the block that
+consumes them and re-set in nested state blocks (state lives next to structure);
+and one file per component, with the `@layer` order (§3.3) doing the assembly.
+
+*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md#selectors--nesting) (owns the
+conventions) and the selector survey in
+[`v2-design-system.md`](docs/research/v2-design-system.md).
 
 ---
 
