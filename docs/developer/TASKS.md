@@ -6,12 +6,12 @@ When starting any task, begin with research:using-research to explore best pract
 
 ## In Flight
 
-- [ ] **design-system-rewrite** — Design doc drafted at
-  `docs/developer/2026-06-02-B-design-system-rewrite/design.md` (branch
-  `2026-06-02-B-design-system-rewrite`). At the design draft gate: review, resolve
-  the two flagged decisions (D1 derivation prefix `--_`; D2 canonical `@layer`
-  order), remove the `*DRAFT*` marker, then run `developer:ailly` to continue
-  (feature-test).
+_None._ The **design-system-rewrite** landed: `design_system.md` is now the
+aspirational design-level spec (§1 Purpose, §2 Foundations, §3 Architecture,
+§4 Components, §5 Patterns). D1 (Derivation `--_` prefix) and D2 (canonical
+`@layer` order) are settled in §3. Anchor integrity is guarded by
+`test/design-system-anchors.test.mjs`. The code/spec divergences it surfaced are
+tracked under *Spec-alignment gaps* below; component ports under *Components*.
 
 ---
 
