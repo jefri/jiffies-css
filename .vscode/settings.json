@@ -1,4 +1,26 @@
 {
   "cSpell.language": "en,lorem",
-  "cSpell.words": ["Pico"]
+  "cSpell.words": [
+    "Pico"
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#f3f94b",
+    "activityBar.background": "#f3f94b",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#06b3b9",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#15202b99",
+    "sash.hoverBorder": "#f3f94b",
+    "statusBar.background": "#f0f71a",
+    "statusBar.foreground": "#15202b",
+    "statusBarItem.hoverBackground": "#d0d608",
+    "statusBarItem.remoteBackground": "#f0f71a",
+    "statusBarItem.remoteForeground": "#15202b",
+    "titleBar.activeBackground": "#f0f71a",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveBackground": "#f0f71a99",
+    "titleBar.inactiveForeground": "#15202b99"
+  },
+  "peacock.color": "#f0f71a"
 }
