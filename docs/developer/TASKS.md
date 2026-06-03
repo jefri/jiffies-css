@@ -4,13 +4,14 @@ When starting any task, begin with research:using-research to explore best pract
 
 ---
 
-## Feature Docs (reconcile README + design_system.md with reality)
+## In Flight
 
-Discuss each drift as a decision, not an automatic rewrite.
-
-- [ ] **rewrite-design-system-md** — Rewrite `design_system.md` once philosophy
-  and type-scale decisions land. Most misleading file in the repo. Hold until
-  upstream tasks clear. Ref §2.4.
+- [ ] **design-system-rewrite** — Design doc drafted at
+  `docs/developer/2026-06-02-B-design-system-rewrite/design.md` (branch
+  `2026-06-02-B-design-system-rewrite`). At the design draft gate: review, resolve
+  the two flagged decisions (D1 derivation prefix `--_`; D2 canonical `@layer`
+  order), remove the `*DRAFT*` marker, then run `developer:ailly` to continue
+  (feature-test).
 
 ---
 
@@ -48,3 +49,18 @@ color system. README-promised, demoed in `index.html`, v2 import commented out.
 - [ ] **computed-thresholds** — Expand seed tests with exact threshold assertions:
   specific non-zero pixel sizes for padding, exact color comparisons for brand
   colors. Depends on component tasks landing stable values.
+
+---
+
+## Spec-alignment gaps (design_system.md)
+
+The aspirational `design_system.md` states the ideal; these are the code/spec
+divergences it surfaced. Each is a CSS realignment, tracked here per the doc's
+no-edit-in-spec rule.
+
+- [ ] **breakpoint-columns** — Align `--content-columns` ramp to the responsive
+  table's target counts (1·1·1·2·2·4). `v2/theme/sizing.css` currently ramps to 2
+  at `xl` and 3 at `4k`. Ref §2.1.
+- [ ] **motion-vocabulary** — Expand motion tokens to the named durations
+  (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) the
+  README sketches; shipped code has only the single `--transition*` triple. Ref §2.5.

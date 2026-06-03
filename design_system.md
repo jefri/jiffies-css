@@ -65,27 +65,134 @@ spec section it builds toward. The contract:
 
 ## 2 Foundations
 
-*Filled in Step 2.*
+The foundations are the **Intent tier** (§3.1): a small set of `:root` dials that
+drive everything downstream. Each subsection states the ideal value system and
+cites the decision or prior art it rests on. Where the ideal differs from shipped
+CSS, the divergence is a tracked gap in [TASKS.md](docs/developer/TASKS.md), never
+an assertion of current state here.
 
 ### 2.1 Breakpoints
 
-*Filled in Step 2.*
+A **6-step, min-width (mobile-first) ladder**, `xs`–`4k`:
+
+| Step | `min-width` | `--base-viewport-width` | `--base-font-size` | `--base-line-height` |
+|---|---|---|---|---|
+| `xs` | 0 (default) | 100% | 12px | 16px |
+| `sm` | 425px | 425px | 14px | 18px |
+| `md` | 768px | 768px | 16px | 20px |
+| `lg` | 1024px | 920px | 18px | 24px |
+| `xl` | 1440px | 1130px | 20px | 28px |
+| `4k` | 2560px | 2170px | 24px | 32px |
+
+Each step resets the content-clamp width and the per-breakpoint type size; the
+`md`+ steps also set the `main`/`aside` split (`--base-main-width`,
+`--base-aside-width`). This replaces the legacy 4-step **max-width** set
+(500/1000/1500/2000) that the 2023 doc carried; the min-width ladder is the v2
+baseline.
+
+*Grounded in:* [`v2-design-system.md`](docs/research/v2-design-system.md) (Sizing
+notes) and the responsive table in [README.md](README.md#responsive); the
+per-breakpoint font sizes landed in commit `a2cf930` and are guarded by
+`test/responsive-fonts.test.mjs`.
+
+> **Spec gap:** the responsive table's target column counts (`--content-columns`
+> 1·1·1·2·2·4) are the ideal; `sizing.css` currently ramps to 2 at `xl` and 3 at
+> `4k`. Tracked in [TASKS.md](docs/developer/TASKS.md).
 
 ### 2.2 Typography
 
-*Filled in Step 2.*
+Heading sizes follow a **major-third modular scale**, `--font-scale: 1.25`, over
+the native CSS `pow()` engine:
+
+```
+font-size = calc(1rem * pow(var(--font-scale), 7 - n))   /* n = 1…6 for h1…h6 */
+```
+
+So `h1` ≈ 3.05rem and the ladder steps down by a constant ratio to `h6` ≈ 1rem.
+`--small-font-size` is `calc(--base-font-size / --font-scale)`. The single dial is
+`--font-scale`; changing it re-tunes the whole hierarchy.
+
+Five font roles, each an Intent override that falls back to a base face:
+`--body-`, `--header-`, `--label-`, `--nav-`, `--monospace-font-family`, resolving
+`var(--brand-<role>-font-family, var(--base-<role>-font-family))`. Default faces:
+Body **Poppins**, Text Header **Libre Baskerville**, App Header **Roboto**, Tables
+**Trebuchet MS**, Code **JetBrains Mono**.
+
+*Grounded in:* decision record **DR-3** in
+[`v2-decisions.md`](docs/research/v2-decisions.md) (1.25 lands in the
+evidence-backed 1.2–1.333 band; keeps the one-line `pow()`), and the
+modular-scale / Open Props prior art DR-3 cites (Tim Brown, *More Meaningful
+Typography*). The golden-ratio `--phi-*` ladder was a **README** claim, removed in
+`a2cf930`; it never appeared in this file and is not part of the ideal.
 
 ### 2.3 Color
 
-*Filled in Step 2.*
+Colors are stored as **parts, not values** — luminance, chroma, hue — and
+assembled at the use site with `oklch()`. The theming contract targets **one brand
+hue per page**: `--brand-hue` drives `--brand-primary-color: oklch(L C H)`, and the
+complementary, accent, and state colors derive from that single hue. Fine control
+is still available by overriding an Application final directly (§3.1).
+
+- **Dark mode flips parts, not colors.** `prefers-color-scheme: dark` lowers
+  `--base-luminance` (95% → 30%) and `--brand-luminance` (95% → 58%); the whole
+  palette recomputes from the same hue/chroma.
+- **State hues** are single-hue dials: `--blue-hue` (info), `--green-hue`
+  (success/`ins`), `--amber-hue` (warning/`mark`), `--red-hue` (error/`del`).
+- **Interactive states** derive in the Derivation tier (§3.1) via `color-mix`:
+  `--_color-hover`/`--_color-focus` mix toward white, `--_color-active` toward
+  black. `--_fn-color` is the parts-based entry point a component reads to build
+  its `oklch()` from local `--luminance`/`--chroma`/`--color-hue`.
+
+*Grounded in:* [PHILOSOPHY.md](PHILOSOPHY.md) (single-brand-hue scope; invariants
+like contrast live in Derivation), decision record **DR-2** in
+[`v2-decisions.md`](docs/research/v2-decisions.md) (why the derivation
+intermediates stay per-element and lazy), and the Material / Cloudscape token
+foundations cited as inspirations in [README.md](README.md#inspiration).
 
 ### 2.4 Spacing & Sizing
 
-*Filled in Step 2.*
+One atom, everything derived. `--base-size: 8px` is the spacing unit; density is a
+single `:root` switch — `.compact` → 4px, `.loose` → 16px — that rescales the
+entire app.
+
+A t-shirt scale derives from the atom:
+
+| Token | Value |
+|---|---|
+| `--size-xsmall` | `--base-size / 4` |
+| `--size-small` | `--base-size / 2` |
+| `--size-base` | `--base-size` |
+| `--size-medium` | `--base-size * 2` |
+| `--size-large` | `--base-size * 3` |
+| `--size-xlarge` | `--base-size * 4` |
+
+The box model is border-box with `--base-border-size` = `--base-size / 4`; block
+rhythm uses `--spacing-block-vertical` (base) and `--spacing-block-horizontal`
+(medium).
+
+*Grounded in:* the Sizing/Density section of [README.md](README.md#sizing) and the
+[`v2-design-system.md`](docs/research/v2-design-system.md) Sizing notes
+("one base, everything derived").
 
 ### 2.5 Motion & Iconography
 
-*Filled in Step 2.*
+**Motion** is a single token triple: `--transition-time` (0.2s),
+`--transition-function` (`ease-in-out`), and the composed `--transition`.
+`prefers-reduced-motion: reduce` collapses `--transition-time` to `0s`, reinforced
+by the reset layer's `reduce-motion` rules — belt and suspenders.
+
+**Iconography** ships as inline data-URI SVGs in the theme so no asset fetch is
+needed: `--icon-chevron` (a stroked chevron) backs the accordion/nav disclosure
+affordance. Icon sources are Feather Icons and Heroicons.
+
+*Grounded in:* [`v2/theme/animation.css`](v2/theme/animation.css),
+[`v2/theme/icons.css`](v2/theme/icons.css), and the Motion token list in
+[README.md](README.md#motion).
+
+> **Spec gap:** README sketches a richer motion vocabulary — named durations
+> (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) —
+> beyond the shipped single `--transition*`. The expanded set is the ideal; the
+> current triple is the floor. Tracked in [TASKS.md](docs/developer/TASKS.md).
 
 ---
 

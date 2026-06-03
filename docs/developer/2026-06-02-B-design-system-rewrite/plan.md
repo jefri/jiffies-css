@@ -31,7 +31,7 @@ carries a stable  section numbering scheme that TASKS.md references for progress
 **Steps:**
 - [x] Step 1: Skeleton, anchors, and §1 Purpose & Scope (anchor guard pulled
   forward from Step 6 as the red→green test for the skeleton)
-- [ ] Step 2: §2 Foundations
+- [x] Step 2: §2 Foundations
 - [ ] Step 3: §3 Architecture (settles D1, D2)
 - [ ] Step 4: §4 Components (§4.1–§4.10)
 - [ ] Step 5: §5 Patterns
