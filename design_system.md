@@ -479,4 +479,66 @@ flattening interior borders and radii.
 
 ## 5 Patterns
 
-*Filled in Step 5.*
+Patterns are compositions of components (§4) and semantic elements into recurring
+page structures. They use the same contract template as §4. The card, navigation,
+and breadcrumb patterns already ship; their entries state the **ideal** shape, and
+where the shipped CSS diverges that is a tracked gap in
+[TASKS.md](docs/developer/TASKS.md), consistent with the rest of this doc.
+
+### 5.1 Card & Panel
+
+A surface with optional header/footer rails around a main body. `article` is the
+elevated card; `section` is the flat panel.
+
+- **DOM shape:** `:is(article, section) > :is(header, main, footer)`
+- **ARIA:** none beyond the native sectioning roles
+- **Tokens:** `--card-background-color`, `--border-radius-card` (`--base-size`),
+  `--margin-card-vertical` (`--size-large`), `--card-inner-border`,
+  `--spacing-block-vertical`/`--spacing-block-horizontal` (rail padding),
+  `--content-columns` (multi-column `main`)
+- **States:** `& > header`/`& > footer` inner borders; `& > main:last-child`
+  bottom padding
+- **Edge-classes:** none (`.fluid` is a layout utility, see §5.4)
+
+### 5.2 Navigation
+
+`nav > ol` in two modes selected by ancestor, not by class.
+
+- **DOM shape:** `:is(header, footer) > nav > ol` (page-end bar) and
+  `aside > nav > ol` (sticky table of contents)
+- **ARIA:** `[aria-current]` marks the active link
+- **Tokens:** `--header-nav-background-color`/`--header-nav-color`,
+  `--nav-item-spacing-vertical`/`--nav-item-spacing-horizontal`, `--nav-font-family`,
+  `--_color-hover`/`--color-accent`, `--toc-left-offset`, `--transition`
+- **States:** `:is([aria-current], :hover, :focus)` (underline);
+  `li:has(a:hover)` (background); aside TOC hover-indent
+- **Edge-classes:** none
+
+### 5.3 Breadcrumb
+
+A trail rendered from a nav list with a separator glyph.
+
+- **DOM shape:** `ol.breadcrumbs > li` (within `nav`)
+- **ARIA:** `nav[aria-label="Breadcrumb"]`, `[aria-current=page]` on the last crumb
+- **Tokens:** `--breadcrumb-marker` (`"→"`), `--nav-item-spacing-horizontal`
+- **States:** `li::before` separator (omit on the first item)
+- **Edge-classes:** `.breadcrumbs` is the one structural hook this pattern needs
+
+### 5.4 Page layout & page-ends
+
+The page spine: a flex-column root that centers content to the responsive clamp,
+turns header/footer into brand "page-ends" when they contain a nav, and reflows an
+optional `aside` by `order`. This composite is aspirational in the `layout` layer
+(§3.3); it ships today in `content/containers.css` — the `layout-layer` task is the
+move.
+
+- **DOM shape:** `body:not(:has(> #root)), body > #root` then
+  `& > :is(header, main, footer, aside)`
+- **ARIA:** structural only (sectioning landmarks)
+- **Tokens:** `--page-background-color`, `--base-viewport-width` (content clamp),
+  `--base-main-width`/`--base-aside-width`, `--layout-header-order`/`-main-order`/
+  `-aside-order`/`-footer-order`, `--page-end-border`,
+  `--background-color-page-end-brand-primary`
+- **States:** `:is(header, footer):has(> nav)` (brand page-end);
+  `:has(> aside)` (row-wrap reflow); responsive `order` swap at `md`
+- **Edge-classes:** `.fluid` (full-bleed, opt out of the content clamp)
