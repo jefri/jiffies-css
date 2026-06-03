@@ -328,48 +328,152 @@ conventions) and the selector survey in
 
 ## 4 Components
 
-*Filled in Step 4. Each `§4.x` is the contract its `component-*` task in
-[TASKS.md](docs/developer/TASKS.md) implements against.*
+Each `§4.x` is the **contract** its `component-*` task in
+[TASKS.md](docs/developer/TASKS.md) implements against. A component is a DOM shape
+plus an ARIA contract (§3.4), never a class; the only sanctioned edge-classes are
+the closed list `.secondary`, `.contrast`, `.outline`. Each entry uses one format:
+
+- **DOM shape** — the element tree / nesting the rule targets.
+- **ARIA** — roles/attributes that select modalities or states.
+- **Tokens** — the Application finals (§3.1) it consumes.
+- **States** — the interactive/ARIA states it styles.
+- **Edge-classes** — sanctioned classes, if any.
+
+Token names follow the §3.2 grammar; some are aspirational finals the component
+introduces. Build status is in TASKS.md, never asserted here.
 
 ### 4.1 Buttons
 
-*Filled in Step 4.*
+The reference component — first consumer of the parts-based color engine
+(`--_fn-color`). Proves the philosophy the rest follow.
+
+- **DOM shape:** `button, a[role=button], input[type=button|submit|reset]`
+- **ARIA:** `[role=button]` promotes a link; `[aria-disabled]`, `[aria-busy]`
+- **Tokens:** `--_fn-color` (built from local `--color`/`--luminance`/`--chroma`),
+  `--_color-hover`/`--_color-focus`/`--_color-active`, `--label-font-family`,
+  `--font-size-base`, `--border-radius-button`, `--size-small`/`--size-base`
+  (padding)
+- **States:** `:hover`, `:focus-visible`, `:active`, `[disabled]`/`[aria-disabled]`,
+  `[aria-busy]`
+- **Edge-classes:** `.secondary`, `.contrast`, `.outline`
 
 ### 4.2 Forms
 
-*Filled in Step 4.*
+The largest component. Controls share a border/radius/focus language; validity and
+editability are read from ARIA and native attributes, not classes.
+
+- **DOM shape:** `label`, `input`, `select`, `textarea`, `fieldset`, `legend`
+- **ARIA:** `[aria-invalid]`, `[aria-describedby]`, `[required]`, `[disabled]`,
+  `[readonly]`
+- **Tokens:** `--color-form-base`/`--color-form-invalid`/`--color-form-disabled`/
+  `--color-form-required`, `--_fn-border`, `--border-radius-input`,
+  `--label-font-family`, `--grid-column-count` (fieldset grid layout),
+  `--size-small`/`--size-base` (padding)
+- **States:** `:focus-visible`, `:placeholder-shown`, `[aria-invalid]`,
+  `[disabled]`, `[readonly]`
+- **Edge-classes:** none
 
 ### 4.3 Form switch
 
-*Filled in Step 4.*
+A pure-CSS toggle: a checkbox or radio painted as a sliding switch via
+`appearance: none` and a `::before` knob.
+
+- **DOM shape:** `input[type=checkbox][role=switch]`,
+  `input[type=radio][role=switch]`
+- **ARIA:** `[role=switch]`; checked state is native `:checked` (reflected as
+  `aria-checked`)
+- **Tokens:** `--_fn-color` (track/knob from brand), `--transition`,
+  `--size-base`/`--size-medium` (track geometry), `--border-radius-input`
+- **States:** `:checked`, `:focus-visible`, `[disabled]`
+- **Edge-classes:** none
 
 ### 4.4 Tables
 
-*Filled in Step 4.*
+Opinionated tables with zebra striping and their own type face.
+
+- **DOM shape:** `table > thead, tbody, tfoot > tr > th, td`
+- **ARIA:** `[aria-sort]` on sortable `th`; `scope` on header cells
+- **Tokens:** `--table-font-family` (Trebuchet MS), `--table-row-even-color`/
+  `--table-row-odd-color`, `--_fn-border`, `--spacing-block-vertical`/
+  `--spacing-block-horizontal` (cell padding)
+- **States:** `tr:nth-child(even|odd)`, `th[aria-sort]`, `tr:hover`
+- **Edge-classes:** none
 
 ### 4.5 Accordion
 
-*Filled in Step 4.*
+Pure-CSS disclosure using native `details`; the chevron is the theme icon.
+
+- **DOM shape:** `details > summary` (+ flow content sibling)
+- **ARIA:** native `details[open]` carries expansion state (exposed as
+  `aria-expanded` on `summary`)
+- **Tokens:** `--icon-chevron` (disclosure marker), `--transition` (rotation),
+  `--spacing-block-vertical`/`--spacing-block-horizontal`, `--_fn-border`
+- **States:** `[open]`, `summary:hover`, `summary:focus-visible`
+- **Edge-classes:** none
 
 ### 4.6 Tabs
 
-*Filled in Step 4.*
+A tablist whose selected state is driven by `accessibility.js` — accessible tab
+selection cannot be expressed in pure CSS, so this supersedes the README's
+"pure-CSS tabs" framing.
+
+- **DOM shape:** `[role=tablist] > [role=tab]` paired with `[role=tabpanel]`
+  (commonly inside a `section`)
+- **ARIA:** `[role=tab]`, `[role=tabpanel]`, `[aria-selected]`, `[aria-controls]`,
+  `[tabpanel][hidden]`
+- **Tokens:** `--color-accent` (active-tab indicator), `--_color-hover`,
+  `--label-font-family`, `--_fn-border` (tablist baseline)
+- **States:** `[aria-selected=true]`, `:hover`, `:focus-visible`
+- **Edge-classes:** none
 
 ### 4.7 Modal
 
-*Filled in Step 4.*
+Native `dialog`; the reset gives the base, the component styles the surface and
+backdrop.
+
+- **DOM shape:** `dialog` (often `dialog > article`, reusing the card surface)
+- **ARIA:** native `dialog[open]`, `[aria-modal]`, `[aria-labelledby]`
+- **Tokens:** `--card-background-color` (surface), `--border-radius-container`,
+  `--modal-backdrop-color`, `--spacing-block-vertical`/`--spacing-block-horizontal`
+- **States:** `[open]`, `::backdrop`
+- **Edge-classes:** none
 
 ### 4.8 Property sheet
 
-*Filled in Step 4.*
+A `dl` rendered as aligned label/value rows; shares the table striping language.
+
+- **DOM shape:** `dl > dt, dd`
+- **ARIA:** none beyond the native `dl` term/definition association
+- **Tokens:** `--label-font-family` (terms), `--table-row-even-color`/
+  `--table-row-odd-color`, `--size-small`/`--size-base` (row spacing)
+- **States:** `dt`/`dd` row pairing, `:hover` row
+- **Edge-classes:** none
 
 ### 4.9 Progress
 
-*Filled in Step 4.*
+The smallest component: a styled native `progress`, both determinate and
+indeterminate.
+
+- **DOM shape:** `progress` (`progress[value]` determinate; valueless =
+  indeterminate)
+- **ARIA:** native `progress` role; `[aria-label]` for context
+- **Tokens:** `--_fn-color` (value fill), `--progress-track-color`,
+  `--border-radius-inline`, `--base-line-height` (bar height basis)
+- **States:** `[value]` (determinate) vs indeterminate; `::-webkit-progress-value`/
+  `::-moz-progress-bar`
+- **Edge-classes:** none
 
 ### 4.10 Form group
 
-*Filled in Step 4.*
+A `fieldset[role=group]` that joins adjacent controls into one segmented row,
+flattening interior borders and radii.
+
+- **DOM shape:** `fieldset[role=group] > :is(button, input, select)`
+- **ARIA:** `[role=group]`; `[aria-label]` names the joined set
+- **Tokens:** `--border-radius-input`, `--_fn-border`, `--size-base` (gap collapse)
+- **States:** `:first-child`/`:last-child` (outer radius), `:focus-within`
+  (raise the focused member)
+- **Edge-classes:** none
 
 ---
 

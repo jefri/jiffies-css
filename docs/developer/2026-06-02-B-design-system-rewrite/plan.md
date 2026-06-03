@@ -33,7 +33,7 @@ carries a stable  section numbering scheme that TASKS.md references for progress
   forward from Step 6 as the red→green test for the skeleton)
 - [x] Step 2: §2 Foundations
 - [x] Step 3: §3 Architecture (settles D1, D2)
-- [ ] Step 4: §4 Components (§4.1–§4.10)
+- [x] Step 4: §4 Components (§4.1–§4.10)
 - [ ] Step 5: §5 Patterns
 - [ ] Step 6: Anchor-integrity guard and TASKS.md close-out (guard written in
   Step 1; this step is TASKS.md close-out + full-suite confirmation)
