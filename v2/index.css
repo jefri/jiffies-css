@@ -4,8 +4,8 @@
 @import "./functions.css" layer(fns);
 @import "./sanitize/index.css" layer(reset);
 @import "./theme/theme.css" layer(theme);
-/* zero-out (Phase 0): layout/layout.css does not exist yet; re-create + re-enable in Phase 2 layout-layer. Commenting clears the esbuild 404. */
-/* @import "./layout/layout.css" layer(layout); */
+/* layout — page spine + page-end brand bar (re-enabled Phase 2 layout-layer). */
+@import "./layout/layout.css" layer(layout);
 @import "./content/content.css" layer(content);
 @import "./component/component.css" layer(component);
 @import "./utility/utility.css" layer(utility);

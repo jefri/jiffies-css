@@ -1,0 +1,149 @@
+/* layout/layout.css (@layer layout) — the page SPINE + the page-END treatment.
+ *
+ * design_system.md › "Page layout & page-ends" is the contract. This layer owns:
+ *   1. the page spine — a flex-column root that centers content to the responsive
+ *      clamp --base-viewport-width, with .fluid the full-bleed opt-out;
+ *   2. the page-END treatment — header/footer become a brand "page-end" bar when
+ *      they hold a > nav, and leave a hook for a hero page-end (> figure);
+ *   3. the optional aside reflow — :has(> aside) reflows to a row-wrap and splits
+ *      main/aside by --base-main-width/--base-aside-width (md+), with a responsive
+ *      `order` swap at the md breakpoint.
+ *
+ * Boundary with Phase 3 (content/containers.css): containers owns the container
+ * MODEL (overflow, .scroll-*) on the same slots; it must NOT re-style page-ends.
+ * The page-end brand-bar rules therefore live HERE, in the layout layer.
+ *
+ * DOM shape (design_system.md):
+ *   body:not(:has(> #root)), body > #root          <- the layout root
+ *     & > :is(header, main, footer, aside)         <- its slots
+ * Supporting both a bare body and a direct-child #root app mount (React, etc.).
+ */
+
+/* ---------------------------------------------------------------------------
+   Tokens (Application tier) — the layout dials, set on :root so the spine reads
+   them per element. --page-background-color and --base-viewport-width /
+   --base-main-width / --base-aside-width / --page-end-border are owned upstream
+   (theme/colors.css bridge alias, theme/sizing.css ladder, theme/borders.css);
+   read, do not redefine, those here.
+
+   --background-color-page-end-brand-primary derives from the M3 --color-primary
+   role; its foreground is the paired --color-on-primary. Dark mode reassigns the
+   role upstream, so the bar tracks the scheme without a second rule here.
+
+   --layout-*-order is the source-order vs visual-order reflow map for :has(> aside).
+   At xs/sm the aside drops below main (single column); at md+ it sits beside main.
+   --------------------------------------------------------------------------- */
+:root {
+  --background-color-page-end-brand-primary: var(--color-primary);
+  --color-page-end-brand-primary: var(--color-on-primary);
+
+  /* aside reflow order (source order: header, main, aside, footer). Default
+     (xs/sm): aside reflows AFTER main so it stacks below. */
+  --layout-header-order: 1;
+  --layout-main-order: 2;
+  --layout-aside-order: 3;
+  --layout-footer-order: 4;
+}
+
+/* md+ — the aside moves beside main: header, aside, main, footer in visual
+   order so the sidebar leads the content column. */
+@media (min-width: 768px) {
+  :root {
+    --layout-aside-order: 2;
+    --layout-main-order: 3;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   The page spine. A flex column whose slots center to the content clamp.
+   --------------------------------------------------------------------------- */
+body:not(:has(> #root)),
+body > #root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--page-background-color);
+
+  /* main fills the spine so footers sit at the page foot on short pages. */
+  & > main {
+    flex-grow: 1;
+  }
+
+  /* Content clamp: every spine slot centers to the responsive viewport width.
+     .fluid is the full-bleed opt-out — a layout utility, not a component
+     variant — so a slot can span the whole spine (page-end bars, page heroes). */
+  & > :is(header, main, footer) {
+    --width-content: var(--base-viewport-width);
+    width: var(--width-content);
+    max-width: 100%;
+    margin-inline: auto;
+
+    &.fluid {
+      width: 100%;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Page-END: a header/footer that holds a > nav is a brand bar. Background is
+     the M3 primary role; its label color the paired on-primary. The page-end
+     border (theme/borders.css) seats the bar against the page body.
+     ------------------------------------------------------------------------- */
+  & > :is(header, footer):has(> nav) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-block-horizontal);
+
+    background-color: var(--background-color-page-end-brand-primary);
+    color: var(--color-page-end-brand-primary);
+    padding-inline: var(--spacing-block-horizontal);
+
+    &:is(header) {
+      border-block-end: var(--page-end-border);
+    }
+
+    &:is(footer) {
+      border-block-start: var(--page-end-border);
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     Hero page-END hook: a header/footer that holds a > figure is a hero bar.
+     The Hero component lands in Phase 4 — leave the structural hook (full-bleed
+     in the spine) and let Phase 4 own the figure/img/title treatment. Do NOT
+     fully style the hero here.
+     ------------------------------------------------------------------------- */
+  & > :is(header, footer):has(> figure) {
+    width: 100%;
+  }
+
+  /* -------------------------------------------------------------------------
+     Optional aside: reflow the spine to a row-wrap and split main/aside by the
+     responsive --base-main-width / --base-aside-width. header/footer stay
+     full-width bands; the visual order is the --layout-*-order map (swapped at
+     md by the :root media query above).
+     ------------------------------------------------------------------------- */
+  &:has(> aside) {
+    flex-flow: row wrap;
+
+    & > header {
+      order: var(--layout-header-order);
+      width: 100%;
+    }
+    & > main {
+      order: var(--layout-main-order);
+      flex: 1 1 var(--base-main-width);
+      max-width: 100%;
+    }
+    & > aside {
+      order: var(--layout-aside-order);
+      flex: 1 1 var(--base-aside-width);
+    }
+    & > footer {
+      order: var(--layout-footer-order);
+      width: 100%;
+    }
+  }
+}

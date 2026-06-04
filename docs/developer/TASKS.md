@@ -126,7 +126,7 @@ module to it.
 
 ## Phase 2 — Re-enable `layout`
 
-- [ ] **layout-layer** — The `layout` layer import was removed in **zero-out** (it
+- [x] **layout-layer** — The `layout` layer import was removed in **zero-out** (it
   pointed at a non-existent `./layout/layout.css`). Create the file, implement the
   page spine — flex-column root, content clamp to `--base-viewport-width`,
   header/footer page-ends, optional `aside` reflow by `order` — then re-add its
