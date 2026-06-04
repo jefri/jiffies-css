@@ -186,6 +186,20 @@
     --color-on-surface-variant: #45464f;
     --color-outline: #767680;
     --color-outline-variant: #c6c5d0;
+    /* State roles — this chunk's ins/mark and future alerts/chips read them,
+     * so the floor must cover them too (M3-baseline static values). */
+    --color-success: #2e6a4b;
+    --color-on-success: #ffffff;
+    --color-success-container: #b1f1c8;
+    --color-on-success-container: #00210f;
+    --color-warning: #7a5900;
+    --color-on-warning: #ffffff;
+    --color-warning-container: #ffdf9b;
+    --color-on-warning-container: #261a00;
+    --color-info: #1b6cb0;
+    --color-on-info: #ffffff;
+    --color-info-container: #d3e4ff;
+    --color-on-info-container: #001c39;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -210,6 +224,18 @@
       --color-on-surface-variant: #c6c5d0;
       --color-outline: #90909a;
       --color-outline-variant: #45464f;
+      --color-success: #95d5ac;
+      --color-on-success: #00391f;
+      --color-success-container: #14512f;
+      --color-on-success-container: #b1f1c8;
+      --color-warning: #f5be48;
+      --color-on-warning: #402d00;
+      --color-warning-container: #5c4200;
+      --color-on-warning-container: #ffdf9b;
+      --color-info: #a3c9ff;
+      --color-on-info: #00325a;
+      --color-info-container: #004880;
+      --color-on-info-container: #d3e4ff;
     }
   }
 }

@@ -79,12 +79,54 @@ const TEXT_PAIRS = [
 // facing token. NOTE: --color-outline-variant is intentionally NOT asserted
 // here — it is documented (borders.css) as a purely decorative hairline,
 // exempt from the 3:1 non-text floor.
+//
+// The last entry is the link :focus-visible RING: typography-inline.css draws
+// `outline: ... solid var(--color-primary)` around a focused link, which sits
+// on the page background. As a focus indicator it is load-bearing non-text and
+// MUST clear the 3:1 floor.
 // Format: [label, tokenA, tokenB].
 const NON_TEXT_PAIRS = [
   ["outline vs surface", "--color-outline", "--color-surface"],
   ["outline vs background", "--color-outline", "--color-background"],
   ["base-border-color vs surface", "--base-border-color", "--color-surface"],
+  ["focus-ring (primary) vs background", "--color-primary", "--color-background"],
 ];
+
+// Cross-role text pairs: the foreground colors the CONTENT layer
+// (v2/content/typography-inline.css + typography-block.css) actually paints on
+// the neutral page. Unlike TEXT_PAIRS (each --color-on-X vs its own --color-X),
+// these are the colors a reader literally sees on the page surface, so each is
+// asserted against BOTH neutral backgrounds the content can sit on:
+// --color-background and --color-surface. Every one MUST clear 4.5:1.
+//
+//   --color-primary            — default link, and link :focus-visible label
+//   --color-secondary          — .secondary link
+//   --color-on-surface         — .contrast link, body text
+//   --color-on-surface-variant — ::marker, blockquote rail text
+//   --color-error              — del
+//   --color-success            — ins
+//
+// Format: [label, foregroundToken].
+const CROSS_ROLE_FOREGROUNDS = [
+  ["link (primary)", "--color-primary"],
+  ["secondary link (secondary)", "--color-secondary"],
+  ["contrast link / body text (on-surface)", "--color-on-surface"],
+  ["marker / blockquote rail (on-surface-variant)", "--color-on-surface-variant"],
+  ["del (error)", "--color-error"],
+  ["ins (success)", "--color-success"],
+];
+
+// The two neutral backgrounds content sits on. Each cross-role foreground is
+// asserted against both.
+const CROSS_ROLE_BACKGROUNDS = [
+  "--color-background",
+  "--color-surface",
+];
+
+// Expanded to [label, fg, bg] triples — one per (foreground × background).
+const CROSS_ROLE_TEXT_PAIRS = CROSS_ROLE_FOREGROUNDS.flatMap(([label, fg]) =>
+  CROSS_ROLE_BACKGROUNDS.map((bg) => [`${label} on ${bg}`, fg, bg]),
+);
 
 const TEXT_FLOOR = 4.5;
 const NON_TEXT_FLOOR = 3.0;
@@ -164,6 +206,7 @@ async function measureForHue(page, hue) {
     new Set([
       ...TEXT_PAIRS.flatMap(([, fg, bg]) => [fg, bg]),
       ...NON_TEXT_PAIRS.flatMap(([, a, b]) => [a, b]),
+      ...CROSS_ROLE_TEXT_PAIRS.flatMap(([, fg, bg]) => [fg, bg]),
     ]),
   );
 
@@ -223,6 +266,33 @@ for (const scheme of ["light", "dark"]) {
             assert.ok(
               ratio >= TEXT_FLOOR,
               `TEXT contrast FAIL: pair "${label}" (${fg} on ${bg}) ` +
+                `at brand hue ${hue}deg, ${scheme} scheme — ` +
+                `measured ${ratio.toFixed(3)}:1, floor ${TEXT_FLOOR}:1 ` +
+                `(fg rgb ${f.rgb}, bg rgb ${b.rgb})`,
+            );
+          });
+        }
+
+        for (const [label, fg, bg] of CROSS_ROLE_TEXT_PAIRS) {
+          it(`cross-role text ${label} >= ${TEXT_FLOOR}:1`, () => {
+            const f = resolved[fg];
+            const b = resolved[bg];
+            assert.ok(
+              f && f.rgb,
+              `${label}: foreground ${fg} did not resolve to sRGB ` +
+                `(value="${f ? f.value : "<missing>"}") ` +
+                `[hue ${hue}deg, ${scheme}]`,
+            );
+            assert.ok(
+              b && b.rgb,
+              `${label}: background ${bg} did not resolve to sRGB ` +
+                `(value="${b ? b.value : "<missing>"}") ` +
+                `[hue ${hue}deg, ${scheme}]`,
+            );
+            const ratio = contrastRatio(f.rgb, b.rgb);
+            assert.ok(
+              ratio >= TEXT_FLOOR,
+              `CROSS-ROLE TEXT contrast FAIL: pair "${label}" (${fg} on ${bg}) ` +
                 `at brand hue ${hue}deg, ${scheme} scheme — ` +
                 `measured ${ratio.toFixed(3)}:1, floor ${TEXT_FLOOR}:1 ` +
                 `(fg rgb ${f.rgb}, bg rgb ${b.rgb})`,

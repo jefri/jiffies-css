@@ -40,10 +40,11 @@ body > #root > :is(main, aside) {
 /* ---------------------------------------------------------------------------
    Overflow scrolling: figure.scroll-x / figure.scroll-y are the opt-ins for a
    figure that holds an oversized child (a wide table, a tall code block, a
-   diagram). The default figure clips (sanitize's `overflow: auto` on figures
-   plus the container `overflow: hidden` above); these classes turn the clip
-   into a scroll on the chosen axis, with sensible max sizing so the figure
-   never grows past its slot (x) or the viewport (y).
+   diagram). An oversized child is clipped by default by the container
+   `overflow: hidden` above (the only containment source — sanitize has no figure
+   rule); these classes turn the clip into a scroll on the chosen axis, with
+   sensible max sizing so the figure never grows past its slot (x) or the
+   viewport (y).
    --------------------------------------------------------------------------- */
 figure.scroll-x {
   --max-width-scroll-figure: 100%;

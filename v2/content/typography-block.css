@@ -85,7 +85,7 @@ ul {
     figure,
     ol,
     p,
-    pre:not(:has(> code.hljs)),
+    pre,
     table,
     ul
   ):last-child {

@@ -217,3 +217,30 @@ file yet) that get created and enabled.
 - [ ] **computed-thresholds** — Expand the seed `test/computed/` tests with exact
   threshold assertions: specific non-zero pixel sizes for padding, exact color
   comparisons for brand colors. Depends on modules landing stable values.
+
+- [ ] **symposium-doc-debt** — Deferred doc-honesty items raised by the foundation
+  and typography-base symposia (fix here so they don't propagate as more components
+  land):
+  - README: add a Usage / Getting-Started section (install / CDN `<link>` / "write
+    semantic HTML"); the only package ref today is a commented-out v1 unpkg line.
+  - Edge-class list: design_system.md calls `.secondary`/`.contrast`/`.outline` a
+    *closed* list, but the system also sanctions `.fluid`, `.compact`/`.loose`,
+    `.round`, `figure.scroll-x/-y`. Replace the closed enumeration with the
+    *sanctioning criterion* ("a class only when an element can't infer intent from
+    shape or ARIA") + one canonical census. Sweep PHILOSOPHY's closed-list claim too.
+  - Bridge-token grammar: normalize `--mark-background-color`/`--mark-color`/
+    `--ins-color`/`--del-color` (and `--page-background-color`/`--card-background-color`)
+    to the documented category-first grammar (`--color-mark-background`, `--color-mark`,
+    `--color-ins`, `--color-del`), or have consumers read the role tokens directly.
+  - Font roles: reconcile design_system.md (names App-Header Roboto, Tables Trebuchet
+    MS) with the shipped five roles (body/header/label/nav/monospace); introduce
+    `--table-font-family` with the tables component (Phase 4) and document it.
+  - Mark info/success/warning as PROJECT EXTENSIONS (not M3-canonical) in the Color
+    section, and record `--brand-color`'s blast radius now reaching prose links/marks.
+  - Document the foreign/embedded-content scope (bare-element selectors restyle CMS /
+    third-party markup — declare out-of-scope or give a reset escape hatch) and the
+    blessed `#root` SPA mount id; note base line-height is a frozen px ladder, not a
+    unitless ratio.
+  - Demo/screenshots honesty: the per-module screenshot folders show not-yet-styled
+    components (intentional changelog), but note this so the set doesn't read as a
+    more complete framework than ships.
