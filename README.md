@@ -70,10 +70,10 @@ Post-Modern CSS Full-Page Reset
 ## Components
 
 - Card & Panel `{article, section} > {main, header, footer}`
-- Alerts `aside[data-variant+role]`, `[role=alert]`, `[role=status]`
-  - `[role=alert]` + `[data-variant=warning|error]`
-  - `[role=status]` + `[data-variant=info|success|neutral]`
-- Chips `small[data-variant=warning|error|info|success|neutral]`
+- Alerts `aside\[data-variant+role]`, `\[role=alert]`, `\[role=status]`
+  - `\[role=alert]` + `\[data-variant=warning|error]`
+  - `\[role=status]` + `\[data-variant=info|success|neutral]`
+- Chips `small\[data-variant=warning|error|info|success|neutral]`
 - Accordion `details { @nest summary }`
 - Tab `details \[role=tablist] summary\[role=tab]`
 - Modal `dialog`

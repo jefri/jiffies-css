@@ -86,70 +86,122 @@ function (Baseline 2023), which lets the whole scale be one `calc()`.
 
 ### Color
 
-Colors are stored as **parts, not values** — luminance, chroma, hue — and
+Colors are stored as **parts, not values** — lightness, chroma, hue — and
 assembled at the use site with `oklch()`. The theming contract targets **one
-brand hue per page**: `--brand-hue` drives the whole palette, and the
-complementary, accent, and state colors derive from that single hue. Fine
-control stays available by overriding an Application final directly, or by
-setting a local `--luminance`/`--chroma` and reading `--_fn-color`, the
-parts-based `oklch()` builder.
+brand color per page**: `--brand-color` seeds the whole scheme, and every role —
+primary, secondary, tertiary, the neutrals, and their container/text pairs —
+derives from it. Fine control stays available by overriding a role token or an
+Application final directly, or by setting local parts and reading `--_fn-color`,
+the parts-based `oklch()` builder.
 
-**The 12-step scale.** A single hue expands into a **12-step semantic ladder**,
-adopted from [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale).
-Each step is one `(luminance, chroma)` point fed through the `--_fn-color`
-builder, so the entire ladder is *computed* from the hue rather than hand-picked.
-The steps carry fixed roles:
+This is **Material 3's generative color model**, approximated in pure CSS via
+OKLCH. M3 starts from a source color, derives five key colors, expands each into
+a tonal palette, then assigns the tones to semantic roles. Jiffies does the same
+with relative color syntax — `oklch(from var(--brand-color) <L> <C> h)` — so no
+JavaScript ever touches a color value.
 
-| Step | Role | Read by |
-|---|---|---|
-| `--_brand-1` | App background | page / app base (`--page-background-color`) |
-| `--_brand-2` | Subtle background | sunken wells, even table rows |
-| `--_brand-3` | Component background | card/panel surface, input field (`--card-background-color`) |
-| `--_brand-4` | Hovered component background | `:hover` surface |
-| `--_brand-5` | Active / selected component background | `:active`, `[aria-current]`, selected row |
-| `--_brand-6` | Subtle border | dividers, inner card borders (`--card-inner-border`) |
-| `--_brand-7` | Border & focus ring | input border, `:focus-visible` ring (`--_fn-border`) |
-| `--_brand-8` | Hovered border | `:hover` border |
-| `--_brand-9` | Solid (pure brand) | filled button, brand page-end (`--brand-primary-color`) |
-| `--_brand-10` | Hovered solid | filled button `:hover` |
-| `--_brand-11` | Low-contrast text | muted text, placeholders |
-| `--_brand-12` | High-contrast text | headings, emphasized body |
+**Five key palettes, derived from one source.** Following M3's default
+*TonalSpot* scheme, four palettes keep the source hue and take a fixed chroma per
+role; the fifth rotates the hue. A sixth, **error**, is a fixed red and is *not*
+derived from the source — as in M3.
 
-**Step 9 is the pure hue** — the one step mixed with the least black or white,
-the most saturated point, and the brand color proper (`--brand-primary-color`).
-It is the fill for solid controls and brand page-ends.
+| Palette | Prefix | Hue | Chroma | Role |
+|---|---|---|---|---|
+| Primary | `--_p-*` | source `h` | 0.130 | brand accent |
+| Secondary | `--_s-*` | source `h` | 0.045 | muted accent |
+| Tertiary | `--_t-*` | `h + 60` | 0.090 | contrasting accent |
+| Neutral | `--_n-*` | source `h` | 0.008 | backgrounds, surfaces, text |
+| Neutral variant | `--_nv-*` | source `h` | 0.016 | outlines, surface variants |
+| Error | `--_e-*` | fixed (≈ 27) | tapered | error states |
 
-**Interactive states are steps, not mixes.** A component surface walks
-`3 → 4 → 5` (rest → hover → active); a solid control walks `9 → 10`
-(rest → hover); a border walks `6 → 7 → 8`; the focus ring is step 7. State no
-longer derives by mixing toward white or black — it is a defined position on the
-ladder, so the contrast between adjacent states is consistent across every hue.
+Each palette is a **tonal ramp**: hue and chroma held constant while *tone*
+sweeps from 0 (black) to 100 (white) at M3's stops
+`0 10 20 30 40 50 60 70 80 90 95 98 99 100`. A tone is one `--_p-<tone>` (etc.) —
+`--_p-40` is primary at tone 40, `--_n-98` the near-white neutral background.
 
-**Dark mode flips the ladder, not the colors.** `prefers-color-scheme: dark`
-lowers `--base-luminance` (95% → 30%) and `--brand-luminance` (95% → 58%); the
-same 12 roles recompute from the same hue/chroma at the darker luminances. This
-mirrors Radix's paired light/dark scales: identical roles, re-derived per theme.
+**The inverse Oklab toe is the one move that matters.** M3 "tone" is CIE L\*;
+CSS `oklch()` lightness is Oklab L. They are different curves — Oklab compresses
+the dark end, so a naive `L = tone / 100` drifts dark through the midtones. Each
+tone is therefore mapped through the **inverse Oklab toe** before it reaches
+`oklch()`:
 
-**State hues** are single-hue dials, each expanding into its own 12-step ladder:
-`--blue-hue` (info), `--green-hue` (success/`ins`), `--amber-hue` (warning/`mark`),
-`--red-hue` (error/`del`).
+```
+L = (Lr² + k1·Lr) / (k3·(Lr + k2))
+k1 = 0.206,  k2 = 0.03,  k3 = (1 + k1) / (1 + k2) ≈ 1.170873   /* so L = 1 when Lr = 1 */
+```
 
-**Step-9 text pairing.** Most step-9 fills take white foreground text; the warm
-exceptions take dark text — in Radix these are Sky, Mint, Lime, Yellow, and
-Amber — so the warning/`mark` hue (`--amber-hue`) pairs its step-9 fill with
-dark text, not white.
+where `Lr = tone / 100`. This lands tone 40 at `L ≈ 0.482`, not `0.40`. The
+constants and the per-tone lightness are evaluated once as Derivation tokens
+(`--_k1`/`--_k2`/`--_k3`, then `--_l-40` = … ); change `--_k1` or `--_k2` and the
+whole ramp re-derives. The correction is what makes the ramp track HCT rather
+than merely *looking* OKLCH-flavored. (The standalone reference file writes these
+without the `--_` prefix; integrated into Jiffies the engine intermediates carry
+it, per [Naming grammar](#naming-grammar).)
 
-*Grounded in:* [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
-for the 12-step semantic scale — the step→role mapping, step 9 as the pure
-color, and the paired light/dark scales; [OKLCH in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
+**Roles, not steps.** Components read **semantic role tokens**, never raw tones.
+Each role is a tone of a palette, and every surface or fill role ships with an
+**`--color-on-*` pair** that carries a contrast-safe foreground. Dark mode does not
+re-derive anything — it **reassigns** each role to a different tone of the same
+palette:
+
+| Role / on-pair | Light tones | Dark tones | Read by |
+|---|---|---|---|
+| `--color-primary` / `--color-on-primary` | `--_p-40` / `--_p-100` | `--_p-80` / `--_p-20` | filled button, focus ring, brand page-end (`--brand-primary-color`) |
+| `--color-primary-container` / `--color-on-primary-container` | `--_p-90` / `--_p-10` | `--_p-30` / `--_p-90` | tonal surfaces |
+| `--color-secondary` / `--color-secondary-container` (+ `on-`) | `--_s-40` / `--_s-90` | `--_s-80` / `--_s-30` | muted accents, `.secondary` controls |
+| `--color-tertiary` / `--color-tertiary-container` (+ `on-`) | `--_t-40` / `--_t-90` | `--_t-80` / `--_t-30` | contrasting accents |
+| `--color-error` / `--color-error-container` (+ `on-`) | `--_e-40` / `--_e-90` | `--_e-80` / `--_e-30` | error fills and text |
+| `--color-background` / `--color-on-background` | `--_n-98` / `--_n-10` | `--_n-10` / `--_n-90` | page base (`--page-background-color`) |
+| `--color-surface` / `--color-on-surface` | `--_n-98` / `--_n-10` | `--_n-10` / `--_n-90` | card/panel/input surface (`--card-background-color`) |
+| `--color-surface-variant` / `--color-on-surface-variant` | `--_nv-90` / `--_nv-30` | `--_nv-30` / `--_nv-80` | hovered/sunken surfaces |
+| `--color-outline` / `--color-outline-variant` | `--_nv-50` / `--_nv-80` | `--_nv-60` / `--_nv-30` | input & focus border (`--_fn-border`), inner card border (`--card-inner-border`) |
+| `--color-inverse-surface` / `--color-inverse-on-surface` / `--color-inverse-primary` | `--_n-20` / `--_n-95` / `--_p-80` | `--_n-90` / `--_n-20` / `--_p-40` | snackbars, scrims, hero title contrast |
+
+`--color-primary` moving from `--_p-40` (light) to `--_p-80` (dark), surfaces moving
+from the 98 end to the 10 end, and each `on-` partner flipping with it, is M3's
+canonical light/dark mapping: the same roles, different tones. The six palettes
+are theme-independent — every tone of every hue exists at all times — so a theme
+switch is a remap, not a recompute.
+
+**Contrast is by tone distance, not a warm-hue exception.** M3 pairs a role with
+its `on-` foreground so the tone gap clears the contrast floor: a gap of 40 in
+HCT tone is ≈ 3:1, a gap of 50 is ≈ 4.5:1. Because every role ships its `on-`
+partner, a light fill always carries a dark foreground and a dark fill a light
+one — there is no per-hue special case (the old "amber takes dark text" rule is
+folded into the pairing).
+
+**State colors are M3 custom colors.** Info, success, and warning sit outside the
+core M3 scheme; each is a **fixed source hue expanded into its own tonal palette
+and role pair** by the same toe + chroma machinery, then mapped to
+container/`on-container` roles exactly like error. The dials are `--blue-hue`
+(info), `--green-hue` (success / `ins`), `--amber-hue` (warning / `mark`); error
+(`del`) is the built-in fixed red.
+
+**Where this honestly diverges from M3.** (1) Key-color derivation uses fixed
+OKLCH chroma per role — a translation of the TonalSpot variant; M3 also ships
+Fidelity, Vibrant, Expressive, Neutral, and Monochrome variants with different
+hue/chroma logic. (2) Chroma is held constant per ramp and left to the browser's
+gamut mapping at the light/dark extremes, where M3 deliberately tapers it. (3)
+Oklab hue ≠ CAM16 hue, so expect small hue drift in the blue–purple band — the
+exact region HCT was built to fix. (4) Contrast is *approximate*: the toe lands
+tones near their CIE L\* targets, but pairings are not formally verified to
+3:1 / 4.5:1 the way M3's contrast module enforces — CSS alone cannot run that
+verification pass.
+
+*Grounded in:* [Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
+for the generative model — one source color → five key colors → tonal palettes →
+semantic roles, with the canonical light/dark tone assignments and `on-` pairing;
+[Material Color Utilities](https://github.com/material-foundation/material-color-utilities)
+for the reference algorithm (HCT, palettes, contrast, scheme), which this
+approximates in CSS rather than reimplements; Björn Ottosson's
+[Oklab](https://bottosson.github.io/posts/oklab/) for the toe — the
+reference-lightness correction that aligns Oklab L with CIE L\*;
+[OKLCH in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
 (Evil Martians) and Lea Verou's
 [LCH colors in CSS](https://lea.verou.me/blog/2020/04/lch-colors-in-css-what-why-and-how/)
-for the parts-based, perceptually uniform model — because OKLCH separates
-lightness from hue and chroma, the same hue/chroma ramp yields both the light and
-dark ladders; [Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
-for deriving a full scale from a single hue; and
-[`color-mix()`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix)
-for interpolating between adjacent steps.
+for the parts-based, perceptually uniform model; and
+[relative color syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors)
+(`oklch(from …)`), which derives every palette from `--brand-color` with no JavaScript.
 
 ### Spacing & Sizing
 
@@ -213,8 +265,8 @@ author intent to rendered property:
 
 | Tier | Lives on | Answers | Example |
 |---|---|---|---|
-| **Intent** | `:root` (public API) | "how will this be used?" | `--brand-hue`, `--base-size`, `--font-scale` |
-| **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_brand-9` |
+| **Intent** | `:root` (public API) | "how will this be used?" | `--brand-color`, `--base-size`, `--font-scale` |
+| **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_p-40` |
 | **Application** | the element's own rule | "what does this change?" | `--color-header`, `--font-size-base` |
 
 Overriding an **Intent** token is coarse control: it moves everything downstream.
@@ -237,11 +289,11 @@ the Derivation engine lives on `*` and re-computes per element.
 Names are **kebab-case, category/element-first**. Tier is not encoded with
 mid-name underscores.
 
-- **Intent and Application** tokens are plain kebab-case: `--brand-hue`,
+- **Intent and Application** tokens are plain kebab-case: `--brand-color`,
   `--base-font-size`, `--color-header`, `--margin-card-vertical`.
 - **Derivation** intermediates carry a leading **`--_`** — Lea Verou's
   pseudo-private prefix — so a reader knows the value is part of the engine, not a
-  dial to override: `--_fn-color`, `--_brand-9`, `--_fn-border`.
+  dial to override: `--_fn-color`, `--_p-40`, `--_fn-border`.
 
 **Decision D1 — Derivation prefix = `--_`.** The leading underscore is a naming
 convention only (CSS enforces no privacy); it signals "internal, do not override."
@@ -334,11 +386,13 @@ an ARIA contract, never a class. Some necessary edge-classes add subtle addition
 
 - **DOM shape:** `button, a[role=button], input[type=button|submit|reset]`
 - **ARIA:** `[role=button]` promotes a link to a button; `[aria-disabled]`, `[aria-busy]` allow for disabled states and loading spinners in buttons.
-- **Tokens:** `--_fn-color` (built from local `--color`/`--luminance`/`--chroma`),
-  the solid steps `--_brand-9`/`--_brand-10` (fill + hover) and `--_brand-7`
-  (focus ring); `.secondary`/`.outline` read the component steps `--_brand-3`–
-  `--_brand-5`. Plus `--label-font-family`, `--font-size-base`,
-  `--border-radius-button`, `--size-small`/`--size-base` (padding)
+- **Tokens:** the role pair `--color-primary`/`--color-on-primary` (filled fill + label)
+  with a `:hover`/`:active` state layer, and `--color-primary` for the
+  `:focus-visible` ring; `.secondary` reads the tonal pair
+  `--color-secondary-container`/`--color-on-secondary-container`; `.outline` reads
+  `--color-outline` (border) + `--color-primary` (label). Plus `--label-font-family`,
+  `--font-size-base`, `--border-radius-button`, `--size-small`/`--size-base`
+  (padding)
 - **States:** `:hover`, `:focus-visible`, `:active`, `[disabled]`/`[aria-disabled]`,
   `[aria-busy]`
 - **Edge-classes:** `.secondary`, `.contrast`, `.outline`
@@ -405,8 +459,9 @@ A tablist whose selected state is driven entirely accessibly.
   (commonly inside a `section`)
 - **ARIA:** `[role=tab]`, `[role=tabpanel]`, `[aria-selected]`, `[aria-controls]`,
   `[tabpanel][hidden]`
-- **Tokens:** `--color-accent` (active-tab indicator), `--_brand-4` (hover),
-  `--label-font-family`, `--_fn-border` (tablist baseline, step 7)
+- **Tokens:** `--color-primary` (active-tab indicator), `--color-surface-variant`
+  (hover), `--label-font-family`, `--color-outline-variant` (tablist baseline, via
+  `--_fn-border`)
 - **States:** `[aria-selected=true]`, `:hover`, `:focus-visible`
 - **Edge-classes:** none
 
@@ -491,7 +546,7 @@ elevated card; `section` is the flat panel.
 - **ARIA:** `[aria-current]` marks the active link
 - **Tokens:** `--header-nav-background-color`/`--header-nav-color`,
   `--nav-item-spacing-vertical`/`--nav-item-spacing-horizontal`, `--nav-font-family`,
-  `--_brand-4`/`--color-accent`, `--toc-left-offset`, `--transition`
+  `--color-surface-variant`/`--color-primary`, `--toc-left-offset`, `--transition`
 - **States:** `:is([aria-current], :hover, :focus)` (underline);
   `li:has(a:hover)` (background); aside TOC hover-indent
 - **Edge-classes:** none
@@ -544,7 +599,7 @@ page banner.
   heading carries the visible title
 - **Tokens:** `--border-radius-card` (card-hero corner clip), `--base-viewport-width`
   (page hero may opt out of the clamp via `.fluid`), `--header-font-family`,
-  `--_brand-12`/`--_brand-1` (title contrast over the image)
+  `--color-on-surface`/`--color-surface` (title contrast over the image)
 - **States:** `:is(article, section) > :is(header, footer) > figure` (card-scoped,
   clipped); `(body > #root) > :is(header, footer) > figure` (page-scoped,
   full-bleed); heading positioned over the image

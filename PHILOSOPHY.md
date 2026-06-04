@@ -46,7 +46,7 @@ rendered property; reading the gradient tells you where to reach to change a giv
 outcome and what else moves when you do.
 
 **Intent**  *on `:root`* Answers _"how will this be used?"_ Brand and base
-inputs like `--brand-hue`, `--base-luminance`, `--base-text-color`, `--font-scale`
+inputs like `--brand-color`, `--base-text-color`, `--base-size`, `--font-scale`
 control wide swaths of the page's style.  These properties are named in the words
 of someone shaping a page. **This tier is the public API.** It is small, stable,
 and deserves the most thought, because it is the contract an end user overrides.
