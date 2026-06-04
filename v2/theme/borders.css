@@ -1,4 +1,39 @@
+/* borders — Intent tokens for the border-radius scale and border composition.
+ *
+ * Tier: Intent (:root, public API). Plain kebab-case names.
+ * Ownership split with sizing.css: sizing owns --base-border-size (the width
+ * atom); borders owns the radius scale and the composition tokens that braid
+ * width + style + color into a shorthand.
+ *
+ * Radius scale — a coherent, density-independent corner language in rem so the
+ * corner softness reads consistently across the --base-size density switch.
+ * Three anchors at a 4× / 2× / 1× ratio:
+ *   container  .5rem    largest enclosing surfaces (cards, modals, panels)
+ *   item       .25rem   discrete controls inside a container
+ *   inline     .125rem  small inline chrome (badges, chips, progress bars)
+ * The role tokens below alias these anchors so a consumer can retune one
+ * control family without touching the shared scale.
+ */
 :root {
-  --page-end-border: var(--base-border-size) solid var(--base-border-color);
-  --card-inner-border: var(--base-border-size) solid var(--base-border-color);
+  --border-radius-container: 0.5rem;
+  --border-radius-item: 0.25rem;
+  --border-radius-inline: 0.125rem;
+
+  /* Role radii — derive from the scale anchors. */
+  --border-radius-button: var(--border-radius-item);
+  --border-radius-input: var(--border-radius-item);
+  --border-radius-badge: var(--border-radius-inline);
+
+  /* Border composition — width (from sizing) + style + color, braided into a
+   * reusable shorthand. --base-border-color resolves through the M3 outline
+   * role so it tracks the active color scheme; --base-border-size is owned by
+   * sizing.css. */
+  --base-border-style: solid;
+  --base-border-color: var(--color-outline-variant);
+  --base-border: var(--base-border-size) var(--base-border-style)
+    var(--base-border-color);
+
+  /* Composed application borders read by consumers. */
+  --page-end-border: var(--base-border);
+  --card-inner-border: var(--base-border);
 }

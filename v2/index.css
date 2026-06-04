@@ -1,7 +1,7 @@
 @layer fns, reset, layout, content, component, utility, user, theme;
 
-/* zero-out (Phase 0): re-enable with fns (Phase 1 m3-tonal-palettes / derivation-private-prefix) */
-/* @import "./functions.css" layer(fns); */
+/* fns — Derivation engine (re-enabled Phase 1 m3-tonal-palettes / derivation-private-prefix) */
+@import "./functions.css" layer(fns);
 @import "./sanitize/index.css" layer(reset);
 @import "./theme/theme.css" layer(theme);
 /* zero-out (Phase 0): layout/layout.css does not exist yet; re-create + re-enable in Phase 2 layout-layer. Commenting clears the esbuild 404. */

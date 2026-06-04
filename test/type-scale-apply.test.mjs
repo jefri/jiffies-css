@@ -20,8 +20,8 @@ const readmePath = join(repoRoot, "README.md");
 
 // zero-out (Phase 0): theme/sizing.css import is commented out and the module
 // is reviewed/rewritten in Phase 1; the README is doc-realigned in Phase 6.
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing) + Phase 6 doc-alignment.
-test.skip("--font-scale is 1.25 (major third) in sizing.css", () => {
+// re-enabled with theme/typography (Phase 1); --font-scale is set in theme/sizing.css.
+test("--font-scale is 1.25 (major third) in sizing.css", () => {
   const css = readFileSync(sizingPath, "utf8");
   assert.match(
     css,
@@ -30,8 +30,8 @@ test.skip("--font-scale is 1.25 (major third) in sizing.css", () => {
   );
 });
 
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("sizing.css comment identifies the scale as Major third", () => {
+// re-enabled with theme/typography (Phase 1); comment lives in theme/sizing.css.
+test("sizing.css comment identifies the scale as Major third", () => {
   const css = readFileSync(sizingPath, "utf8");
   assert.match(
     css,

@@ -1,8 +1,77 @@
+/* Typography — modular type scale + the five font roles. See design_system.md
+   "### Typography".
+
+   Heading sizes follow a major-third modular scale, --font-scale: 1.25, over the
+   native CSS pow() engine:
+
+       font-size = calc(1rem * pow(var(--font-scale), 7 - n))   [ n = 1…6, h1…h6 ]
+
+   so h1 = 1.25^6 ≈ 3.81rem and the ladder steps down by a constant 1.25 ratio to
+   h6 = 1.25^1 = 1.25rem. --small-font-size is the base divided by the same ratio.
+   The single dial is --font-scale; changing it re-tunes the whole hierarchy.
+
+   Five font roles, each an Intent override that falls back to a named default
+   face and then to the system stack defined in sanitize/typography.css, so faces
+   resolve even offline:
+
+       --<role>-font-family:
+         var(--brand-<role>-font-family, <named face>, var(--base-<role>-font-family))
+
+   Default faces — Body Poppins, Text header Libre Baskerville, App header / label
+   Roboto, Nav Roboto, Code JetBrains Mono.
+
+   This module defines tokens only. Applying them to h1…h6 / body elements is
+   content/typography-block (Phase 3). */
+
 :root {
+  /* ------------------------------------------------------------------------
+     Modular type scale. --font-scale and the responsive --base-font-size
+     ladder live in theme/sizing.css; this is the heading hierarchy and the
+     small-text step derived from that single ratio.
+     ------------------------------------------------------------------------ */
   --base-font-weight: normal;
-  --body-font-family: var(--brand-body-font-family, var(--base-body-font-family));
-  --header-font-family: var(--brand-header-font-family, var(--base-header-font-family));
-  --label-font-family: var(--brand-label-font-family, var(--base-label-font-family));
-  --nav-font-family: var(--brand-nav-font-family, var(--base-nav-font-family));
-  --monospace-font-family: var(--brand-monospace-font-family, var(--base-monospace-font-family));
+
+  /* Major-third modular scale via pow(): h(n) = 1rem * 1.25^(7 - n). */
+  --font-size-h1: calc(1rem * pow(var(--font-scale), 6)); /* ≈ 3.815rem */
+  --font-size-h2: calc(1rem * pow(var(--font-scale), 5)); /* ≈ 3.052rem */
+  --font-size-h3: calc(1rem * pow(var(--font-scale), 4)); /* ≈ 2.441rem */
+  --font-size-h4: calc(1rem * pow(var(--font-scale), 3)); /* ≈ 1.953rem */
+  --font-size-h5: calc(1rem * pow(var(--font-scale), 2)); /* ≈ 1.563rem */
+  --font-size-h6: calc(1rem * pow(var(--font-scale), 1)); /* = 1.25rem    */
+
+  /* Small text is the base divided by the same ratio. Mirrors theme/sizing.css
+     so it resolves whether or not sizing is loaded. */
+  --small-font-size: calc(var(--base-font-size) / var(--font-scale));
+
+  /* ------------------------------------------------------------------------
+     Five font roles. Each resolves brand override → named default face →
+     system stack (--base-<role>-font-family, from sanitize/typography.css).
+     The named face sits between the two var() lookups so an absent webfont
+     falls through to the offline system stack within the same family list.
+     ------------------------------------------------------------------------ */
+  --body-font-family: var(
+    --brand-body-font-family,
+    "Poppins",
+    var(--base-body-font-family)
+  );
+  --header-font-family: var(
+    --brand-header-font-family,
+    "Libre Baskerville",
+    var(--base-header-font-family)
+  );
+  --label-font-family: var(
+    --brand-label-font-family,
+    "Roboto",
+    var(--base-label-font-family)
+  );
+  --nav-font-family: var(
+    --brand-nav-font-family,
+    "Roboto",
+    var(--base-nav-font-family)
+  );
+  --monospace-font-family: var(
+    --brand-monospace-font-family,
+    "JetBrains Mono",
+    var(--base-monospace-font-family)
+  );
 }

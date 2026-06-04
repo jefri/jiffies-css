@@ -29,9 +29,7 @@ const LADDER = [
   ["4k (2560px)", "2560px", "24px"],
 ];
 
-// zero-out (Phase 0): theme/sizing.css import is commented out.
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("all six breakpoints define --base-font-size", () => {
+test("all six breakpoints define --base-font-size", () => {
   const css = readFileSync(sizingPath, "utf8");
   for (const [label, minWidth, fontSize] of LADDER) {
     if (minWidth === null) {

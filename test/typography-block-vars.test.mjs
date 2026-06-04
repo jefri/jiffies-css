@@ -37,10 +37,10 @@ function readAllCss(dir) {
   return out;
 }
 
-// zero-out (Phase 0): content/typography-block.css and theme/typography.css
-// imports are commented out and both modules are reviewed/rewritten in later phases.
-// re-enable with content/typography-block (Phase 3) + theme/typography (Phase 1).
-test.skip("transposed read names are gone everywhere in v2", () => {
+// re-enabled with theme/typography (Phase 1): theme/typography.css is rewritten
+// to the spec and must not reintroduce the transposed/undefined property names.
+// (content/typography-block.css follows in Phase 3; this scans all of v2.)
+test("transposed read names are gone everywhere in v2", () => {
   const badNames = ["--text-color-base", "--font-family-body-base"];
   const offenders = [];
   for (const { path, text } of readAllCss(v2Dir)) {
@@ -70,8 +70,8 @@ test.skip("base block reads the local names it sets", () => {
   );
 });
 
-// re-enable with theme/typography (Phase 1 re-enable theme/typography).
-test.skip("upstream --base-font-weight token is defined in the typography theme", () => {
+// re-enabled with theme/typography (Phase 1 re-enable theme/typography).
+test("upstream --base-font-weight token is defined in the typography theme", () => {
   const css = readFileSync(typographyThemePath, "utf8");
   assert.match(
     css,

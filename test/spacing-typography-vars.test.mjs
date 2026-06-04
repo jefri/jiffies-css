@@ -40,10 +40,7 @@ const TOKENS = [
   "--spacing-typography-horizontal",
 ];
 
-// zero-out (Phase 0): theme/sizing.css import is commented out and the module
-// is reviewed/rewritten in Phase 1.
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("tokens are defined in v2/theme/sizing.css", () => {
+test("tokens are defined in v2/theme/sizing.css", () => {
   const css = readFileSync(sizingPath, "utf8");
   for (const token of TOKENS) {
     assert.match(
@@ -54,8 +51,7 @@ test.skip("tokens are defined in v2/theme/sizing.css", () => {
   }
 });
 
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("every reference to spacing-typography tokens in v2 has a definition", () => {
+test("every reference to spacing-typography tokens in v2 has a definition", () => {
   const allFiles = readAllCss(v2Dir);
   const definitions = new Set();
   const references = [];
@@ -76,8 +72,7 @@ test.skip("every reference to spacing-typography tokens in v2 has a definition",
   );
 });
 
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("sizing.css defines the tokens beside the existing --spacing-block-* definitions", () => {
+test("sizing.css defines the tokens beside the existing --spacing-block-* definitions", () => {
   const css = readFileSync(sizingPath, "utf8");
   const blockIdx = css.indexOf("--spacing-block-");
   const vertIdx = css.indexOf("--spacing-typography-vertical:");
@@ -98,8 +93,7 @@ test.skip("sizing.css defines the tokens beside the existing --spacing-block-* d
   );
 });
 
-// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
-test.skip("tokens resolve to --size-base", () => {
+test("tokens resolve to --size-base", () => {
   const css = readFileSync(sizingPath, "utf8");
   for (const token of TOKENS) {
     assert.match(

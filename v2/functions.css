@@ -1,18 +1,268 @@
+/* Derivation engine (@layer fns) — Material 3 generative color model in pure CSS.
+ *
+ * One Intent token, --brand-color (an oklch() color on :root, theme layer),
+ * seeds the whole scheme. Five key palettes + error + three state palettes are
+ * built here as Derivation tokens (the --_ pseudo-private prefix) on *, so they
+ * are lazy and re-derive per element. Relative color syntax
+ * `oklch(from var(--brand-color) <L> <C> <h>)` reads the brand's channels;
+ * `h` is the brand hue, fixed chroma per role, lightness from the toe below.
+ *
+ * Tokens here are theme-INDEPENDENT: every tone of every palette exists at all
+ * times (defined unconditionally, not inside a media query). Dark mode does not
+ * re-derive — it remaps role tokens (theme/colors.css).
+ *
+ * See design_system.md › Color and › Naming grammar.
+ */
+
+/* Register the toe lightness intermediates as <number> so the calc() resolves
+ * to a computed numeric value (otherwise an unregistered custom property keeps
+ * the literal calc() string). This also lets a consumer animate the ramp. */
+@property --_l-0 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-10 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-20 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-30 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-40 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-50 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-60 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-70 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-80 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-90 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-95 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-98 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-99 { syntax: "<number>"; inherits: true; initial-value: 0; }
+@property --_l-100 { syntax: "<number>"; inherits: true; initial-value: 0; }
+
 * {
-  /* Scaffolding: --fn-color is the first consumer entry-point for the
-     parts-based color system. No v2 component reads it yet; component-buttons
-     will be the first consumer when ported. */
-  --fn-color: oklch(
-    var(--luminance, var(--base-luminance)) var(--chroma)
-      var(--color-hue, var(--color-primary-hue))
+  /* ---- A. Inverse Oklab toe -------------------------------------------------
+   * M3 "tone" is CIE L*; oklch() lightness is Oklab L. Oklab compresses the
+   * dark end, so a naive L = tone/100 drifts dark through the midtones. Map each
+   * tone t through the inverse toe BEFORE oklch():
+   *   Lr = t / 100
+   *   L  = (Lr^2 + k1*Lr) / (k3 * (Lr + k2))
+   * k3 = (1 + k1) / (1 + k2) so that L = 1 when Lr = 1.
+   * Sanity: --_l-40 computes to ~0.482 (NOT 0.40).
+   */
+  --_k1: 0.206;
+  --_k2: 0.03;
+  --_k3: 1.170873; /* (1 + k1) / (1 + k2) */
+
+  --_l-0: calc((0 * 0 + var(--_k1) * 0) / (var(--_k3) * (0 + var(--_k2))));
+  --_l-10: calc(
+    (0.1 * 0.1 + var(--_k1) * 0.1) / (var(--_k3) * (0.1 + var(--_k2)))
+  );
+  --_l-20: calc(
+    (0.2 * 0.2 + var(--_k1) * 0.2) / (var(--_k3) * (0.2 + var(--_k2)))
+  );
+  --_l-30: calc(
+    (0.3 * 0.3 + var(--_k1) * 0.3) / (var(--_k3) * (0.3 + var(--_k2)))
+  );
+  --_l-40: calc(
+    (0.4 * 0.4 + var(--_k1) * 0.4) / (var(--_k3) * (0.4 + var(--_k2)))
+  );
+  --_l-50: calc(
+    (0.5 * 0.5 + var(--_k1) * 0.5) / (var(--_k3) * (0.5 + var(--_k2)))
+  );
+  --_l-60: calc(
+    (0.6 * 0.6 + var(--_k1) * 0.6) / (var(--_k3) * (0.6 + var(--_k2)))
+  );
+  --_l-70: calc(
+    (0.7 * 0.7 + var(--_k1) * 0.7) / (var(--_k3) * (0.7 + var(--_k2)))
+  );
+  --_l-80: calc(
+    (0.8 * 0.8 + var(--_k1) * 0.8) / (var(--_k3) * (0.8 + var(--_k2)))
+  );
+  --_l-90: calc(
+    (0.9 * 0.9 + var(--_k1) * 0.9) / (var(--_k3) * (0.9 + var(--_k2)))
+  );
+  --_l-95: calc(
+    (0.95 * 0.95 + var(--_k1) * 0.95) / (var(--_k3) * (0.95 + var(--_k2)))
+  );
+  --_l-98: calc(
+    (0.98 * 0.98 + var(--_k1) * 0.98) / (var(--_k3) * (0.98 + var(--_k2)))
+  );
+  --_l-99: calc(
+    (0.99 * 0.99 + var(--_k1) * 0.99) / (var(--_k3) * (0.99 + var(--_k2)))
+  );
+  --_l-100: calc((1 * 1 + var(--_k1) * 1) / (var(--_k3) * (1 + var(--_k2))));
+
+  /* ---- B. Five key palettes + error ----------------------------------------
+   * Chroma is fixed per role; hue comes from the brand (h) except tertiary
+   * (+60) and error (fixed red). Each palette is a tonal ramp: hue + chroma
+   * held constant, lightness sweeping the toe stops above.
+   */
+
+  /* Primary — brand accent. hue h, chroma 0.130 */
+  --_p-0: oklch(from var(--brand-color) var(--_l-0) 0.13 h);
+  --_p-10: oklch(from var(--brand-color) var(--_l-10) 0.13 h);
+  --_p-20: oklch(from var(--brand-color) var(--_l-20) 0.13 h);
+  --_p-30: oklch(from var(--brand-color) var(--_l-30) 0.13 h);
+  --_p-40: oklch(from var(--brand-color) var(--_l-40) 0.13 h);
+  --_p-50: oklch(from var(--brand-color) var(--_l-50) 0.13 h);
+  --_p-60: oklch(from var(--brand-color) var(--_l-60) 0.13 h);
+  --_p-70: oklch(from var(--brand-color) var(--_l-70) 0.13 h);
+  --_p-80: oklch(from var(--brand-color) var(--_l-80) 0.13 h);
+  --_p-90: oklch(from var(--brand-color) var(--_l-90) 0.13 h);
+  --_p-95: oklch(from var(--brand-color) var(--_l-95) 0.13 h);
+  --_p-98: oklch(from var(--brand-color) var(--_l-98) 0.13 h);
+  --_p-99: oklch(from var(--brand-color) var(--_l-99) 0.13 h);
+  --_p-100: oklch(from var(--brand-color) var(--_l-100) 0.13 h);
+
+  /* Secondary — muted accent. hue h, chroma 0.045 */
+  --_s-0: oklch(from var(--brand-color) var(--_l-0) 0.045 h);
+  --_s-10: oklch(from var(--brand-color) var(--_l-10) 0.045 h);
+  --_s-20: oklch(from var(--brand-color) var(--_l-20) 0.045 h);
+  --_s-30: oklch(from var(--brand-color) var(--_l-30) 0.045 h);
+  --_s-40: oklch(from var(--brand-color) var(--_l-40) 0.045 h);
+  --_s-50: oklch(from var(--brand-color) var(--_l-50) 0.045 h);
+  --_s-60: oklch(from var(--brand-color) var(--_l-60) 0.045 h);
+  --_s-70: oklch(from var(--brand-color) var(--_l-70) 0.045 h);
+  --_s-80: oklch(from var(--brand-color) var(--_l-80) 0.045 h);
+  --_s-90: oklch(from var(--brand-color) var(--_l-90) 0.045 h);
+  --_s-95: oklch(from var(--brand-color) var(--_l-95) 0.045 h);
+  --_s-98: oklch(from var(--brand-color) var(--_l-98) 0.045 h);
+  --_s-99: oklch(from var(--brand-color) var(--_l-99) 0.045 h);
+  --_s-100: oklch(from var(--brand-color) var(--_l-100) 0.045 h);
+
+  /* Tertiary — contrasting accent. hue h + 60, chroma 0.090 */
+  --_t-0: oklch(from var(--brand-color) var(--_l-0) 0.09 calc(h + 60));
+  --_t-10: oklch(from var(--brand-color) var(--_l-10) 0.09 calc(h + 60));
+  --_t-20: oklch(from var(--brand-color) var(--_l-20) 0.09 calc(h + 60));
+  --_t-30: oklch(from var(--brand-color) var(--_l-30) 0.09 calc(h + 60));
+  --_t-40: oklch(from var(--brand-color) var(--_l-40) 0.09 calc(h + 60));
+  --_t-50: oklch(from var(--brand-color) var(--_l-50) 0.09 calc(h + 60));
+  --_t-60: oklch(from var(--brand-color) var(--_l-60) 0.09 calc(h + 60));
+  --_t-70: oklch(from var(--brand-color) var(--_l-70) 0.09 calc(h + 60));
+  --_t-80: oklch(from var(--brand-color) var(--_l-80) 0.09 calc(h + 60));
+  --_t-90: oklch(from var(--brand-color) var(--_l-90) 0.09 calc(h + 60));
+  --_t-95: oklch(from var(--brand-color) var(--_l-95) 0.09 calc(h + 60));
+  --_t-98: oklch(from var(--brand-color) var(--_l-98) 0.09 calc(h + 60));
+  --_t-99: oklch(from var(--brand-color) var(--_l-99) 0.09 calc(h + 60));
+  --_t-100: oklch(from var(--brand-color) var(--_l-100) 0.09 calc(h + 60));
+
+  /* Neutral — backgrounds, surfaces, text. hue h, chroma 0.008 */
+  --_n-0: oklch(from var(--brand-color) var(--_l-0) 0.008 h);
+  --_n-10: oklch(from var(--brand-color) var(--_l-10) 0.008 h);
+  --_n-20: oklch(from var(--brand-color) var(--_l-20) 0.008 h);
+  --_n-30: oklch(from var(--brand-color) var(--_l-30) 0.008 h);
+  --_n-40: oklch(from var(--brand-color) var(--_l-40) 0.008 h);
+  --_n-50: oklch(from var(--brand-color) var(--_l-50) 0.008 h);
+  --_n-60: oklch(from var(--brand-color) var(--_l-60) 0.008 h);
+  --_n-70: oklch(from var(--brand-color) var(--_l-70) 0.008 h);
+  --_n-80: oklch(from var(--brand-color) var(--_l-80) 0.008 h);
+  --_n-90: oklch(from var(--brand-color) var(--_l-90) 0.008 h);
+  --_n-95: oklch(from var(--brand-color) var(--_l-95) 0.008 h);
+  --_n-98: oklch(from var(--brand-color) var(--_l-98) 0.008 h);
+  --_n-99: oklch(from var(--brand-color) var(--_l-99) 0.008 h);
+  --_n-100: oklch(from var(--brand-color) var(--_l-100) 0.008 h);
+
+  /* Neutral variant — outlines, surface variants. hue h, chroma 0.016 */
+  --_nv-0: oklch(from var(--brand-color) var(--_l-0) 0.016 h);
+  --_nv-10: oklch(from var(--brand-color) var(--_l-10) 0.016 h);
+  --_nv-20: oklch(from var(--brand-color) var(--_l-20) 0.016 h);
+  --_nv-30: oklch(from var(--brand-color) var(--_l-30) 0.016 h);
+  --_nv-40: oklch(from var(--brand-color) var(--_l-40) 0.016 h);
+  --_nv-50: oklch(from var(--brand-color) var(--_l-50) 0.016 h);
+  --_nv-60: oklch(from var(--brand-color) var(--_l-60) 0.016 h);
+  --_nv-70: oklch(from var(--brand-color) var(--_l-70) 0.016 h);
+  --_nv-80: oklch(from var(--brand-color) var(--_l-80) 0.016 h);
+  --_nv-90: oklch(from var(--brand-color) var(--_l-90) 0.016 h);
+  --_nv-95: oklch(from var(--brand-color) var(--_l-95) 0.016 h);
+  --_nv-98: oklch(from var(--brand-color) var(--_l-98) 0.016 h);
+  --_nv-99: oklch(from var(--brand-color) var(--_l-99) 0.016 h);
+  --_nv-100: oklch(from var(--brand-color) var(--_l-100) 0.016 h);
+
+  /* Error — FIXED red, NOT from brand. hue --red-hue (~27 in oklch), chroma
+   * tapered: ~0.13 at the midtones, lower toward black/white where the ramp
+   * can no longer hold saturation. lightness from the toe. */
+  --red-hue: 27;
+  --_e-0: oklch(var(--_l-0) 0.02 var(--red-hue));
+  --_e-10: oklch(var(--_l-10) 0.07 var(--red-hue));
+  --_e-20: oklch(var(--_l-20) 0.1 var(--red-hue));
+  --_e-30: oklch(var(--_l-30) 0.12 var(--red-hue));
+  --_e-40: oklch(var(--_l-40) 0.13 var(--red-hue));
+  --_e-50: oklch(var(--_l-50) 0.13 var(--red-hue));
+  --_e-60: oklch(var(--_l-60) 0.13 var(--red-hue));
+  --_e-70: oklch(var(--_l-70) 0.12 var(--red-hue));
+  --_e-80: oklch(var(--_l-80) 0.1 var(--red-hue));
+  --_e-90: oklch(var(--_l-90) 0.06 var(--red-hue));
+  --_e-95: oklch(var(--_l-95) 0.035 var(--red-hue));
+  --_e-98: oklch(var(--_l-98) 0.015 var(--red-hue));
+  --_e-99: oklch(var(--_l-99) 0.008 var(--red-hue));
+  --_e-100: oklch(var(--_l-100) 0 var(--red-hue));
+
+  /* ---- C. State palettes (M3 custom colors) --------------------------------
+   * info / success / warning: each a fixed source hue expanded into its own
+   * tonal ramp by the SAME toe + chroma machinery, mapped to container /
+   * on-container exactly like error. Dials: --blue-hue (info), --green-hue
+   * (success / `ins`), --amber-hue (warning / `mark`). The chroma taper mirrors
+   * error so the extremes stay in gamut.
+   */
+  --blue-hue: 245;
+  --green-hue: 150;
+  --amber-hue: 80;
+
+  /* Info — blue ramp (--_i-*). colorful mid chroma ~0.13 */
+  --_i-0: oklch(var(--_l-0) 0.02 var(--blue-hue));
+  --_i-10: oklch(var(--_l-10) 0.07 var(--blue-hue));
+  --_i-20: oklch(var(--_l-20) 0.1 var(--blue-hue));
+  --_i-30: oklch(var(--_l-30) 0.12 var(--blue-hue));
+  --_i-40: oklch(var(--_l-40) 0.13 var(--blue-hue));
+  --_i-50: oklch(var(--_l-50) 0.13 var(--blue-hue));
+  --_i-60: oklch(var(--_l-60) 0.13 var(--blue-hue));
+  --_i-70: oklch(var(--_l-70) 0.12 var(--blue-hue));
+  --_i-80: oklch(var(--_l-80) 0.1 var(--blue-hue));
+  --_i-90: oklch(var(--_l-90) 0.06 var(--blue-hue));
+  --_i-95: oklch(var(--_l-95) 0.035 var(--blue-hue));
+  --_i-98: oklch(var(--_l-98) 0.015 var(--blue-hue));
+  --_i-99: oklch(var(--_l-99) 0.008 var(--blue-hue));
+  --_i-100: oklch(var(--_l-100) 0 var(--blue-hue));
+
+  /* Success — green ramp (--_g-*). green holds less chroma; mid ~0.11 */
+  --_g-0: oklch(var(--_l-0) 0.02 var(--green-hue));
+  --_g-10: oklch(var(--_l-10) 0.06 var(--green-hue));
+  --_g-20: oklch(var(--_l-20) 0.09 var(--green-hue));
+  --_g-30: oklch(var(--_l-30) 0.11 var(--green-hue));
+  --_g-40: oklch(var(--_l-40) 0.12 var(--green-hue));
+  --_g-50: oklch(var(--_l-50) 0.13 var(--green-hue));
+  --_g-60: oklch(var(--_l-60) 0.13 var(--green-hue));
+  --_g-70: oklch(var(--_l-70) 0.12 var(--green-hue));
+  --_g-80: oklch(var(--_l-80) 0.1 var(--green-hue));
+  --_g-90: oklch(var(--_l-90) 0.06 var(--green-hue));
+  --_g-95: oklch(var(--_l-95) 0.035 var(--green-hue));
+  --_g-98: oklch(var(--_l-98) 0.015 var(--green-hue));
+  --_g-99: oklch(var(--_l-99) 0.008 var(--green-hue));
+  --_g-100: oklch(var(--_l-100) 0 var(--green-hue));
+
+  /* Warning — amber ramp (--_w-*). amber peaks bright; mid ~0.14 */
+  --_w-0: oklch(var(--_l-0) 0.02 var(--amber-hue));
+  --_w-10: oklch(var(--_l-10) 0.06 var(--amber-hue));
+  --_w-20: oklch(var(--_l-20) 0.09 var(--amber-hue));
+  --_w-30: oklch(var(--_l-30) 0.11 var(--amber-hue));
+  --_w-40: oklch(var(--_l-40) 0.13 var(--amber-hue));
+  --_w-50: oklch(var(--_l-50) 0.14 var(--amber-hue));
+  --_w-60: oklch(var(--_l-60) 0.15 var(--amber-hue));
+  --_w-70: oklch(var(--_l-70) 0.15 var(--amber-hue));
+  --_w-80: oklch(var(--_l-80) 0.13 var(--amber-hue));
+  --_w-90: oklch(var(--_l-90) 0.08 var(--amber-hue));
+  --_w-95: oklch(var(--_l-95) 0.05 var(--amber-hue));
+  --_w-98: oklch(var(--_l-98) 0.02 var(--amber-hue));
+  --_w-99: oklch(var(--_l-99) 0.01 var(--amber-hue));
+  --_w-100: oklch(var(--_l-100) 0 var(--amber-hue));
+
+  /* ---- F. Parts-based oklch builder + structural helpers --------------------
+   * --_fn-color: the per-element parts-based oklch() builder. Reads a local
+   * --color (a role token) and re-expresses it as oklch, letting a component
+   * override lightness/chroma/hue parts locally without touching the role.
+   * Defaults keep it a faithful pass-through of --color. */
+  --_fn-color: oklch(
+    from var(--color, var(--color-primary)) var(--_l, l) var(--_c, c)
+      var(--_h, h)
   );
 
-  --color-hover: color-mix(in oklab, var(--color) 85%, white);
-  --color-focus: color-mix(in oklab, var(--color) 90%, white);
-  --color-active: color-mix(in oklab, var(--color) 85%, black);
+  /* Structural string/border builders (Application tier consumers read these).
+   * Renamed to the --_ pseudo-private prefix per derivation-private-prefix. */
+  --_fn-merge: var(--_fn-merge-a) ", " var(--_fn-merge-b, "");
 
-  --fn-merge: var(--fn-merge-a) ", " var(--fn-merge-b, "");
-
-  --fn-border: var(--fn-border-color) var(--fn-border-style, solid)
-    var(--fn-border-size);
+  --_fn-border: var(--_fn-border-color) var(--_fn-border-style, solid)
+    var(--_fn-border-size);
 }

@@ -1,11 +1,38 @@
+/* Motion — named duration + curve vocabulary, plus the composed --transition
+ * triple for back-compat. See design_system.md "### Motion & Iconography".
+ *
+ * Tier: Intent (:root, public). Three named beats and three named curves give
+ * authors a small, deliberate motion vocabulary instead of magic numbers:
+ *   snap  — quick state flips (hover, focus, checkbox)
+ *   shake — short attention nudges (invalid input, toggles)
+ *   draw  — deliberate reveals (accordion, drawer, disclosure)
+ */
 :root {
-  --transition-time: 0.2s;
-  --transition-function: ease-in-out;
+  /* Durations */
+  --motion-duration-snap: 115ms; /* quick state flips */
+  --motion-duration-shake: 165ms; /* short attention nudges */
+  --motion-duration-draw: 250ms; /* deliberate reveals */
+
+  /* Curves */
+  --motion-curve-smooth: cubic-bezier(0.4, 0, 0.2, 1); /* standard ease, decelerate-in */
+  --motion-curve-sticky: cubic-bezier(0.5, 0, 0.1, 1); /* lingers, then resolves */
+  --motion-curve-draw: cubic-bezier(0.2, 0, 0, 1); /* emphasized, long tail */
+
+  /* Composed back-compat triple. --transition is consumed as the time+function
+   * pair inside `transition: <prop> var(--transition)`. */
+  --transition-time: var(--motion-duration-snap);
+  --transition-function: var(--motion-curve-smooth);
   --transition: var(--transition-time) var(--transition-function);
 }
 
+/* Belt-and-suspenders with the reset layer's reduce-motion rules: collapse the
+ * named durations and the composed time to 0s so anything reading these tokens
+ * stops animating too. */
 @media (prefers-reduced-motion: reduce) {
   :root {
+    --motion-duration-snap: 0s;
+    --motion-duration-shake: 0s;
+    --motion-duration-draw: 0s;
     --transition-time: 0s;
   }
 }

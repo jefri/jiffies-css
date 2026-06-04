@@ -82,7 +82,7 @@ module to it.
 
 ## Phase 1 — Re-enable `fns` + `theme` (foundation; tokens every consumer reads)
 
-- [ ] **m3-tonal-palettes** — Re-enable `fns` (`./functions.css`) and `theme/colors.css`
+- [x] **m3-tonal-palettes** — Re-enable `fns` (`./functions.css`) and `theme/colors.css`
   and rewrite both to Material 3's generative model. Color derives the scheme from
   one `--brand-color`: five key palettes (`--_p-*`/`--_s-*`/`--_t-*`/`--_n-*`/`--_nv-*`)
   plus a fixed `--_e-*` error, each a tonal ramp whose lightness passes through the
@@ -94,32 +94,32 @@ module to it.
   roles that do not exist yet. Folds in the color half of **derivation-private-prefix**.
   Screenshot. Ref: *Color*.
 
-- [ ] **derivation-private-prefix** — Rename the remaining (non-color) Derivation
+- [x] **derivation-private-prefix** — Rename the remaining (non-color) Derivation
   intermediates to the `--_` private prefix (D1): `--fn-merge`/`--fn-border` →
   `--_fn-*`; update callers. Ref: *Naming grammar*.
 
-- [ ] **re-enable theme/typography** — Uncomment and review against *Typography*:
+- [x] **re-enable theme/typography** — Uncomment and review against *Typography*:
   major-third modular scale via `pow()`, the five font roles
   (`--body-`/`--header-`/`--label-`/`--nav-`/`--monospace-font-family` with
   `--brand-*` overrides), responsive `--base-font-size`. Screenshot.
 
-- [ ] **re-enable theme/sizing** — Uncomment and review against *Spacing & Sizing*
+- [x] **re-enable theme/sizing** — Uncomment and review against *Spacing & Sizing*
   and *Breakpoints*: the `--base-size` atom + t-shirt scale, the 6-step min-width
   ladder. Includes **breakpoint-columns**: align the `--content-columns` ramp to the
   responsive table's target counts (1·1·1·2·2·4); it currently ramps to 2 at `xl`
   and 3 at `4k`. Screenshot.
 
-- [ ] **re-enable theme/borders** — Uncomment and review against the border-radius
+- [x] **re-enable theme/borders** — Uncomment and review against the border-radius
   token set (`--border-radius-container`/`-item`/`-button`/`-input`/`-inline`/`-badge`)
   and `--base-border-size`. Screenshot.
 
-- [ ] **re-enable theme/animation** — Uncomment and review against *Motion*. Includes
+- [x] **re-enable theme/animation** — Uncomment and review against *Motion*. Includes
   **motion-vocabulary**: expand to the named durations
   (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) the
   README sketches; shipped code has only the single `--transition*` triple, plus the
   `prefers-reduced-motion` collapse. Screenshot.
 
-- [ ] **re-enable theme/icons** — Uncomment and review against *Iconography*:
+- [x] **re-enable theme/icons** — Uncomment and review against *Iconography*:
   inline data-URI SVG `--icon-chevron`. Screenshot.
 
 ---

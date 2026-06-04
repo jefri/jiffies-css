@@ -11,7 +11,7 @@
 hr {
   height: 0;
   border: 0;
-  border-top: var(--sizing-border-width) solid var(--color-border);
+  border-top: var(--base-border-size, 1px) solid var(--color-outline-variant, currentColor);
   color: inherit;
 }
 

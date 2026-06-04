@@ -1,4 +1,66 @@
-/* | xs | 0     |        | 12px | */
+/* Spacing & Sizing — one atom, everything derived. See design_system.md
+   "### Spacing & Sizing" and "### Breakpoints".
+
+   --base-size is the single spacing atom; density is a :root switch
+   (.compact → 4px, .loose → 16px). The t-shirt scale, border-box basis, and
+   block rhythm all derive from it. The 6-step min-width ladder (mobile-first)
+   resets the per-breakpoint viewport clamp, type size, line height, the md+
+   main/aside split, and the content-column count. */
+
+/* ---------------------------------------------------------------------------
+   Atom + derived t-shirt scale + block rhythm (density-aware).
+   --------------------------------------------------------------------------- */
+:root {
+  --font-scale: 1.25; /* Major third */
+
+  --base-size: 8px;
+  &.compact {
+    --base-size: 4px;
+  }
+  &.loose {
+    --base-size: 16px;
+  }
+
+  /* T-shirt scale: every step derived from the atom. */
+  --size-xsmall: calc(var(--base-size) / 4);
+  --size-small: calc(var(--base-size) / 2);
+  --size-base: var(--base-size);
+  --size-medium: calc(var(--base-size) * 2);
+  --size-large: calc(var(--base-size) * 3);
+  --size-xlarge: calc(var(--base-size) * 4);
+
+  /* Box model: border-box with --base-border-size = --size-xsmall. */
+  --base-border-size: var(--size-xsmall);
+  --base-padding-with-border-size: calc(
+    var(--base-size) - var(--base-border-size)
+  );
+  --base-margin-size: var(--base-size);
+
+  /* --small-font-size lives in theme/typography.css (it is type, not spacing). */
+
+  /* Block rhythm. */
+  --spacing-block-vertical: var(--size-base);
+  --spacing-block-horizontal: var(--size-medium);
+
+  /* Typography spacing — rhythm around heading groups and inline nav items. */
+  --spacing-typography-vertical: var(--size-base); /* 8px */
+  --spacing-typography-horizontal: var(--size-base); /* 8px */
+}
+
+/* ---------------------------------------------------------------------------
+   6-step min-width ladder (mobile-first). Per-step viewport clamp, type size,
+   line height, md+ main/aside split, and content-column count.
+
+   | Step | min-width | viewport | font | line | cols |
+   | xs   | 0         | 100%     | 12px | 16px | 1    |
+   | sm   | 425px     | 425px    | 14px | 18px | 1    |
+   | md   | 768px     | 768px    | 16px | 20px | 1    |
+   | lg   | 1024px    | 920px    | 18px | 24px | 2    |
+   | xl   | 1440px    | 1130px   | 20px | 28px | 2    |
+   | 4k   | 2560px    | 2170px   | 24px | 32px | 4    |
+   --------------------------------------------------------------------------- */
+
+/* xs — phones (default, no media query). */
 :root {
   --base-viewport-width: 100%;
   --base-main-width: var(--base-viewport-width);
@@ -8,39 +70,45 @@
   --content-columns: 1;
 }
 
-/* | sm | 425px | 425px  | 14px | */
+/* sm — phablet. */
 @media (min-width: 425px) {
   :root {
     --base-viewport-width: 425px;
     --base-font-size: 14px;
     --base-line-height: 18px;
+    --content-columns: 1;
   }
 }
 
-/* | md | 768px | 768px  | 16px | */
+/* md — tablet. First step with a main/aside split. */
 @media (min-width: 768px) {
   :root {
     --base-viewport-width: 768px;
-    --base-main-width: 425px;
+    --base-main-width: 512px;
     --base-aside-width: 256px;
     --base-font-size: 16px;
     --base-line-height: 20px;
+    --content-columns: 1;
   }
 }
-/* | lg | 1024px | 920px  | 18px | */
+
+/* lg — laptop. */
 @media (min-width: 1024px) {
   :root {
     --base-viewport-width: 920px;
-    --base-main-width: 728px;
+    --base-main-width: 664px;
+    --base-aside-width: 256px;
     --base-font-size: 18px;
     --base-line-height: 24px;
+    --content-columns: 2;
   }
 }
-/* | xl | 1440px | 1130px | 20px | */
+
+/* xl — desktop. */
 @media (min-width: 1440px) {
   :root {
     --base-viewport-width: 1130px;
-    --base-main-width: var(--base-viewport-width);
+    --base-main-width: 820px;
     --base-aside-width: 310px;
     --base-font-size: 20px;
     --base-line-height: 28px;
@@ -48,47 +116,14 @@
   }
 }
 
-/* | 4k | 2560px | 2170px | 24px | */
+/* 4k — ultrawide. */
 @media (min-width: 2560px) {
   :root {
     --base-viewport-width: 2170px;
+    --base-main-width: 1780px;
     --base-aside-width: 390px;
     --base-font-size: 24px;
     --base-line-height: 32px;
-    --content-columns: 3;
+    --content-columns: 4;
   }
-}
-
-:root {
-  --font-scale: 1.25; /* Major third */
-
-  --base-size: 8px;
-  &.compact {
-    --base-size: 4px;
-  }
-
-  &.loose {
-    --base-size: 16px;
-  }
-
-  --base-border-size: calc(var(--base-size) / 4);
-  --base-padding-with-border-size: calc(
-    var(--base-size) - var(--base-border-size)
-  );
-  --base-margin-size: var(--base-size);
-  --small-font-size: calc(var(--base-font-size) / var(--font-scale));
-
-  --size-xsmall: calc(var(--base-size) / 4);
-  --size-small: calc(var(--base-size) / 2);
-  --size-base: var(--base-size);
-  --size-medium: calc(var(--base-size) * 2);
-  --size-large: calc(var(--base-size) * 3);
-  --size-xlarge: calc(var(--base-size) * 4);
-
-  --spacing-block-vertical: var(--size-base);
-  --spacing-block-horizontal: var(--size-medium);
-
-  /* Typography spacing — rhythm around heading groups and inline nav items. */
-  --spacing-typography-vertical: var(--size-base);   /* 8px */
-  --spacing-typography-horizontal: var(--size-base); /* 8px */
 }
