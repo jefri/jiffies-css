@@ -17,28 +17,38 @@
       href="https://unpkg.com/@davidsouther/jiffies-css@1.0.1"
     /> -->
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@400;700&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@400;700&display=swap");
 
+      /*
+        NEW Intent surface (design_system.md › Foundations).
+        These are the public-API dials a consumer overrides. They take effect
+        as Phase 1 (fns + theme) lands; until then the theme layer is an empty
+        shell, so they are inert but document the intended override site.
+
+        - One brand color seeds the whole M3-derived scheme.
+        - Density is a class on :root (.compact / .loose) that rescales --base-size.
+        - Font roles are per-role --brand-*-font-family overrides.
+      */
       :root {
-        --body-font-family: Poppins;
-        --header-font-family: Orbitron;
-        --brand-chroma: 0.2;
-        --brand-hue: 255deg;
-          --brand-luminance: 80%;
-        --hyperlink-color: oklch(50% 0.5 90deg);
+        --brand-color: oklch(55% 0.18 255deg);
+
+        /* Font-role overrides (Intent tier). Fall back to base faces. */
+        --brand-body-font-family: "Poppins";
+        --brand-header-font-family: "Libre Baskerville";
+        --brand-nav-font-family: "Roboto";
+        --brand-monospace-font-family: "JetBrains Mono";
       }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --brand-hue: 255deg;
-          --brand-chroma: 0.35;
-          --brand-luminance: 60%;
-          --hyperlink-color: oklch(100% 0.5 90deg);
-        }
-      }
+      /*
+        Live theme controls (brand color, density, fonts) return here once the
+        theme tokens exist (Phase 1: m3-tonal-palettes + theme/sizing +
+        theme/typography). They were removed because they targeted dead OLD-API
+        tokens (--color-primary-hue, --sizing, --font-family-*). Re-add them
+        wired to --brand-color, .compact/.loose, and --brand-*-font-family.
+      */
     </style>
   </head>
-  <body>
+  <body id="top">
     <header class="fluid">
       <nav>
         <h1>
@@ -63,6 +73,9 @@
       </nav>
     </header>
     <main>
+      <!-- ===================================================================
+           OVERVIEW & USAGE
+      ==================================================================== -->
       <section id="overview">
         <h1>About Jiffies CSS</h1>
         <p>
@@ -71,7 +84,14 @@
           pure CSS standards, including layers, native css nesting, and a
           variable structure to define user and application specific overrides.
         </p>
+        <p>
+          This page is the canonical demo and progress tracker for the v2
+          rewrite. Every component and pattern in
+          <code>design_system.md</code> has a demo home below, captured by the
+          screenshot harness as each module lights up.
+        </p>
       </section>
+
       <section id="usage">
         <h1>Usage</h1>
         <ul>
@@ -103,658 +123,799 @@
 &lt;script src="https://unpkg.com/@davidsouther/jiffies-css/accessibility.js">&lt;/script></code></pre>
           </li>
           <li>
-            Add overrides to custom properties in a <code>:root {}</code> block.
+            Theme with the Intent tier: set <code>--brand-color</code> in a
+            <code>:root {}</code> block to seed the whole scheme, add the
+            <code>.compact</code> or <code>.loose</code> class to
+            <code>:root</code> for density, and override
+            <code>--brand-*-font-family</code> for fonts.
           </li>
           <li>
-            Sample customization block
-            (<a href="#usage" onclick="javascript:copyRoot()">Copy</a>):
-            <br />
+            Sample customization block:
             <pre><code>:root {
-  --color-primary-hue: <input id="primaryHue" type="number" min="0" max="360" value="115" step="5" style="width: 4em;" />deg; /* Default 115deg in bundle */
-  --sizing: <input id="sizing" type="range" min="0" max="2" step="0.1" value="1" style="width: 5em;" /> <span id="sizingOut">1</span>;
-  <label><input type="checkbox" id="fontBase" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-base: Poppins;</label>
-  <label><input type="checkbox" id="fontHeader" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-header: "Libre Baskerville";</label>
-  <label><input type="checkbox" id="fontMonospace" style="margin-left: -1rem; margin-right: -0.5rem;" /> --font-family-monospace: "JetBrains Mono";</label>
-}</code></pre>
-            <script type="application/javascript" async>
-              <!--
-              function copyRoot() {
-                const root = [':root {'];
-                root.push(`  --color-primary-hue: ${primaryHue.value}deg;`);
-                root.push(`  --sizing: ${sizing.value};`);
-                fontBase.checked && root.push(`  --font-family-base: Poppins;`);
-                fontHeader.checked && root.push(`  --font-family-header: "Libre Baskerville";`);
-                fontMonospace.checked && root.push(`  --font-family-monospace: "JetBrains Mono";`);
-                root.push("}");
-                navigator.clipboard.writeText(root.join("\n"));
-              }
-            -->
-            </script>
+  --brand-color: oklch(55% 0.18 255deg);
+  --brand-body-font-family: "Poppins";
+  --brand-header-font-family: "Libre Baskerville";
+  --brand-monospace-font-family: "JetBrains Mono";
+}
+/* density: add .compact or .loose to :root */</code></pre>
           </li>
         </ul>
-        <style>
-          @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Libre+Baskerville:wght@700&family=Crimson+Text:wght@700&family=Poppins:ital@0;1&display=swap");
-        </style>
-        <!--
-          :root {
-            --font-family-base: Poppins;
-            --font-family-header: "Libre Baskerville";
-            --font-family-monospace: "JetBrains Mono";
-          }
-          -->
-        <p style="display: hidden; font-family: 'Poppins'"></p>
-        <p style="display: hidden; font-family: 'Libre Baskerville'"></p>
-        <p style="display: hidden; font-family: 'JetBrains Mono'"></p>
-        <style id="fontBaseStyle"></style>
-        <script type="application/javascript" async>
-          fontBase.onchange = () =>
-            fontBaseStyle.textContent = fontBase.checked
-              ? `:root { --font-family-base: "Poppins"; }`
-              : "";
-        </script>
-        <style id="fontHeaderStyle"></style>
-        <script type="application/javascript" async>
-          fontHeader.onchange = () => 
-            fontHeaderStyle.textContent = fontHeader.checked
-              ? `:root { --font-family-header: "Libre Baskerville"; }`
-              : "";
-        </script>
-        <style id="fontMonospaceStyle"></style>
-        <script type="application/javascript" async>
-          fontMonospace.onchange = () => 
-            fontMonospaceStyle.textContent = fontMonospace.checked
-              ? `:root { --font-family-monospace: "JetBrains Mono"; }`
-              : "";
-        </script>
-        <style id="primaryHueStyle"></style>
-        <script type="application/javascript">
-          var setPrimaryHue = (hue) => {
-            primaryHueStyle.textContent = `:root { --color-primary-hue: ${hue}deg; }`;
-          };
-          primaryHue.onchange = () => setPrimaryHue(primaryHue.value);
-          var hue = Math.floor((Math.random() * 360) / 5) * 5;
-          setPrimaryHue(hue);
-          primaryHue.value = hue;
-        </script>
-        <style id="sizingStyle"></style>
-        <script type="application/javascript">
-          sizing.onchange = () => {
-            var size = Number(sizing.value);
-            sizingStyle.textContent = `:root { --sizing: ${size}; }`;
-            sizingOut.textContent = size;
-          };
-        </script>
       </section>
 
-      <article id="overview">
-        <header>
-          <h1>Headings</h1>
-          <p>Headings are built using &lt;h1&gt; etc tags.</p>
-        </header>
-        <main>
-          <hgroup>
-            <h1>Heading 1</h1>
-            <h2>Heading 2</h2>
-            <h3>Heading 3</h3>
-            <h4>Heading 4</h4>
-            <h5>Heading 5</h5>
-            <h6>Heading 6</h6>
-            <h3>hgroup :last-child</h3>
-          </hgroup>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum
-          </p>
-        </main>
-        <footer>
-          <p>Footer content for a card.</p>
-          <button>Ok</button>
-        </footer>
-      </article>
+      <!-- ===================================================================
+           FOUNDATION DEMO: COLOR SWATCHES (tonal palettes + semantic roles)
+           design_system.md › Color. Depends on --brand-color palette plumbing
+           from m3-tonal-palettes (Phase 1); swatches will fill in then.
+      ==================================================================== -->
+      <section id="color-swatches">
+        <h1>Color</h1>
+        <p>
+          The scheme derives from one <code>--brand-color</code>: five key
+          palettes plus a fixed error, each a tonal ramp, assigned to semantic
+          role tokens with light/dark mappings.
+        </p>
+        <style>
+          #color-swatches .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(
+              var(--grid-column-count, 5),
+              minmax(0, 1fr)
+            );
+            gap: 0.25rem;
+          }
+          #color-swatches .swatch-grid > p {
+            margin: 0;
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            border: 1px solid var(--color-outline, currentColor);
+          }
+          #color-swatches .tonal-ramp {
+            --grid-column-count: 7;
+          }
+        </style>
 
-      <article id="formatting">
-        <header>
-          <h1>Formatting</h1>
-          <p>
-            Formatting uses the appropriate <code>&lt;b&gt;</code> etc inline
-            text tags.
-          </p>
-        </header>
+        <h2>Semantic roles</h2>
+        <div class="swatch-grid">
+          <p style="background-color: var(--color-primary); color: var(--color-on-primary)">Primary</p>
+          <p style="background-color: var(--color-secondary); color: var(--color-on-secondary)">Secondary</p>
+          <p style="background-color: var(--color-tertiary); color: var(--color-on-tertiary)">Tertiary</p>
+          <p style="background-color: var(--color-error); color: var(--color-on-error)">Error</p>
+          <p style="background-color: var(--color-surface); color: var(--color-on-surface)">Surface</p>
+          <p style="background-color: var(--color-surface-variant); color: var(--color-on-surface-variant)">Surface variant</p>
+          <p style="background-color: var(--color-primary-container); color: var(--color-on-primary-container)">Primary container</p>
+          <p style="background-color: var(--color-secondary-container); color: var(--color-on-secondary-container)">Secondary container</p>
+          <p style="background-color: var(--color-tertiary-container); color: var(--color-on-tertiary-container)">Tertiary container</p>
+          <p style="background-color: var(--color-error-container); color: var(--color-on-error-container)">Error container</p>
+        </div>
 
-        <main>
-          <p>
-            This sentence is <b>bold</b>. If you like semantics, you might go
-            with <strong>strong</strong> or <em>emphasized</em> text. If not,
-            <i>italic</i> is still around. <small>Small</small> text is for fine
-            print. Your copy can also be <sub>subscripted</sub> and
-            <sup>superscripted</sup>, <ins>inserted</ins>, <del>deleted</del>,
-            or <mark>highlighted</mark>. You would use a
-            <a href="#!">hyperlink</a> to go to a new page.
-          </p>
-          <p>
-            If you like to write about there are plenty of semantic tags for
-            you. There's the generic
-            <code>code</code>, as well as <kbd>keyboard input</kbd>,
-            <samp>computer output</samp>, and <var>variables</var>.
-          </p>
-          <p>
-            You might have need of a <cite>citation</cite>,
-            <q>short quotation</q>, <abbr title="abbreviation">abbr</abbr>, or
-            <dfn>definition</dfn>. It might be <time>10:00pm</time>.
-          </p>
-          <address>
-            <p>
-              123 Fake Street<br />
-              Springfield, USA
-            </p>
-          </address>
+        <h2>Primary tonal palette</h2>
+        <div class="swatch-grid tonal-ramp">
+          <p style="background-color: var(--_p-10); color: var(--_p-90)">10</p>
+          <p style="background-color: var(--_p-20); color: var(--_p-90)">20</p>
+          <p style="background-color: var(--_p-40); color: var(--_p-100)">40</p>
+          <p style="background-color: var(--_p-60); color: var(--_p-100)">60</p>
+          <p style="background-color: var(--_p-80); color: var(--_p-10)">80</p>
+          <p style="background-color: var(--_p-90); color: var(--_p-10)">90</p>
+          <p style="background-color: var(--_p-100); color: var(--_p-10)">100</p>
+        </div>
+      </section>
 
-          <h2>Blockquote</h2>
+      <!-- ===================================================================
+           CONTENT: HEADINGS / FORMATTING / LISTS
+           (exercise the content layer; kept as demo homes for typography.)
+      ==================================================================== -->
+      <section id="headings">
+        <h1>Headings</h1>
+        <p>Headings are built using &lt;h1&gt; etc tags.</p>
+        <hgroup>
+          <h1>Heading 1</h1>
+          <h2>Heading 2</h2>
+          <h3>Heading 3</h3>
+          <h4>Heading 4</h4>
+          <h5>Heading 5</h5>
+          <h6>Heading 6</h6>
+          <h3>hgroup :last-child</h3>
+        </hgroup>
+        <h1>First Heading h1</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea delectus
+          cupiditate minima, magni possimus commodi, eveniet? Rem, adipisci
+          architecto pariatur libero aliquid culpa sunt accusantium.
+        </p>
+        <h2>Second Heading h2</h2>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
+          molestias ullam quasi est a nemo, accusamus voluptatum autem.
+        </p>
+        <h3>Third Heading h3</h3>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
+          deleniti, repudiandae rerum nam laborum eligendi aperiam.
+        </p>
+        <h4>Fourth Heading h4</h4>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque cum
+          eum eligendi voluptatum quasi nisi doloremque ipsam unde.
+        </p>
+        <h5>Fifth Heading h5</h5>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit
+          voluptatem necessitatibus eos iusto nam deserunt, dicta possimus.
+        </p>
+      </section>
 
-          <blockquote>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
-            molestiae et assumenda molestias alias ut saepe doloribus, porro,
-            deleniti neque, harum minus, commodi laudantium quod excepturi nam
-            corrupti odit provident.
-            <cite>- Blockquote Citation</cite>
-          </blockquote>
+      <section id="formatting">
+        <h1>Formatting</h1>
+        <p>
+          Formatting uses the appropriate <code>&lt;b&gt;</code> etc inline text
+          tags.
+        </p>
+        <p>
+          This sentence is <b>bold</b>. If you like semantics, you might go with
+          <strong>strong</strong> or <em>emphasized</em> text. If not,
+          <i>italic</i> is still around. <small>Small</small> text is for fine
+          print. Your copy can also be <sub>subscripted</sub> and
+          <sup>superscripted</sup>, <ins>inserted</ins>, <del>deleted</del>, or
+          <mark>highlighted</mark>. You would use a
+          <a href="#!">hyperlink</a> to go to a new page.
+        </p>
+        <p>
+          If you like to write about there are plenty of semantic tags for you.
+          There's the generic
+          <code>code</code>, as well as <kbd>keyboard input</kbd>,
+          <samp>computer output</samp>, and <var>variables</var>.
+        </p>
+        <p>
+          You might have need of a <cite>citation</cite>,
+          <q>short quotation</q>, <abbr title="abbreviation">abbr</abbr>, or
+          <dfn>definition</dfn>. It might be <time>10:00pm</time>.
+        </p>
+        <address>
+          <p>
+            123 Fake Street<br />
+            Springfield, USA
+          </p>
+        </address>
 
-          <h2>Preformatted Text</h2>
-          <pre>
+        <h2>Blockquote</h2>
+        <blockquote>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
+          molestiae et assumenda molestias alias ut saepe doloribus, porro,
+          deleniti neque, harum minus, commodi laudantium quod excepturi nam
+          corrupti odit provident.
+          <cite>- Blockquote Citation</cite>
+        </blockquote>
+
+        <h2>Preformatted Text</h2>
+        <pre>
 If you can keep your head when all about you
     Are losing theirs and blaming it on you,
 If you can trust yourself when all men doubt you,
     But make allowance for their doubting too;
-If you can wait and not be tired by waiting,
-    Or being lied about, don’t deal in lies,
-Or being hated, don’t give way to hating,
-    And yet don’t look too good, nor talk too wise:
 
 - Rudyard Kipling, If-
-          </pre>
-          <h3>Code</h3>
-          <pre><code class="language-cpp">class Voila {
+        </pre>
+        <h3>Code</h3>
+        <pre><code class="language-cpp">class Voila {
 public:
   // Voila
   static const string VOILA = "Voila";
 }</code></pre>
-          <h2>Horizontal Line</h2>
-          <hr />
-        </main>
-      </article>
+        <h2>Horizontal Line</h2>
+        <hr />
+      </section>
 
-      <article id="headings">
-        <header>
-          <h1>Headings</h1>
-        </header>
+      <section id="lists">
+        <h1>Lists</h1>
+        <h2>Unordered list</h2>
+        <ul>
+          <li>
+            List item one
+            <ul>
+              <li>Nested list item</li>
+            </ul>
+          </li>
+          <li>List item two</li>
+          <li>List item three</li>
+        </ul>
 
-        <main>
-          <h1>First Heading h1</h1>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea
-            delectus cupiditate minima, magni possimus commodi, eveniet? Rem,
-            adipisci architecto pariatur libero aliquid culpa sunt accusantium.
-            Ipsa error aliquid et! Animi.
-          </p>
-          <h2>Second Heading h2</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officia
-            molestias ullam quasi est a nemo, accusamus voluptatum autem. Eius
-            explicabo est assumenda voluptatem id, hic maxime mollitia facere
-            debitis quos.
-          </p>
-          <h3>Third Heading h3</h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo
-            deleniti, repudiandae rerum nam laborum eligendi aperiam. Autem id,
-            ad necessitatibus accusantium, facilis, quae ullam est, voluptates
-            debitis fugiat quos inventore!
-          </p>
-          <h4>Fourth Heading h4</h4>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Neque cum
-            eum eligendi voluptatum quasi nisi doloremque ipsam unde, laboriosam
-            nihil voluptatem consequatur quam non similique vero ratione animi
-            sit veritatis.
-          </p>
-          <h5>Fifth Heading h5</h5>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit
-            voluptatem necessitatibus eos iusto nam deserunt, dicta possimus
-            error qui reiciendis, aut dolore magnam eligendi maiores expedita
-            commodi perferendis non blanditiis.
-          </p>
-        </main>
-      </article>
+        <h2>Ordered list</h2>
+        <ol>
+          <li>
+            List item one
+            <ol>
+              <li>Nested list item</li>
+            </ol>
+          </li>
+          <li>List item two</li>
+          <li>List item three</li>
+        </ol>
 
-      <article id="lists">
-        <header>
-          <h1>Lists</h1>
-        </header>
-        <main>
-          <h2>Unordered list</h2>
+        <h2>Definition List</h2>
+        <dl>
+          <dt>Definition Title One</dt>
+          <dd>First definition description</dd>
+          <dt>Definition Title Two</dt>
+          <dd>Second definition description</dd>
+        </dl>
+      </section>
 
+      <!-- ===================================================================
+           COMPONENT: BUTTONS (incl .secondary / .contrast / .outline)
+           design_system.md › Buttons
+      ==================================================================== -->
+      <section id="buttons">
+        <h1>Buttons</h1>
+        <p>
+          Button elements, links with <code>role="button"</code>, and input
+          elements should all render exactly the same.
+        </p>
+
+        <h2>Primary</h2>
+        <button>Button</button>
+        <input type="submit" value="Submit" />
+        <input type="button" value="Input" />
+        <input type="reset" value="Reset" />
+        <a role="button">Link</a>
+
+        <h2>Secondary</h2>
+        <p>
+          Adding a <code>secondary</code> class reads the tonal container pair.
+        </p>
+        <button class="secondary">Button</button>
+        <input type="submit" value="Submit" class="secondary" />
+        <input type="button" value="Input" class="secondary" />
+        <a role="button" class="secondary">Link</a>
+
+        <h2>Contrast</h2>
+        <p>Adding a <code>contrast</code> class.</p>
+        <button class="contrast">Button</button>
+        <input type="submit" value="Submit" class="contrast" />
+        <input type="button" value="Input" class="contrast" />
+        <a role="button" class="contrast">Link</a>
+
+        <h2>Outline</h2>
+        <p>
+          Adding an <code>outline</code> class creates outlined buttons with no
+          background.
+        </p>
+        <button class="outline">Button</button>
+        <input type="reset" value="Reset" class="outline" />
+        <input type="submit" value="Submit" class="contrast outline" />
+
+        <h2>States</h2>
+        <p>Disabled and busy (loading) states.</p>
+        <button disabled>Disabled</button>
+        <button aria-disabled="true">aria-disabled</button>
+        <button aria-busy="true">Loading</button>
+      </section>
+
+      <!-- ===================================================================
+           COMPONENT: FORMS
+           design_system.md › Forms
+           label / input / select / textarea / fieldset / legend
+           + [aria-invalid] / [disabled] / [readonly]
+      ==================================================================== -->
+      <section id="forms">
+        <h1>Forms</h1>
+        <form onsubmit="event.preventDefault(); return false;">
+          <fieldset style="--grid-column-count: 3">
+            <legend>Account</legend>
+            <label>
+              Text Input <input type="text" placeholder="Text Input" />
+            </label>
+            <label>
+              Password
+              <input type="password" placeholder="Password" />
+            </label>
+            <label>
+              URL
+              <input type="url" placeholder="http://www.example.com" />
+            </label>
+            <label>
+              Email Address
+              <input type="email" placeholder="email@example.com" />
+            </label>
+            <label>
+              Phone Number <input type="tel" placeholder="123-123-1234" />
+            </label>
+            <label> Search <input type="search" placeholder="Search" /> </label>
+            <label> Number <input type="number" placeholder="Number" /> </label>
+            <label>
+              Select
+              <select>
+                <option>Option One</option>
+                <option>Option Two</option>
+                <option>Option Three</option>
+              </select>
+            </label>
+            <div>
+              <label>
+                <input name="checkboxA" type="checkbox" checked="checked" />
+                Choice A
+              </label>
+              <label>
+                <input name="checkboxB" type="checkbox" /> Choice B
+              </label>
+            </div>
+            <div>
+              <label>
+                <input name="radio" type="radio" checked="checked" />
+                Option 1
+              </label>
+              <label><input name="radio" type="radio" />Option 2</label>
+            </div>
+            <label>
+              Textarea
+              <textarea rows="5" cols="30" placeholder="Message"></textarea>
+            </label>
+          </fieldset>
+          <input type="button" value="Button" />
+          <input type="submit" value="Submit" />
+          <input type="reset" value="Reset" />
+          <button>Button element</button>
+        </form>
+
+        <h2>States</h2>
+        <p>
+          Validity and editability are read from ARIA and native attributes, not
+          classes.
+        </p>
+        <form onsubmit="event.preventDefault(); return false;">
+          <fieldset style="--grid-column-count: 4">
+            <legend>Form States</legend>
+            <label>
+              Valid
+              <input type="text" placeholder="Valid" aria-invalid="false" />
+            </label>
+            <label>
+              Invalid
+              <input type="text" placeholder="Invalid" aria-invalid="true" />
+            </label>
+            <label>
+              Disabled
+              <input type="text" placeholder="Disabled" disabled />
+            </label>
+            <label>
+              Readonly
+              <input type="text" value="Readonly" readonly />
+            </label>
+          </fieldset>
+        </form>
+      </section>
+
+      <!-- ===================================================================
+           COMPONENT: FORM SWITCH
+           design_system.md › Form switch
+           input[type=checkbox|radio][role=switch]
+      ==================================================================== -->
+      <section id="form-switch">
+        <h1>Form switch</h1>
+        <p>
+          A pure-CSS toggle: a checkbox or radio painted as a sliding switch.
+        </p>
+        <form onsubmit="event.preventDefault(); return false;">
+          <label>
+            <input
+              type="checkbox"
+              role="switch"
+              name="switch"
+              checked="checked"
+            />
+            Switch on (checkbox)
+          </label>
+          <label>
+            <input type="checkbox" role="switch" name="switch2" />
+            Switch off (checkbox)
+          </label>
+          <label>
+            <input type="checkbox" role="switch" name="switch3" disabled />
+            Switch disabled
+          </label>
+          <label>
+            <input type="radio" role="switch" name="switch-radio" checked />
+            Switch (radio)
+          </label>
+        </form>
+      </section>
+
+      <!-- ===================================================================
+           COMPONENT: TABLES
+           design_system.md › Tables
+           thead / tbody / tfoot, [aria-sort]
+      ==================================================================== -->
+      <section id="tables">
+        <h1>Tables</h1>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col" aria-sort="ascending">Head 1 (sorted)</th>
+              <th scope="col" aria-sort="none">Head 2</th>
+              <th scope="col">Head 3</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th>Footer 1</th>
+              <th>Footer 2</th>
+              <th>Footer 3</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td>Description 1</td>
+              <td>Description 2</td>
+              <td>Description 3</td>
+            </tr>
+            <tr>
+              <td>Description 1</td>
+              <td>Description 2</td>
+              <td>Description 3</td>
+            </tr>
+            <tr>
+              <td>Description 1</td>
+              <td>Description 2</td>
+              <td>Description 3</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ===================================================================
+           COMPONENT: ACCORDION
+           design_system.md › Accordion
+           details > summary
+      ==================================================================== -->
+      <section id="accordion">
+        <h1>Accordion</h1>
+        <p>
+          Styling for <code>&lt;details&gt;</code> and
+          <code>&lt;summary&gt;</code>.
+        </p>
+        <details>
+          <summary>Accordion 1</summary>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+            Pellentesque urna diam, tincidunt nec porta sed, auctor id velit.
+            Etiam venenatis nisl ut orci consequat, vitae tempus quam commodo.
+          </p>
+        </details>
+        <details open="">
+          <summary>Accordion 2</summary>
           <ul>
-            <li>
-              List item one
-              <ul>
-                <li>Nested list item</li>
-              </ul>
-            </li>
-            <li>List item two</li>
-            <li>List item three</li>
+            <li>Vestibulum id elit quis massa interdum sodales.</li>
+            <li>Nunc quis eros vel odio pretium tincidunt nec quis neque.</li>
+            <li>Quisque sed eros non eros ornare elementum.</li>
+            <li>Cras sed libero aliquet, porta dolor quis, dapibus ipsum.</li>
           </ul>
+        </details>
+      </section>
 
-          <h2>Ordered list</h2>
-
-          <ol>
-            <li>
-              List item one
-              <ol>
-                <li>Nested list item</li>
-              </ol>
-            </li>
-            <li>List item two</li>
-            <li>List item three</li>
-          </ol>
-          <h2>Definition List</h2>
-
-          <dl>
-            <dt>Definition Title One</dt>
-            <dd>First definition description</dd>
-            <dt>Definition Title Two</dt>
-            <dd>Second definition description</dd>
-          </dl>
-        </main>
-      </article>
-
-      <article id="tables">
-        <header>
-          <h1>Tables</h1>
-        </header>
-
-        <main>
-          <table>
-            <thead>
-              <tr>
-                <th>Head 1</th>
-                <th>Head 2</th>
-                <th>Head 3</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <th>Footer 1</th>
-                <th>Footer 2</th>
-                <th>Footer 3</th>
-              </tr>
-            </tfoot>
-            <tbody>
-              <tr>
-                <td>Description 1</td>
-                <td>Description 2</td>
-                <td>Description 3</td>
-              </tr>
-              <tr>
-                <td>Description 1</td>
-                <td>Description 2</td>
-                <td>Description 3</td>
-              </tr>
-              <tr>
-                <td>Description 1</td>
-                <td>Description 2</td>
-                <td>Description 3</td>
-              </tr>
-            </tbody>
-          </table>
-        </main>
-      </article>
-
-      <article id="accordion">
-        <header>
-          <h1>Accordion</h1>
-          <p>
-            Styling for <code>&lt;details&gt;</code> and
-            <code>&lt;summary&gt;</code>.
-          </p>
-        </header>
-        <main>
-          <details>
-            <summary>Accordion 1</summary>
+      <!-- ===================================================================
+           COMPONENT: TABS
+           design_system.md › Tabs
+           [role=tablist] > [role=tab] paired with [role=tabpanel]
+      ==================================================================== -->
+      <section id="tabs">
+        <h1 id="tab-sample-header">Tabs</h1>
+        <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
+        <section role="tablist" aria-labelledby="tab-sample-header">
+          <div role="tab" id="tab-1" aria-controls="tabpanel-1">
+            <label>
+              Tab 1
+              <input
+                type="radio"
+                name="tablist-1"
+                aria-controls="tabpanel-1"
+                value="tab-1"
+              />
+            </label>
+          </div>
+          <div role="tabpanel" id="tabpanel-1" aria-labelledby="tab-1">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Pellentesque urna diam, tincidunt nec porta sed, auctor id velit.
               Etiam venenatis nisl ut orci consequat, vitae tempus quam commodo.
-              Nulla non mauris ipsum. Aliquam eu posuere orci. Nulla convallis
-              lectus rutrum quam hendrerit, in facilisis elit sollicitudin.
-              Mauris pulvinar pulvinar mi, dictum tristique elit auctor quis.
-              Maecenas ac ipsum ultrices, porta turpis sit amet, congue turpis.
             </p>
-          </details>
-          <details open="">
-            <summary>Accordion 2</summary>
+          </div>
+          <div role="tab" id="tab-2" aria-controls="tabpanel-2">
+            <label>
+              Tab 2
+              <input type="radio" name="tablist-1" value="tab-2" checked />
+            </label>
+          </div>
+          <div role="tabpanel" id="tabpanel-2" aria-labelledby="tab-2">
             <ul>
               <li>Vestibulum id elit quis massa interdum sodales.</li>
               <li>Nunc quis eros vel odio pretium tincidunt nec quis neque.</li>
               <li>Quisque sed eros non eros ornare elementum.</li>
               <li>Cras sed libero aliquet, porta dolor quis, dapibus ipsum.</li>
             </ul>
-          </details>
-        </main>
-      </article>
+          </div>
+        </section>
+      </section>
 
-      <article id="tabs">
-        <header>
-          <h1 id="tab-sample-header">Tabs</h1>
-          <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
-        </header>
-        <main>
-          <section role="tablist" aria-labelledby="tab-sample-header">
-            <div role="tab" id="tab-1" aria-controls="tabpanel-1">
-              <label>
-                Tab 1
-                <input
-                  type="radio"
-                  name="tablist-1"
-                  aria-controls="tabpanel-1"
-                  value="tab-1"
-                />
-              </label>
-            </div>
-            <div role="tabpanel" id="tabpanel-1" aria-labelledby="tab-1">
+      <!-- ===================================================================
+           COMPONENT: MODAL
+           design_system.md › Modal
+           dialog (often dialog > article reusing the card surface)
+      ==================================================================== -->
+      <section id="modal">
+        <h1>Modal</h1>
+        <p>Native <code>dialog</code>; often <code>dialog &gt; article</code>.</p>
+        <button onclick="document.getElementById('demo-dialog').showModal()">
+          Open modal
+        </button>
+        <!-- Rendered open inline so the screenshot harness captures the surface
+             and backdrop without driving JS. -->
+        <dialog id="demo-dialog" open aria-labelledby="dialog-title">
+          <article>
+            <header>
+              <h2 id="dialog-title">Modal title</h2>
+            </header>
+            <main>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque urna diam, tincidunt nec porta sed, auctor id
-                velit. Etiam venenatis nisl ut orci consequat, vitae tempus quam
-                commodo. Nulla non mauris ipsum. Aliquam eu posuere orci. Nulla
-                convallis lectus rutrum quam hendrerit, in facilisis elit
-                sollicitudin. Mauris pulvinar pulvinar mi, dictum tristique elit
-                auctor quis. Maecenas ac ipsum ultrices, porta turpis sit amet,
-                congue turpis.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. The
+                modal reuses the card surface for its body.
               </p>
-            </div>
-            <div role="tab" id="tab-2" aria-controls="tabpanel-2">
-              <label>
-                Tab 2
-                <input type="radio" name="tablist-1" value="tab-2" checked />
-                <!-- Yep looks like that works! -->
-              </label>
-            </div>
-            <div role="tabpanel" id="tabpanel-2" aria-labelledby="tab-2">
-              <ul>
-                <li>Vestibulum id elit quis massa interdum sodales.</li>
-                <li>
-                  Nunc quis eros vel odio pretium tincidunt nec quis neque.
-                </li>
-                <li>Quisque sed eros non eros ornare elementum.</li>
-                <li>
-                  Cras sed libero aliquet, porta dolor quis, dapibus ipsum.
-                </li>
-              </ul>
-            </div>
-          </section>
-        </main>
-      </article>
+            </main>
+            <footer>
+              <button onclick="document.getElementById('demo-dialog').close()">
+                Confirm
+              </button>
+              <button
+                class="secondary"
+                onclick="document.getElementById('demo-dialog').close()"
+              >
+                Cancel
+              </button>
+            </footer>
+          </article>
+        </dialog>
+      </section>
 
-      <article id="buttons">
-        <header>
-          <h2>Buttons</h2>
-          <p>
-            Button elements, links with <code>role="button"</code>, and input
-            elements should all render exactly the same.
-          </p>
-        </header>
-        <main>
-          <section>
-            <button>Button</button>
-            <input type="submit" value="Submit" />
-            <input type="button" value="Input" />
-            <input type="reset" value="Reset" />
-            <a role="button">Link</a>
-          </section>
+      <!-- ===================================================================
+           COMPONENT: PROPERTY SHEET
+           design_system.md › Property sheet
+           dl > dt, dd rendered as aligned label/value rows
+      ==================================================================== -->
+      <section id="property-sheet">
+        <h1>Property sheet</h1>
+        <p>A <code>dl</code> rendered as aligned label/value rows.</p>
+        <dl>
+          <dt>Name</dt>
+          <dd>Jiffies CSS</dd>
+          <dt>Version</dt>
+          <dd>2.0.0-alpha</dd>
+          <dt>License</dt>
+          <dd>MIT</dd>
+          <dt>Author</dt>
+          <dd>David Souther</dd>
+        </dl>
+      </section>
 
-          <section>
-            <h3>Secondary Buttons</h3>
+      <!-- ===================================================================
+           COMPONENT: PROGRESS
+           design_system.md › Progress
+           determinate + indeterminate, .round
+      ==================================================================== -->
+      <section id="progress">
+        <h1>Progress</h1>
+        <p>A styled native <code>progress</code>, line and round.</p>
+        <h2>Determinate</h2>
+        <progress value="25" max="100" aria-label="25 percent"></progress>
+        <progress value="60" max="100" aria-label="60 percent"></progress>
+        <h2>Indeterminate</h2>
+        <progress aria-label="Loading"></progress>
+        <h2>Round</h2>
+        <progress class="round" value="40" max="100" aria-label="40 percent"></progress>
+        <progress class="round" aria-label="Loading"></progress>
+      </section>
+
+      <!-- ===================================================================
+           COMPONENT: FORM GROUP
+           design_system.md › Form group
+           fieldset[role=group] > :is(button, input, select)
+      ==================================================================== -->
+      <section id="form-group">
+        <h1>Form group</h1>
+        <p>
+          A <code>fieldset[role=group]</code> joins adjacent controls into one
+          segmented row.
+        </p>
+        <form onsubmit="event.preventDefault(); return false;">
+          <fieldset role="group" aria-label="Search the site">
+            <input type="search" placeholder="Search" />
+            <button>Go</button>
+          </fieldset>
+          <fieldset role="group" aria-label="Add a value">
+            <input type="text" placeholder="Value" />
+            <select>
+              <option>kg</option>
+              <option>lb</option>
+            </select>
+            <button>Add</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <!-- ===================================================================
+           PATTERN: CARD & PANEL
+           design_system.md › Card & Panel
+           :is(article, section) > :is(header, main, footer)
+      ==================================================================== -->
+      <section id="card-panel">
+        <h1>Card &amp; Panel</h1>
+        <p>
+          <code>article</code> is the elevated card; <code>section</code> is the
+          flat panel. Each may carry header/main/footer rails.
+        </p>
+
+        <article>
+          <header>
+            <h2>Card (article)</h2>
+            <p>An elevated surface with header, main, and footer rails.</p>
+          </header>
+          <main>
             <p>
-              Adding a <code>secondary</code> class will display a secondary
-              color.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+              eu posuere orci. Nulla convallis lectus rutrum quam hendrerit, in
+              facilisis elit sollicitudin.
             </p>
-            <button class="secondary">Button</button>
-            <input type="submit" value="Submit" class="secondary" />
-            <input type="button" value="Input" class="secondary" />
-            <input type="reset" value="Reset" />
-            <a role="button" class="secondary">Link</a>
-          </section>
+          </main>
+          <footer>
+            <p>Footer content for a card.</p>
+            <button>Ok</button>
+          </footer>
+        </article>
 
-          <section>
-            <h3>Contrast</h3>
+        <section>
+          <header>
+            <h2>Panel (section)</h2>
+          </header>
+          <main>
             <p>
-              Adding a <code>contrast</code> class will create ghost/outline
-              buttons.
+              A flat panel surface. Same rail structure as the card, without the
+              elevation.
             </p>
-            <button class="contrast">Button</button>
-            <input type="submit" value="Submit" class="contrast" />
-            <input type="reset" value="Reset" class="contrast" />
-            <input type="button" value="Input" class="contrast" />
-            <a role="button" class="contrast">Link</a>
-          </section>
+          </main>
+        </section>
 
-          <section>
-            <h3>Outline</h3>
+        <!-- HERO inside a card rail (card-scoped: bleeds to card edge, clips
+             to --border-radius-card). design_system.md › Hero -->
+        <article id="hero-card">
+          <header>
+            <figure>
+              <img
+                src="https://picsum.photos/seed/jiffies-card/1200/400"
+                alt="Decorative banner inside a card header"
+              />
+              <h2>Card-scoped hero</h2>
+            </figure>
+          </header>
+          <main>
             <p>
-              Adding an <code>outline</code> class will create outlined buttons
-              with no background.
+              The hero <code>figure</code> sits in a card's header rail. Its
+              parent (the <code>article</code>) decides its scale: it bleeds past
+              the rail padding and clips to the card radius.
             </p>
-            <button class="outline">Button</button>
-            <input type="reset" value="Reset" class="outline" />
-            <input type="submit" value="Submit" class="contrast outline" />
-          </section>
-        </main>
-      </article>
+          </main>
+        </article>
+      </section>
 
-      <article id="forms">
-        <header>
-          <h1>Forms</h1>
+      <!-- ===================================================================
+           PATTERN: HERO (page-scoped)
+           design_system.md › Hero
+           A header > figure > img + heading inside the page spine is a
+           full-bleed banner. .fluid opts out of the content clamp.
+      ==================================================================== -->
+      <section id="hero-page">
+        <h1>Hero (page-scoped)</h1>
+        <p>
+          A full-bleed page banner: a <code>figure &gt; img</code> plus a
+          heading inside a page-level <code>header</code> rail.
+        </p>
+        <header class="fluid">
+          <figure>
+            <img
+              src="https://picsum.photos/seed/jiffies-page/2000/500"
+              alt="Decorative full-bleed page banner"
+            />
+            <h2>Page-scoped hero</h2>
+          </figure>
         </header>
+      </section>
 
-        <main>
-          <form onsubmit="event.preventDefault(); return false;">
-            <fieldset style="--grid-column-count: 3">
-              <label>
-                Text Input <input type="text" placeholder="Text Input" />
-              </label>
-              <label>
-                Password
-                <input type="password" placeholder="Password" />
-              </label>
-              <label>
-                URL
-                <input type="url" placeholder="http://www.example.com" />
-              </label>
-              <label>
-                Email Address
-                <input type="email" placeholder="email@example.com" />
-              </label>
-              <label>
-                Phone Number <input type="tel" placeholder="123-123-1234" />
-              </label>
-              <label>
-                Search <input type="search" placeholder="Search" />
-              </label>
-              <label>
-                Number <input type="number" placeholder="Number" />
-              </label>
-              <label>
-                Select
-                <select>
-                  <option>Option One</option>
-                  <option>Option Two</option>
-                  <option>Option Three</option>
-                </select>
-              </label>
-              <div>
-                <label>
-                  <input name="checkboxA" type="checkbox" checked="checked" />
-                  Choice A
-                </label>
-                <label>
-                  <input name="checkboxB" type="checkbox" /> Choice B
-                </label>
-              </div>
-              <div>
-                <label>
-                  <input name="radio" type="radio" checked="checked" />
-                  Option 1
-                </label>
-                <label><input name="radio" type="radio" />Option 2</label>
-                <label>
-                  <input
-                    type="checkbox"
-                    role="switch"
-                    name="switch"
-                    checked="checked"
-                  />
-                  Switch 1
-                </label>
-              </div>
-              <label for="textarea">
-                Textarea
-                <textarea rows="5" cols="30" placeholder="Message"></textarea>
-              </label>
-            </fieldset>
-            <input type="button" value="Button" />
-            <input type="submit" value="Submit" />
-            <input type="reset" value="Reset" />
-            <button>Button element</button>
-          </form>
-
-          <form onsubmit="event.preventDefault(); return false;">
-            <fieldset style="--grid-column-count: 4">
-              <legend>Form States</legend>
-              <input type="text" placeholder="Valid" aria-invalid="false" />
-              <input type="text" placeholder="Invalid" aria-invalid="true" />
-              <input type="text" placeholder="Disabled" disabled />
-              <input type="text" value="Readonly" readonly />
-            </fieldset>
-          </form>
-
-          <!-- Progress progress -->
-          <!--
-    Loading [aria-busy=true]
-    Tooltip [data-tooltip][data-direction]
-        -->
-          <!-- Modal dialog -->
-        </main>
-      </article>
-
-      <!--
-      <article>
+      <!-- ===================================================================
+           PATTERN: NAVIGATION
+           design_system.md › Navigation
+           :is(header, footer) > nav > ol  AND  aside > nav > ol
+           (The page-level header/footer/aside below also demonstrate these.)
+      ==================================================================== -->
+      <section id="navigation">
+        <h1>Navigation</h1>
+        <p>
+          <code>nav &gt; ol</code> in two modes selected by ancestor, not by
+          class: a page-end bar (header/footer) and a sticky table of contents
+          (aside). The page header, footer, and aside on this page are live
+          examples; an inline page-end bar follows.
+        </p>
         <header>
-          <h2>Color Swatches</h2>
-          <style>
-            #swatches p {
-              width: 100%;
-              height: 100%;
-              padding: var(--spacing-block);
-              border-radius: var(--spacing-block);
-              background-color: var(--color);
-              --text-color: var(--color-primary-inverse);
-            }
-
-            #rainbow p {
-              width: 100%;
-              height: 10px;
-              padding: 0;
-              margin: 0;
-              border-radius: 0;
-              background-color: var(--color);
-              min-height: 5px;
-            }
-
-            #swatches {
-              min-height: 150px;
-              --grid-column-count: 1;
-            }
-
-            @media (min-width: 425px) {
-              #swatches {
-                min-height: 300px;
-                --grid-column-count: 2;
-              }
-            }
-
-            @media (min-width: 768px) {
-              #swatches {
-                min-height: 150px;
-                --grid-column-count: 4;
-              }
-            }
-          </style>
+          <nav>
+            <ol>
+              <li><a href="#overview" aria-current="page">Overview</a></li>
+              <li><a href="#buttons">Buttons</a></li>
+              <li><a href="#forms">Forms</a></li>
+              <li><a href="#tables">Tables</a></li>
+            </ol>
+          </nav>
         </header>
-        <main class="grid" id="swatches">
-          <p style="--color-hue: var(--color-primary-hue);">
-            <strong>Primary Color</strong>
-          </p>
-          <p style="--color-hue: var(--color-accent-hue);">
-            <strong>Accent Color</strong>
-          </p>
-          <p style="--color-hue: var(--color-secondary-hue);">
-            <strong>Secondary Color</strong>
-          </p>
-          <p style="--color-hue: var(--color-contrast-hue);">
-            <strong>Contrast Color</strong>
-          </p>
-        </main>
+      </section>
 
-        <main id="rainbow" class="grid swatches" style="
-          --grid-column-count: 73;
-          --spacing-block-horizontal: 0;
-          --spacing-block-vertical: 0;">
-          <script type="application/javascript" async>
-            for (let j = 0; j <= 100; j++) {
-              for (let i = 0; i <= 72; i++) {
-                const p = document.createElement('p');
-                p.style.setProperty('--color-hue', `${i * 5}deg`);
-                p.style.setProperty('--chroma', `${j * 0.4 / 10}`);
-                rainbow.append(p);
-              }
-            }
-          </script>
-        </main>
-      </article>
-    -->
+      <!-- ===================================================================
+           PATTERN: BREADCRUMB
+           design_system.md › Breadcrumb
+           nav[aria-label="Breadcrumb"] > ol > li with [aria-current=page]
+      ==================================================================== -->
+      <section id="breadcrumb">
+        <h1>Breadcrumb</h1>
+        <p>Classless: the <code>Breadcrumb</code> ARIA label selects it.</p>
+        <nav aria-label="Breadcrumb">
+          <ol>
+            <li><a href="#top">Home</a></li>
+            <li><a href="#card-panel">Components</a></li>
+            <li><a href="#breadcrumb" aria-current="page">Breadcrumb</a></li>
+          </ol>
+        </nav>
+      </section>
     </main>
+
+    <!-- =====================================================================
+         PATTERN: NAVIGATION (aside table of contents) + PAGE LAYOUT
+         design_system.md › Navigation (aside > nav > ol) and
+         Page layout & page-ends (aside reflowed by order).
+    ====================================================================== -->
     <aside>
       <nav>
-        <ul>
+        <ol>
           <li><a href="#top">Top</a></li>
           <li><a href="#bottom">Bottom</a></li>
-        </ul>
-        <ul>
-          <li><a href="#usage">Usage</a></li>
+        </ol>
+        <ol>
           <li><a href="#overview">Overview</a></li>
-          <li><a href="#formatting">Formatting</a></li>
+          <li><a href="#usage">Usage</a></li>
+          <li><a href="#color-swatches">Color</a></li>
           <li><a href="#headings">Headings</a></li>
+          <li><a href="#formatting">Formatting</a></li>
           <li><a href="#lists">Lists</a></li>
+          <li><a href="#buttons">Buttons</a></li>
+          <li><a href="#forms">Forms</a></li>
+          <li><a href="#form-switch">Form switch</a></li>
           <li><a href="#tables">Tables</a></li>
           <li><a href="#accordion">Accordion</a></li>
           <li><a href="#tabs">Tabs</a></li>
-          <li><a href="#buttons">Buttons</a></li>
-          <li><a href="#forms">Forms</a></li>
-          <li><a href="#swatches">Swatches</a></li>
-        </ul>
+          <li><a href="#modal">Modal</a></li>
+          <li><a href="#property-sheet">Property sheet</a></li>
+          <li><a href="#progress">Progress</a></li>
+          <li><a href="#form-group">Form group</a></li>
+          <li><a href="#card-panel">Card &amp; Panel</a></li>
+          <li><a href="#hero-page">Hero</a></li>
+          <li><a href="#navigation">Navigation</a></li>
+          <li><a href="#breadcrumb">Breadcrumb</a></li>
+        </ol>
       </nav>
     </aside>
+
+    <!-- =====================================================================
+         PATTERN: PAGE LAYOUT & PAGE-ENDS — the page footer is a brand page-end
+         because it contains a nav. design_system.md › Page layout & page-ends
+    ====================================================================== -->
     <footer class="fluid" id="bottom">
       <p>MIT License Copyright (c) 2023 David Souther</p>
       <nav>
         <p>Inspired by</p>
-        <ul>
+        <ol>
           <li>
             <a href="https://csstools.github.io/sanitize.css/">sanitize.css</a>
           </li>
@@ -764,25 +925,10 @@ public:
           </li>
           <li><a href="http://getskeleton.com/">Skeleton</a></li>
           <li><a href="https://github.com/jefri/jiffies">Jiffies</a></li>
-        </ul>
+        </ol>
       </nav>
     </footer>
     <!-- <script src="./accessibility.js"></script> -->
     <script src="https://unpkg.com/@davidsouther/jiffies-css@1.0.1/accessibility.js"></script>
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/default.min.css"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", (event) => {
-        document
-          .querySelectorAll("pre code[class^='language-']")
-          .forEach((el) => {
-            hljs.highlightElement(el);
-          });
-      });
-    </script> -->
   </body>
 </html>

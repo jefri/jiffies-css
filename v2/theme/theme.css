@@ -1,6 +1,13 @@
-@import "./typography.css";
-@import "./colors.css";
-@import "./sizing.css";
-@import "./borders.css";
-@import "./animation.css";
-@import "./icons.css";
+/* zero-out (Phase 0): all theme sub-imports commented. Re-enable one at a time in Phase 1. */
+/* re-enable with theme/typography (Phase 1 re-enable theme/typography) */
+/* @import "./typography.css"; */
+/* re-enable with theme/colors (Phase 1 m3-tonal-palettes) */
+/* @import "./colors.css"; */
+/* re-enable with theme/sizing (Phase 1 re-enable theme/sizing) */
+/* @import "./sizing.css"; */
+/* re-enable with theme/borders (Phase 1 re-enable theme/borders) */
+/* @import "./borders.css"; */
+/* re-enable with theme/animation (Phase 1 re-enable theme/animation) */
+/* @import "./animation.css"; */
+/* re-enable with theme/icons (Phase 1 re-enable theme/icons) */
+/* @import "./icons.css"; */

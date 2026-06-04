@@ -46,7 +46,12 @@ const TOKENS = [
   "--font-size-larger",
 ];
 
-test("all seven bridging aliases are defined in navigation.css :root block", () => {
+// zero-out (Phase 0): component/navigation.css import is commented out, and the
+// module is rewritten in Phase 4 to drop the old --brand-primary-color /
+// --color-primary-hover bridging aliases asserted below in favor of --color-*
+// role tokens.
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("all seven bridging aliases are defined in navigation.css :root block", () => {
   const css = readFileSync(navPath, "utf8");
   const rootStart = css.indexOf(":root");
   const rootEnd = css.indexOf("}", rootStart) + 1;
@@ -60,7 +65,8 @@ test("all seven bridging aliases are defined in navigation.css :root block", () 
   }
 });
 
-test("every reference to the seven tokens in v2 has a definition", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("every reference to the seven tokens in v2 has a definition", () => {
   const allFiles = readAllCss(v2Dir);
   const definitions = new Set();
   const references = [];
@@ -83,7 +89,8 @@ test("every reference to the seven tokens in v2 has a definition", () => {
   );
 });
 
-test("--color bridges to var(--brand-primary-color)", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--color bridges to var(--brand-primary-color)", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -92,7 +99,8 @@ test("--color bridges to var(--brand-primary-color)", () => {
   );
 });
 
-test("--color-accent bridges to oklch derived from brand primitives", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--color-accent bridges to oklch derived from brand primitives", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -101,7 +109,8 @@ test("--color-accent bridges to oklch derived from brand primitives", () => {
   );
 });
 
-test("--color-primary-hover bridges to color-mix toward white", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--color-primary-hover bridges to color-mix toward white", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -110,7 +119,8 @@ test("--color-primary-hover bridges to color-mix toward white", () => {
   );
 });
 
-test("--color-text bridges to var(--base-text-color)", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--color-text bridges to var(--base-text-color)", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -119,7 +129,8 @@ test("--color-text bridges to var(--base-text-color)", () => {
   );
 });
 
-test("--border-width bridges to var(--base-border-size)", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--border-width bridges to var(--base-border-size)", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -128,7 +139,8 @@ test("--border-width bridges to var(--base-border-size)", () => {
   );
 });
 
-test("--border-style bridges to solid", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--border-style bridges to solid", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,
@@ -137,7 +149,8 @@ test("--border-style bridges to solid", () => {
   );
 });
 
-test("--font-size-larger bridges to calc(base-font-size * font-scale)", () => {
+// re-enable with component-navigation (Phase 4 re-enable component-navigation).
+test.skip("--font-size-larger bridges to calc(base-font-size * font-scale)", () => {
   const css = readFileSync(navPath, "utf8");
   assert.match(
     css,

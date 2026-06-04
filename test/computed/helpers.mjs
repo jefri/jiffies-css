@@ -1,10 +1,10 @@
 import { createServer } from "node:http";
-import { readFileSync, statSync } from "node:fs";
+import { readFileSync, statSync, mkdirSync } from "node:fs";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 
-const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../..");
+export const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "../..");
 
 const MIME = {
   ".html": "text/html",
@@ -16,7 +16,15 @@ const MIME = {
   ".svg": "image/svg+xml",
 };
 
-function startServer() {
+/**
+ * startServer() — starts a node:http static file server bound to a random
+ * loopback port, serving files relative to the repo root. Resolves with the
+ * listening server instance (call server.address().port for the port, and
+ * server.close() to tear down).
+ *
+ * @returns {Promise<import('node:http').Server>}
+ */
+export function startServer() {
   const server = createServer((req, res) => {
     const url = new URL(req.url, "http://localhost");
     const filePath = join(repoRoot, url.pathname);
@@ -103,4 +111,28 @@ export async function css(page, selector, property) {
         .trim(),
     { selector, property },
   );
+}
+
+/**
+ * screenshot(page, name, options?) — writes a PNG of the page to
+ * docs/screenshots/<name>.png (relative to the repo root), creating any
+ * intervening directories. `name` may include subdirectories (e.g.
+ * "00-baseline/overview--light"). Defaults to a full-page capture; pass
+ * { clip } / { element } / { fullPage: false } to scope a frame.
+ *
+ * @param {import('playwright').Page} page
+ * @param {string} name  — path under docs/screenshots/, without the .png suffix
+ * @param {{ fullPage?: boolean, element?: import('playwright').Locator | import('playwright').ElementHandle }=} options
+ * @returns {Promise<string>}  — the absolute path of the PNG written
+ */
+export async function screenshot(page, name, options = {}) {
+  const { fullPage = true, element } = options;
+  const path = join(repoRoot, "docs", "screenshots", `${name}.png`);
+  mkdirSync(dirname(path), { recursive: true });
+  if (element !== undefined) {
+    await element.screenshot({ path });
+  } else {
+    await page.screenshot({ path, fullPage });
+  }
+  return path;
 }

@@ -1,5 +1,7 @@
+/* zero-out (Phase 0): component sub-imports commented; re-enable one at a time in Phase 4. */
 /* Card & Panel {article, section} > {main, header, footer} */
-@import "./card.css";
+/* re-enable with component-card + theme/colors + theme/borders (Phase 4 re-enable component-card) */
+/* @import "./card.css"; */
 /* Accordion details, summary */
 /* @import "./accordion.css"; */
 /* Tab details[role=tablist] summary[role=tab] */
@@ -7,9 +9,11 @@
 /* @import "./form-grid.css"; */
 /* Modal dialog */
 /* Navigation nav > ol, ul */
-@import "./navigation.css";
+/* re-enable with component-navigation + theme/colors (Phase 4 re-enable component-navigation) */
+/* @import "./navigation.css"; */
 /* Breadcrumb nav > ol.breadcrumb */
-@import "./breadcrumb.css";
+/* re-enable with breadcrumb-classless + theme/colors (Phase 4 breadcrumb-classless) */
+/* @import "./breadcrumb.css"; */
 /* Progress progress */
 /* @import "./property.css"; */
 /* Property Sheet dl, dt, dd */

@@ -1,2 +1,5 @@
-@import "./flex.css";
-@import "./grid.css";
+/* zero-out (Phase 0): utility sub-imports commented; re-enable in Phase 5. */
+/* re-enable with utility/flex (Phase 5 re-enable utility/flex) */
+/* @import "./flex.css"; */
+/* re-enable with utility/grid (Phase 5 re-enable utility/grid) */
+/* @import "./grid.css"; */

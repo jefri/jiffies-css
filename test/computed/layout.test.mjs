@@ -27,16 +27,22 @@ describe("layout computed styles", () => {
     await session.close();
   });
 
-  it("CSS loads at all — body background-color is not transparent", async () => {
+  // zero-out (Phase 0): sanitize-only baseline does not paint a body background.
+  // re-enable with content/containers (Phase 3) + theme/colors (Phase 1 m3-tonal-palettes)
+  it.skip("CSS loads at all — body background-color is not transparent", async () => {
     assert.notStrictEqual(lightBodyBg, "rgba(0, 0, 0, 0)");
   });
 
-  it("Intent→Application chain resolves — header background differs from body", async () => {
+  // zero-out (Phase 0): no theme/colors roles and no content/containers header surface yet.
+  // re-enable with theme/colors (Phase 1 m3-tonal-palettes) + content/containers (Phase 3)
+  it.skip("Intent→Application chain resolves — header background differs from body", async () => {
     assert.notStrictEqual(lightHeaderBg, "rgba(0, 0, 0, 0)");
     assert.notStrictEqual(lightHeaderBg, lightBodyBg);
   });
 
-  it("Component layer fires — article border-radius is non-zero", async () => {
+  // zero-out (Phase 0): component layer is empty; article gets no border-radius.
+  // re-enable with component-card (Phase 4) + theme/borders (Phase 1 re-enable theme/borders)
+  it.skip("Component layer fires — article border-radius is non-zero", async () => {
     const value = await css(page, "article", "border-radius");
     assert.notStrictEqual(value, "0px");
   });
@@ -55,12 +61,16 @@ describe("layout computed styles — dark mode", () => {
     await session.close();
   });
 
-  it("dark body background differs from light", async () => {
+  // zero-out (Phase 0): no theme/colors roles, so dark mode does not reassign a body surface.
+  // re-enable with theme/colors (Phase 1 m3-tonal-palettes) + content/containers (Phase 3)
+  it.skip("dark body background differs from light", async () => {
     const darkBodyBg = await css(page, "body", "background-color");
     assert.notStrictEqual(darkBodyBg, lightBodyBg);
   });
 
-  it("dark header background differs from light", async () => {
+  // zero-out (Phase 0): no theme/colors roles, so dark mode does not reassign a header surface.
+  // re-enable with theme/colors (Phase 1 m3-tonal-palettes) + content/containers (Phase 3)
+  it.skip("dark header background differs from light", async () => {
     const darkHeaderBg = await css(page, "body > header", "background-color");
     assert.notStrictEqual(darkHeaderBg, lightHeaderBg);
   });

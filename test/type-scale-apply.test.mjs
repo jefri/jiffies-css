@@ -18,7 +18,10 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const sizingPath = join(repoRoot, "v2", "theme", "sizing.css");
 const readmePath = join(repoRoot, "README.md");
 
-test("--font-scale is 1.25 (major third) in sizing.css", () => {
+// zero-out (Phase 0): theme/sizing.css import is commented out and the module
+// is reviewed/rewritten in Phase 1; the README is doc-realigned in Phase 6.
+// re-enable with theme/sizing (Phase 1 re-enable theme/sizing) + Phase 6 doc-alignment.
+test.skip("--font-scale is 1.25 (major third) in sizing.css", () => {
   const css = readFileSync(sizingPath, "utf8");
   assert.match(
     css,
@@ -27,7 +30,8 @@ test("--font-scale is 1.25 (major third) in sizing.css", () => {
   );
 });
 
-test("sizing.css comment identifies the scale as Major third", () => {
+// re-enable with theme/sizing (Phase 1 re-enable theme/sizing).
+test.skip("sizing.css comment identifies the scale as Major third", () => {
   const css = readFileSync(sizingPath, "utf8");
   assert.match(
     css,
@@ -36,7 +40,8 @@ test("sizing.css comment identifies the scale as Major third", () => {
   );
 });
 
-test("README no longer lists --phi-* constants as the type scale", () => {
+// re-enable with Phase 6 doc-alignment (README realignment).
+test.skip("README no longer lists --phi-* constants as the type scale", () => {
   const readme = readFileSync(readmePath, "utf8");
   assert.doesNotMatch(
     readme,
@@ -45,7 +50,8 @@ test("README no longer lists --phi-* constants as the type scale", () => {
   );
 });
 
-test("README typography section references --font-scale", () => {
+// re-enable with theme/sizing (Phase 1) + Phase 6 doc-alignment (README realignment).
+test.skip("README typography section references --font-scale", () => {
   const readme = readFileSync(readmePath, "utf8");
   assert.match(
     readme,

@@ -1,98 +1,219 @@
 # Developer Tasks — Jiffies CSS v2
 
-When starting any task, begin with research:using-research to explore best practices and common patterns for each component or feature.
+When starting any task, begin with research:using-research to explore best
+practices and common patterns for each component or feature.
 
 ---
 
-## In Flight
+## Conventions
 
-_None._ The **design-system-rewrite** landed: `design_system.md` is now the
-self-contained design-level spec (Foundations, Architecture, Components,
-Patterns). D1 (Derivation `--_` prefix) and D2 (canonical `@layer` order) are
-settled in Architecture. The code/spec divergences surfaced during the rewrite
-are tracked under *Spec-alignment gaps* below; component ports under *Components*.
+**Re-enablement model.** The v2 stylesheet has accumulated cruft and has drifted
+from `design_system.md`. Rather than edit in place, the rewrite **zeroes out** to a
+sanitize-only baseline (see **zero-out**) and then walks *up the cascade* —
+`fns → theme → layout → content → component → utility` — re-enabling **one module
+at a time**. Each module's task is the same shape: uncomment its `@import`, review
+and update the file against the spec in `design_system.md`, then capture a
+screenshot. A module is not done until it matches the spec and its frame is
+refreshed. `fns` and `theme` are not written in isolation, but edited as necessary working through `layout`, `content`, and `component`.
 
-A follow-up refinement pass added device profiles to Breakpoints, adopted the
-Radix 12-step color scale in Color, and added the Hero pattern. Section
-references are **name anchors**, not numbers: a TASKS pointer reads
-`Ref: <Heading>` and the doc cross-links by heading name. The anchor guard
-(`test/design-system-anchors.test.mjs`) verifies every `Ref:` pointer resolves to
-a real heading. The two new code/spec divergences are tracked below
-(*radix-12-step-scale*, *hero-pattern*).
+**Visible progress via screenshots.** `index.html` is the canonical demo page *and*
+the progress tracker. The screenshot series begins from the near-unstyled
+(sanitize-only) baseline and each re-enabled module adds a frame showing the delta,
+so the set reads as a visual changelog of the rewrite. Screenshot capture is a
+separate Playwright job (see **screenshot-harness**), not an assertion test in
+`test/computed/`.
+
+**Doc/code divergence (read before any foundation work).** Commit `42b5c5b` rewrote
+the *docs* (`design_system.md`, `PHILOSOPHY.md`, `README.md`) to Material 3's
+`--brand-color` model, but `v2/` still ships the **old parts API**:
+`--brand-hue`/`--brand-luminance`/`--brand-chroma`, `--fn-color`/`--fn-merge`/
+`--fn-border`, the `--color-hover`/`-focus`/`-active` mixes, and
+`--brand-primary-color` (read by `navigation.css`). The `--_` private prefix is not
+yet used. `design_system.md` is the authority; every re-enable task realigns its
+module to it.
 
 ---
 
-## Components (parity port — each follows docs/philosophy.md)
+## Phase 0 — Zero out & harness (do these first)
 
-Suggested order = dependency / demo-prominence. Each consumes the parts-based
-color system. README-promised, demoed in `index.html`, v2 import commented out.
+- [x] **zero-out** — Comment the current implementation down to the `reset`
+  (sanitize) layer, leaving a near-unstyled baseline. Keep the `@layer` declaration
+  in `v2/index.css` so order survives. Specifically:
+  - `v2/index.css`: comment the `fns` (`./functions.css`) and the broken `layout`
+    (`./layout/layout.css`) layer imports — the latter also clears the current 404.
+    Keep `./sanitize/index.css` active; keep the `theme`/`content`/`component`/
+    `utility` layer imports active as empty shells.
+  - `v2/theme/theme.css`: comment all six sub-imports (typography, colors, sizing,
+    borders, animation, icons).
+  - `v2/content/content.css`: comment the active sub-imports (containers,
+    typography-block, typography-inline).
+  - `v2/component/component.css`: comment the active sub-imports (card, navigation,
+    breadcrumb).
+  - `v2/utility/utility.css`: comment flex and grid.
 
-- [ ] **component-buttons** — Reference implementation that proves the philosophy.
-  `button, a[role=button], input[type=button/submit/reset]` + `.secondary
-  .contrast .outline`. First consumer of `--fn-color`. Ref: Buttons.
+  Result: only `reset` applies. Each later task re-enables exactly one of these
+  lines. Verify the existing `test/computed/` suite still loads (it will need its
+  expectations relaxed to the sanitize-only baseline, or skipped until modules
+  return).
 
-- [ ] **layout-layer** — Implement container/page-end layout into the
-  declared-but-empty `layout` layer, or drop the layer from the spine. Ref
+- [x] **demo-page** — Review and update `index.html` as the canonical test/demo
+  page. Remove the stale old-API `:root` overrides in the inline `<style>`
+  (`--brand-hue`, `--brand-chroma`, `--brand-luminance`, `--hyperlink-color`) and
+  the old live-tuning controls (`--color-primary-hue`, `--sizing`,
+  `--font-family-*`); replace them with the new Intent surface (`--brand-color`,
+  `--base-size`/density, font-role overrides) or drop the controls until the engine
+  lands. Ensure every component in `design_system.md` has a demo home so screenshots
+  can track it: add the markup that is currently missing or commented out —
+  `progress` (Progress), `dialog` (Modal), `dl` property sheet, hero `figure > img`
+  + heading inside a rail (Hero), `nav[aria-label="Breadcrumb"]` (Breadcrumb), and
+  the color swatches block. Ref: README demo, all Components.
+
+- [x] **screenshot-harness** — Add a Playwright screenshot capability that drives
+  `index.html` and writes PNGs to `docs/screenshots/`. Add a `screenshot(page,
+  name)` helper alongside `withPage`/`css` in `test/computed/helpers.mjs` (or a
+  sibling module), and an npm script (e.g. `screenshots`) that loads the demo page
+  in Chromium, captures a full-page frame plus per-section frames, and runs both
+  light and dark via `emulateMedia({ colorScheme })`. Capture the **baseline** now —
+  the sanitize-only zero-out render — so every later module has a before to diff
+  against. Keep this separate from `node --test` (artifacts, not assertions), and
+  commit the PNGs. Ref: DEVELOPMENT.md (Playwright section).
+
+---
+
+## Phase 1 — Re-enable `fns` + `theme` (foundation; tokens every consumer reads)
+
+- [ ] **m3-tonal-palettes** — Re-enable `fns` (`./functions.css`) and `theme/colors.css`
+  and rewrite both to Material 3's generative model. Color derives the scheme from
+  one `--brand-color`: five key palettes (`--_p-*`/`--_s-*`/`--_t-*`/`--_n-*`/`--_nv-*`)
+  plus a fixed `--_e-*` error, each a tonal ramp whose lightness passes through the
+  inverse Oklab toe (`--_k1`/`--_k2`/`--_k3` → `--_l-*`), assigned to `--color-*`
+  semantic role tokens with canonical light/dark tone mappings; dark mode reassigns
+  roles to tones (does not re-derive). Add the state palettes (info/success/warning
+  + fixed error). Replace the old parts API and the `--color-hover`/`-focus`/`-active`
+  mixes. This is the gate for content and components below — they read `--color-*`
+  roles that do not exist yet. Folds in the color half of **derivation-private-prefix**.
+  Screenshot. Ref: *Color*.
+
+- [ ] **derivation-private-prefix** — Rename the remaining (non-color) Derivation
+  intermediates to the `--_` private prefix (D1): `--fn-merge`/`--fn-border` →
+  `--_fn-*`; update callers. Ref: *Naming grammar*.
+
+- [ ] **re-enable theme/typography** — Uncomment and review against *Typography*:
+  major-third modular scale via `pow()`, the five font roles
+  (`--body-`/`--header-`/`--label-`/`--nav-`/`--monospace-font-family` with
+  `--brand-*` overrides), responsive `--base-font-size`. Screenshot.
+
+- [ ] **re-enable theme/sizing** — Uncomment and review against *Spacing & Sizing*
+  and *Breakpoints*: the `--base-size` atom + t-shirt scale, the 6-step min-width
+  ladder. Includes **breakpoint-columns**: align the `--content-columns` ramp to the
+  responsive table's target counts (1·1·1·2·2·4); it currently ramps to 2 at `xl`
+  and 3 at `4k`. Screenshot.
+
+- [ ] **re-enable theme/borders** — Uncomment and review against the border-radius
+  token set (`--border-radius-container`/`-item`/`-button`/`-input`/`-inline`/`-badge`)
+  and `--base-border-size`. Screenshot.
+
+- [ ] **re-enable theme/animation** — Uncomment and review against *Motion*. Includes
+  **motion-vocabulary**: expand to the named durations
+  (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) the
+  README sketches; shipped code has only the single `--transition*` triple, plus the
+  `prefers-reduced-motion` collapse. Screenshot.
+
+- [ ] **re-enable theme/icons** — Uncomment and review against *Iconography*:
+  inline data-URI SVG `--icon-chevron`. Screenshot.
+
+---
+
+## Phase 2 — Re-enable `layout`
+
+- [ ] **layout-layer** — The `layout` layer import was removed in **zero-out** (it
+  pointed at a non-existent `./layout/layout.css`). Create the file, implement the
+  page spine — flex-column root, content clamp to `--base-viewport-width`,
+  header/footer page-ends, optional `aside` reflow by `order` — then re-add its
+  layer import to `v2/index.css`. Screenshot. Ref: *Page layout & page-ends*;
   v2-tasks §1.6.
 
 ---
-- [ ] **component-forms** — `label input select textarea fieldset legend` +
-  `[aria-invalid] [disabled] [readonly]`. Largest; grid via `--grid-column-count`
-  on fieldset. Ref: Forms.
-- [ ] **component-form-switch** — `input[type=checkbox/radio][role=switch]`. Ref: Form switch.
-- [ ] **component-tables** — `table thead tbody tfoot tr th td`; even/odd,
-  Trebuchet family. Ref: Tables.
-- [ ] **component-accordion** — `details > summary`; chevron already in
-  `theme/icons.css`. Ref: Accordion.
-- [ ] **component-tabs** — `section[role=tablist] [role=tab] [role=tabpanel]`;
-  uses existing `accessibility.js` for `aria-selected`. Ref: Tabs.
-- [ ] **component-modal** — `dialog`; reset has base, needs component styling. Ref: Modal.
-- [ ] **component-property-sheet** — `dl dt dd`. Ref: Property sheet.
-- [ ] **component-progress** — `progress`; smallest. Ref: Progress.
-- [ ] **component-form-group** — `fieldset[role=group]`; joined-control row. Ref: Form group.
-- [ ] **component-color-swatches** — rainbow/swatches commented block in
-  `index.html`; depends on `--color-hue`/`--chroma` plumbing (finish Color first).
 
-- [ ] **computed-thresholds** — Expand seed tests with exact threshold assertions:
-  specific non-zero pixel sizes for padding, exact color comparisons for brand
-  colors. Depends on component tasks landing stable values.
+## Phase 3 — Re-enable `content` (semantic element styles)
+
+- [ ] **re-enable content/containers** — Uncomment and review against the container
+  model (`body (> #root) > {main, header, footer, aside}`, overflow/`.scroll-*`).
+  Screenshot.
+- [ ] **re-enable content/typography-block** — Uncomment and review block typography
+  (`html hgroup h1–h6 p ul ol blockquote textarea`) against *Typography*. Screenshot.
+- [ ] **re-enable content/typography-inline** — Uncomment and review inline typography
+  (`a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sup u`);
+  `mark`/`ins`/`del` now read the M3 state roles. Screenshot.
 
 ---
 
-## Spec-alignment gaps (design_system.md)
+## Phase 4 — Re-enable / port `component` (each reads `--color-*` roles; each ends with a screenshot)
 
-These are code/spec divergences between `design_system.md` and the shipped CSS.
-Each is a CSS realignment, tracked here rather than in the spec.
+Order = dependency / demo-prominence. `card`/`navigation`/`breadcrumb` already exist
+and are *re-enabled + reviewed*; the rest are *parity ports* (commented stubs with no
+file yet) that get created and enabled.
 
-- [ ] **breakpoint-columns** — Align `--content-columns` ramp to the responsive
-  table's target counts (1·1·1·2·2·4). `v2/theme/sizing.css` currently ramps to 2
-  at `xl` and 3 at `4k`. Ref: Breakpoints.
-- [ ] **motion-vocabulary** — Expand motion tokens to the named durations
-  (`--motion-duration-snap`/`-shake`/`-draw`) and curves (`--motion-curve-*`) the
-  README sketches; shipped code has only the single `--transition*` triple. Ref: Motion & Iconography.
-- [ ] **derivation-private-prefix** — Rename shipped Derivation intermediates to the
-  `--_` private prefix (D1). `v2/functions.css`: `--fn-color`, `--fn-merge`,
-  `--fn-border`; update callers (`navigation.css`). The `--color-hover`/`-focus`/
-  `-active` mixes are superseded by the step scale — fold into
-  **radix-12-step-scale**. Ref: Naming grammar.
+- [ ] **re-enable component-card** — Uncomment and review `card.css` against
+  *Card & Panel* (`:is(article, section) > :is(header, main, footer)`, M3 surface
+  roles, inner borders, rail padding). Screenshot. Ref: Card & Panel.
+- [ ] **component-buttons** — Reference port that proves the philosophy.
+  `button, a[role=button], input[type=button/submit/reset]` + `.secondary .contrast
+  .outline`. First consumer of the `--color-primary`/`--color-on-primary` role pair
+  (`.secondary`→container pair, `.outline`→`--color-outline`). Screenshot. Ref: Buttons.
+- [ ] **component-forms** — `label input select textarea fieldset legend` +
+  `[aria-invalid] [disabled] [readonly]`. Largest; grid via `--grid-column-count`
+  on fieldset. Screenshot. Ref: Forms.
+- [ ] **component-form-switch** — `input[type=checkbox/radio][role=switch]`. Screenshot. Ref: Form switch.
+- [ ] **component-tables** — `table thead tbody tfoot tr th td`; even/odd,
+  Trebuchet family. Screenshot. Ref: Tables.
+- [ ] **component-accordion** — `details > summary`; chevron from `theme/icons.css`.
+  Screenshot. Ref: Accordion.
+- [ ] **component-tabs** — `section[role=tablist] [role=tab] [role=tabpanel]`;
+  uses existing `accessibility.js` for `aria-selected`. Screenshot. Ref: Tabs.
+- [ ] **component-modal** — `dialog`; reset has base, needs component styling.
+  Screenshot. Ref: Modal.
+- [ ] **component-property-sheet** — `dl dt dd`. Screenshot. Ref: Property sheet.
+- [ ] **component-progress** — `progress`; smallest. Screenshot. Ref: Progress.
+- [ ] **component-form-group** — `fieldset[role=group]`; joined-control row.
+  Screenshot. Ref: Form group.
+- [ ] **re-enable component-navigation** — Uncomment and review `navigation.css`
+  against *Navigation*. Drop the old `--brand-primary-color`/`--color-primary-hover`
+  for the `--color-*` role tokens (this is the caller flagged in
+  **derivation-private-prefix**). Screenshot. Ref: Navigation.
+- [ ] **breadcrumb-classless** — Re-enable `breadcrumb.css` and reselect by the
+  `Breadcrumb` ARIA label rather than the `ol.breadcrumbs` class, keeping the
+  pattern classless. Screenshot. Ref: Breadcrumb.
+- [ ] **hero-pattern** — New: a `figure > img` + heading inside a `header`/`footer`
+  rail. Card scope bleeds the figure past the rail padding and clips it to
+  `--border-radius-card`; page scope (`body > #root > …`) is a full-bleed banner
+  reusing `.fluid`. No CSS ships today. Screenshot. Ref: Hero.
+- [ ] **component-color-swatches** — Tonal-palette/role swatches block in
+  `index.html`; depends on the `--brand-color` palette plumbing from
+  **m3-tonal-palettes**. Screenshot. Ref: Color.
 
-- [ ] **radix-12-step-scale** — Color now expands each hue into a 12-step Radix
-  ladder (`--_brand-1`…`--_brand-12`), with interactive states as defined steps
-  (component `3→4→5`, solid `9→10`, border `6→7→8`, focus ring `7`). Shipped
-  `v2/functions.css` instead mixes toward white/black (`--color-hover`/`-focus`/
-  `-active`). Realign the engine to emit the step ladder and reselect each
-  component's state colors as steps; the amber step-9 fill takes dark text, not
-  white. Ref: Color.
+---
 
-- [ ] **hero-pattern** — Implement the Hero pattern: a `figure > img` + heading inside a
-  `header`/`footer` rail. Card scope (`:is(article, section) > …`) bleeds the
-  figure past the rail padding and clips it to `--border-radius-card`; page scope
-  (`body > #root > …`) is a full-bleed banner reusing `.fluid`. No CSS ships
-  today. Ref: Hero.
+## Phase 5 — Re-enable `utility`
+
+- [ ] **re-enable utility/flex** — Uncomment and review against *Flex*
+  (`.flex .row .inline .flex-{0-4} .justify-* .align-*`). Screenshot.
+- [ ] **re-enable utility/grid** — Uncomment and review the grid utilities
+  (`--grid-column-count`). Screenshot.
+
+---
+
+## Phase 6 — Docs & hardening
+
+- [ ] **color-doc-alignment** — Realign the consumer-facing color docs to M3. The
+  README `### Color` section still lists the old parts API
+  (`--color-primary-hue`/`--primary-luminance`/`--primary-chroma`); reduce it to
+  `--brand-color` plus the `--color-*` role surface. Sweep PHILOSOPHY for any
+  remaining brand-hue/luminance color language. Ref: Color.
 - [ ] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
   the layering *concept*; the `@layer order` section of `design_system.md` owns
   the canonical `fns, reset, layout, content, component, utility, user, theme`
   order. Ref: @layer order.
-- [ ] **breadcrumb-classless** — Reselect breadcrumbs by the `Breadcrumb` ARIA
-  label rather than the `ol.breadcrumbs` class, keeping the pattern classless.
-  Shipped `v2/component/breadcrumb.css` uses `ol.breadcrumbs`. Ref: Breadcrumb.
+- [ ] **computed-thresholds** — Expand the seed `test/computed/` tests with exact
+  threshold assertions: specific non-zero pixel sizes for padding, exact color
+  comparisons for brand colors. Depends on modules landing stable values.

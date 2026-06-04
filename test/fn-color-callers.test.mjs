@@ -31,7 +31,11 @@ function readAllCss(dir) {
   return out;
 }
 
-test("--fn-color is defined in functions.css", () => {
+// zero-out (Phase 0): the fns (functions.css) import is commented out and the
+// file is rewritten to the M3 generative model in Phase 1, replacing the old
+// --fn-color parts API this test asserts.
+// re-enable with fns (Phase 1 m3-tonal-palettes / derivation-private-prefix).
+test.skip("--fn-color is defined in functions.css", () => {
   const css = readFileSync(functionsPath, "utf8");
   assert.match(
     css,
@@ -40,7 +44,8 @@ test("--fn-color is defined in functions.css", () => {
   );
 });
 
-test("functions.css has a scaffolding annotation on --fn-color", () => {
+// re-enable with fns (Phase 1 m3-tonal-palettes / derivation-private-prefix).
+test.skip("functions.css has a scaffolding annotation on --fn-color", () => {
   const css = readFileSync(functionsPath, "utf8");
   assert.match(
     css,
@@ -49,7 +54,8 @@ test("functions.css has a scaffolding annotation on --fn-color", () => {
   );
 });
 
-test("no v2 component reads var(--fn-color)", () => {
+// re-enable with fns (Phase 1 m3-tonal-palettes / derivation-private-prefix).
+test.skip("no v2 component reads var(--fn-color)", () => {
   const callers = [];
   for (const { path, text } of readAllCss(v2Dir)) {
     if (path === functionsPath) continue;

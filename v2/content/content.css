@@ -1,9 +1,13 @@
-@import "./containers.css";
+/* zero-out (Phase 0): content sub-imports commented; re-enable one at a time in Phase 3. */
+/* re-enable with content/containers (Phase 3 re-enable content/containers) */
+/* @import "./containers.css"; */
 /* Overflow scrolling figure .scroll-{x,y} */
 /* Block Typography html, hgroup, h*, p, ul, ol, blockquote, textarea */
-@import "./typography-block.css";
+/* re-enable with content/typography-block + theme/typography (Phase 3 re-enable content/typography-block) */
+/* @import "./typography-block.css"; */
 /* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
-@import "./typography-inline.css";
+/* re-enable with content/typography-inline + theme/colors (Phase 3 re-enable content/typography-inline) */
+/* @import "./typography-inline.css"; */
 /* Button button a[role=button] input[type={button,submit,reset] */
 /* @import "./button.css"; */
 /* Form label input select textarea label fieldset legend */

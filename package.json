@@ -16,7 +16,8 @@
   "homepage": "https://github.com/jefri/jiffies-css#readme",
   "scripts": {
     "pretest": "npx playwright install chromium",
-    "test": "node --test 'test/**/*.test.mjs'"
+    "test": "node --test 'test/**/*.test.mjs'",
+    "screenshots": "node test/screenshots.mjs"
   },
   "devDependencies": {
     "@parcel/css-cli": "^1.13.1",

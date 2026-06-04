@@ -1,0 +1,7 @@
+Build v2. Make it pretty. Create a dynamic workflow to drive the work to completion.
+Each development task should use /ailly to drive the feature, the dynamic workflow should drive developer:ailly.
+When questions come up, anchor on the aspirations in README and PHILOSOPHY.
+If there's still uncertainty, research best practices using research:public resources.
+It's OK to edit design_system.md to clarify those issues.
+When performing end of task review, use the normal general:review skill.
+But when finishing a substantial block or chunk of work, like the typography base or a set of components, apply a full symposium review.
