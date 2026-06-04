@@ -9,24 +9,29 @@ answered first: (1) when is Shadow DOM the right tool for a component, and (2)
 how do CSS resets and global styles behave at a shadow boundary. This record settles the question so it does not recur, and
 documents the reasoning that makes the answer stable.
 
-Jiffies-CSS is **a classless reset for semantic HTML**. A component is
-identified by its DOM hierarchy and its ARIA role — `article > header` is a card
-header, `nav > ol` is a navigation list, `[role=tab]` is a tab — and styled by a
-single global stylesheet whose cascade is ordered by one canonical document-wide
-`@layer` spine (`fns, reset, layout, content, component, utility, user, theme`).
-Customization runs through a small Intent tier of custom properties on `:root`.
+Jiffies-CSS is **a Post-Modern CSS Full-Page Reset**: one global stylesheet that
+normalizes and styles an *entire page* from a single place. It provides beautiful semantic
+defaults, components built from element relationships, ARIA-role modalities,
+DOM-state styling, responsive layout, and variable-driven theming. The *mechanism* that delivers this is semantic DOM addressing: a
+component is identified by its DOM hierarchy and its ARIA role — `article >
+header` is a card header, `nav > ol` is a navigation list, `[role=tab]` is a tab.
+The cascade is ordered by a document-wide `@layer` spine (`fns,
+reset, layout, content, component, utility, user, theme`), and customization runs
+through a small Intent tier of custom properties on `:root`. Semantic addressing
+is *how* Jiffies resets the full page; the full-page reset is *what* it is.
 
-Shadow DOM is the platform's **style and DOM encapsulation** primitive. The
-question is whether a project whose entire mechanism is *global semantic reach*
-has anything to gain from a primitive whose entire purpose is *sealing reach
-off*.
+Shadow DOM is the platform's **style and DOM encapsulation** primitive: it
+fragments a page into sealed component sub-trees. The question is whether a
+project whose entire purpose is *resetting and styling the whole page from one
+global stylesheet* has anything to gain from a primitive whose entire purpose is
+*sealing the page into boxes the global stylesheet cannot reach*.
 
 ## Decision
 
 **Jiffies-CSS rejects Shadow DOM as its component model.** It remains a
-light-DOM, global-cascade, classless reset. The two models are not merely a poor
-fit; they are opposite answers to the same question, and adopting the second
-negates the first.
+light-DOM, global-cascade, full-page reset that addresses elements by semantic
+structure. The two models are not merely a poor fit; they are opposite answers to
+the same question, and adopting the second negates the first.
 
 A narrow, additive interop path is recorded (not adopted) at the end: teams that
 independently use Shadow DOM can consume Jiffies's reset as a shared
@@ -127,13 +132,18 @@ asymmetry is the load-bearing fact for the decision.
 
 ## The Core Tension — Global Semantic Selectors vs. Strict Encapsulation
 
-Jiffies-CSS and Shadow DOM answer the same question — *how does a style rule find
-the element it should style?* — with opposite bets. Jiffies bets on **global
-semantic addressing**: an element's position in the document tree and its ARIA
-role *are* its address, and one stylesheet with global reach matches that
-address wherever it appears. Shadow DOM bets on **local encapsulated
-addressing**: a component's internal structure is private, addressability stops
-at the boundary, and the component exposes only a small explicit interface. The
+Jiffies-CSS and Shadow DOM make opposite bets at two levels. At the level of
+*goal*: a **full-page reset** normalizes and styles the whole document from one
+global stylesheet, so its scope is the entire page by definition; Shadow DOM
+exists to *fragment* the page into sealed component sub-trees that the global
+stylesheet cannot reach. At the level of *mechanism* — *how does a style rule find
+the element it should style?* — Jiffies bets on **global semantic addressing**: an
+element's position in the document tree and its ARIA role *are* its address, and
+one stylesheet with global reach matches that address wherever it appears. Shadow
+DOM bets on **local encapsulated addressing**: a component's internal structure is
+private, addressability stops at the boundary, and the component exposes only a
+small explicit interface. The mechanism is how the goal-level opposition bites:
+sealing addressability off is exactly what makes a full-page reset impossible. The
 feature of each is the anti-feature of the other. Five axes make the opposition
 concrete, running from raw mechanism up to motivation.
 
@@ -148,13 +158,14 @@ making that tree illegible from outside: page CSS and `document.querySelectorAll
 cannot see in. A classless framework needs every component's structure published
 to the document; Shadow DOM exists to seal it off.
 
-Second, **a reset is global by definition.** Jiffies is *a reset*, and a reset's
-job is to normalize the whole document from one place — inherently singular and
-global. Shadow DOM forces that single responsibility to fragment: the document
-reset reaches nothing inside a root, so each root must re-establish its own,
-re-parsed per instance unless shared through `adoptedStyleSheets`. "Classless
-reset" and "encapsulated component" describe opposite distributions of the same
-styling responsibility — one centralizes it, the other replicates it N times.
+Second, **a full-page reset is global by definition.** Jiffies is *a full-page
+reset*, and a reset's job is to normalize the whole document from one place —
+inherently singular and global. Shadow DOM forces that single responsibility to
+fragment: the document reset reaches nothing inside a root, so each root must
+re-establish its own, re-parsed per instance unless shared through
+`adoptedStyleSheets`. "Full-page reset" and "encapsulated component" describe
+opposite distributions of the same styling responsibility — one centralizes it,
+the other replicates it N times.
 
 Both faces reduce to one fact — selectors do not cross — but they show how that
 fact lands on Jiffies specifically: it loses the global legibility it selects
@@ -273,7 +284,7 @@ shadow roots. Rejected: it requires re-applying the reset per root, abandoning
 the global `@layer` spine, replacing every role/hierarchy selector with
 per-component internal CSS, and absorbing cross-root ARIA breakage,
 `ElementInternals` form participation, and FOUC/SSR costs. It negates the
-project's reason to exist (§Core Tension, all six axes). Not viable.
+project's reason to exist (§Core Tension, all five axes). Not viable.
 
 **B. Hybrid — light-DOM default plus a shadow-encapsulated build for
 distributable widgets.** Keep light DOM as default, offer a shadow-wrapped build
@@ -286,11 +297,14 @@ Metrics.
 
 ## Summary
 
-Shadow DOM and Jiffies-CSS are opposite bets on how a rule finds its element:
-global semantic addressing versus sealed local addressing. The shadow boundary
-is opaque to selectors and permeable only to inherited values and custom
-properties — which means it would cut Jiffies exactly at the seam between its
-public token API (which crosses) and its engine plus component rules (which do
+Jiffies-CSS is a **Post-Modern CSS Full-Page Reset**: one global stylesheet that
+styles the whole page. Shadow DOM is the opposite bet — it fragments the page into
+sealed component sub-trees. The opposition is a goal-level one (reset the whole
+page versus wall parts of it off), and it bites through the mechanism: a rule
+finds its element by global semantic addressing, which the shadow boundary blocks
+outright. That boundary is opaque to selectors and permeable only to inherited
+values and custom properties — so it would cut Jiffies exactly at the seam between
+its public token API (which crosses) and its engine plus component rules (which do
 not). Jiffies stays light-DOM and global-cascade. Its `:root` token API already
 themes across any boundary it meets, for free. A shared-reset interop path is
 recorded as an additive, non-roadmap option.
