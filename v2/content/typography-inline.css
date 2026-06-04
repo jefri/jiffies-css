@@ -1,77 +1,163 @@
-/* Inline Typography a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sub u */
+/* Inline typography (@layer content). See design_system.md "### Typography".
+ *
+ * Semantic, classless inline elements: links + their .secondary/.contrast
+ * edge-classes, emphasis, edits, highlight, key caps, and the sizing/baseline
+ * runts. Color comes only from the M3 role tokens bridged in theme/colors.css
+ * (mark = warning container, ins = success, del = error); no hardcoded values.
+ *
+ * Per the Selector & nesting conventions: Application finals are declared at the
+ * top of the block that consumes them, and state lives next to structure (the
+ * link's hover/focus/visited finals are re-set inside its nested state blocks).
+ */
+
+/* ---- Hyperlinks ---------------------------------------------------------- */
 a,
 [role="link"] {
-  --color-hyperlink: var(--hyperlink-color);
-  --background-color-hyperlink: transparent;
+  --color-link: var(--color-primary);
+  --text-decoration-link: underline;
 
-  color: var(--color-hyperlink);
-  background-color: var(--background-color-hyperlink);
-
-  --text-decoration-hyperlink: underline;
+  color: var(--color-link);
+  text-decoration: var(--text-decoration-link);
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.15em;
   outline: none;
-  text-decoration: var(--text-decoration-hyperlink);
-  transition: background-color var(--transition), color var(--transition),
-    text-decoration var(--transition), box-shadow var(--transition);
+  transition: color var(--transition), text-decoration-color var(--transition),
+    outline-color var(--transition);
 
-  &:is([aria-current], :hover, :focus) {
-    --text-color: var(--hyperlink-hover-color);
-    --text-decoration-hyperlink: none;
+  /* Hover/current: keep the underline as the affordance, lift the color one
+   * step toward the brand container so the change reads without losing it. */
+  &:is(:hover, [aria-current]) {
+    --color-link: var(--color-on-primary-container);
   }
 
-  &:is(:visited) {
-    --color-hyperlink: var(--hyperlink-visited-color);
+  /* Keyboard focus: a visible ring in the brand color (the underline alone is
+   * not a sufficient focus indicator). */
+  &:focus-visible {
+    outline: var(--base-border-size) solid var(--color-primary);
+    outline-offset: 0.2em;
+    border-radius: var(--border-radius-inline);
   }
 
-  &:is(:focus) {
-    --background-color-hyperlink: var(--hyperlink-focus-background-color);
+  /* Muted accent link. */
+  &.secondary {
+    --color-link: var(--color-secondary);
+
+    &:is(:hover, [aria-current]) {
+      --color-link: var(--color-on-secondary-container);
+    }
+  }
+
+  /* Maximum-contrast link: reads in body-text color, underline is the only
+   * affordance. */
+  &.contrast {
+    --color-link: var(--color-on-surface);
+
+    &:is(:hover, [aria-current]) {
+      --color-link: var(--color-on-surface);
+      --text-decoration-link: none;
+    }
   }
 }
 
-mark {
-  --background-color-mark: var(--mark-background-color);
-  --color-mark: var(--mark-color);
-  padding: 0.125rem 0.25rem;
-  background-color: var(--background-color-mark);
-  color: var(--color-mark);
-  vertical-align: baseline;
-}
-
+/* ---- Abbreviation -------------------------------------------------------- */
 abbr[title] {
-  border-bottom: 1px dotted;
-  text-decoration: none;
+  text-decoration: underline dotted;
+  text-underline-offset: 0.15em;
   cursor: help;
 }
 
-ins {
-  --color-ins: var(--ins-color);
-  color: var(--color-ins);
-  text-decoration: none;
+/* ---- Strong / bold ------------------------------------------------------- */
+strong,
+b {
+  font-weight: bolder;
 }
 
+/* ---- Emphasis / italic / citation ---------------------------------------- */
+em,
+i,
+cite {
+  font-style: italic;
+}
+
+/* ---- Deletion (error role) ----------------------------------------------- */
 del {
   --color-del: var(--del-color);
+
   color: var(--color-del);
-  text-decoration: none;
+  text-decoration: line-through;
 }
 
-q::before {
-  content: "“";
+/* ---- Insertion (success role) -------------------------------------------- */
+ins {
+  --color-ins: var(--ins-color);
+
+  color: var(--color-ins);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }
 
-q::after {
-  content: "”";
+/* ---- Highlight (warning container role) ---------------------------------- */
+mark {
+  --background-color-mark: var(--mark-background-color);
+  --color-mark: var(--mark-color);
+
+  padding: 0.0625em 0.25em;
+  background-color: var(--background-color-mark);
+  color: var(--color-mark);
+  border-radius: var(--border-radius-inline);
 }
 
-time {
-  --font-family-time: var(--monospace-font-family);
-  font-family: var(--font-family-time);
+/* ---- Key cap ------------------------------------------------------------- */
+kbd {
+  --font-family-kbd: var(--monospace-font-family);
+  --background-color-kbd: var(--color-surface-variant);
+  --color-kbd: var(--color-on-surface-variant);
+  --border-kbd: var(--base-border-size) solid var(--color-outline);
+
+  padding: 0.0625em 0.375em;
+  font-family: var(--font-family-kbd);
+  font-size: 0.875em;
+  line-height: 1;
+  background-color: var(--background-color-kbd);
+  color: var(--color-kbd);
+  border: var(--border-kbd);
+  border-radius: var(--border-radius-inline);
 }
 
-b,
-bold {
+/* ---- Strikethrough ------------------------------------------------------- */
+s {
+  text-decoration: line-through;
 }
 
+/* ---- Small print --------------------------------------------------------- */
 small {
   --font-size-small: var(--small-font-size);
+
   font-size: var(--font-size-small);
+}
+
+/* ---- Sub / superscript --------------------------------------------------- */
+/* Shrink and shift off the baseline without adding to the line box, so the
+ * surrounding line rhythm is preserved (line-height: 0 keeps the runt from
+ * stretching its line). */
+sub,
+sup {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+/* ---- Underline ----------------------------------------------------------- */
+u {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
 }

@@ -55,8 +55,8 @@ test("transposed read names are gone everywhere in v2", () => {
   );
 });
 
-// re-enable with content/typography-block (Phase 3 re-enable content/typography-block).
-test.skip("base block reads the local names it sets", () => {
+// re-enabled with content/typography-block (Phase 3 re-enable content/typography-block).
+test("base block reads the local names it sets", () => {
   const css = readFileSync(blockPath, "utf8");
   assert.match(
     css,

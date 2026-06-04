@@ -1,24 +1,73 @@
-html,
-body {
+/* content/typography-block.css (@layer content) — the block type system.
+ *
+ * README "Block Typography" is the contract for this file:
+ *   html, hgroup, h1..h6, p, ul, ol, blockquote, textarea
+ * and the supporting block-flow elements (address, dl, figure, pre, table) that
+ * share the base paragraph rhythm.
+ *
+ * Applies the type tokens from theme/typography.css (the major-third heading
+ * ladder, the five font roles, --small-font-size) and theme/sizing.css (the
+ * responsive --base-font-size ladder, --spacing-block-vertical) to the document
+ * blocks. See design_system.md "### Typography" and "### Spacing & Sizing".
+ *
+ * Tier discipline (design_system.md "### Variable model"): every block declares
+ * its Application finals (--color-text-base, --font-family-body, …) at the top of
+ * the rule that consumes them, sourcing them from the upstream Intent/Derivation
+ * tokens so an author can retune one block without reaching into the theme.
+ *
+ * Color comes only from M3 role tokens (theme/colors.css). No hardcoded colors.
+ * Boundary: textarea gets the block form-field BASE only (surface + border +
+ * radius); full form-control polish (focus, sizing, states) is Phase 4 forms.
+ */
+
+/* ---------------------------------------------------------------------------
+   The responsive root. font-size anchors 1rem to the breakpoint ladder so the
+   whole type system — heading scale included — rides the breakpoints together
+   (design_system.md: anchor on --base-font-size, NOT a bare 1rem). line-height
+   and the body font role are set here so every descendant inherits the rhythm
+   and face; body text color reads the M3 on-background role.
+   --------------------------------------------------------------------------- */
+html {
+  --color-text-base: var(--color-on-background);
+  --font-family-body: var(--body-font-family);
+  --font-size-base: var(--base-font-size);
+  --font-weight-base: var(--base-font-weight);
+  --line-height-base: var(--base-line-height);
+
+  color: var(--color-text-base);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-base);
+  line-height: var(--line-height-base);
 }
 
-/** Base typography blocks */
+/* body inherits the root face, size, and color; it owns no type of its own.
+   Its margin (reset) and background (layout spine) live in their own layers. */
+body {
+  font-family: inherit;
+}
+
+/* ---------------------------------------------------------------------------
+   Base block flow. Every block-level text element shares one vertical rhythm:
+   a single --spacing-block-vertical of bottom margin, no top margin, so blocks
+   stack on a consistent baseline. The last block in a flow drops its trailing
+   margin so it does not push the container box open.
+   --------------------------------------------------------------------------- */
 address,
 blockquote,
 dl,
 figure,
-form,
 ol,
 p,
 pre,
 table,
 ul {
-  --color-text-base: var(--base-text-color);
+  --color-text-base: var(--color-on-background);
   --font-family-body: var(--body-font-family);
   --font-size-base: var(--base-font-size);
   --font-weight-base: var(--base-font-weight);
   --line-height-base: var(--base-line-height);
-  --margin-size-base: var(--base-margin-size);
+  --margin-block-base: var(--spacing-block-vertical);
 
   color: var(--color-text-base);
   font-family: var(--font-family-body);
@@ -26,148 +75,199 @@ ul {
   font-style: normal;
   font-weight: var(--font-weight-base);
   line-height: var(--line-height-base);
-  margin-bottom: var(--margin-size-base);
-  margin-top: 0;
+  margin-block: 0 var(--margin-block-base);
 }
+
 :where(
     address,
     blockquote,
     dl,
     figure,
-    form,
     ol,
     p,
     pre:not(:has(> code.hljs)),
     table,
     ul
   ):last-child {
-  margin-bottom: 0;
+  margin-block-end: 0;
 }
 
-header,
+/* ---------------------------------------------------------------------------
+   Headings. Each h-level reads its own --font-size-h<n> off the major-third
+   ladder (theme/typography.css), so h1..h6 step down by a constant 1.25 ratio
+   and h6 (= 1.25 × base) stays just above body text at every breakpoint. The
+   header font role (Libre Baskerville → serif) and a tight heading line-height
+   set display type apart from running text. Headings carry the body block
+   rhythm below them; a tighter heading color (on-surface) keeps titles crisp.
+   --------------------------------------------------------------------------- */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
+  --color-header: var(--color-on-surface);
   --font-family-header: var(--header-font-family);
-  font-family: var(--font-family-header);
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  --color-header: color-mix(
-    in srgb,
-    var(--grey) calc(10% + calc(5% * var(--h-level))),
-    black
-  );
-  --font-size-header: calc(
-    1rem * pow(var(--font-scale), calc(7 - var(--h-level)))
-  );
   --font-weight-header: 700;
-  --margin-bottom-header: var(--base-margin-size);
-  --margin-top-header: 0;
+  --line-height-header: 1.15; /* tight: headings set solid, not on the body lead */
+  --margin-block-header: 0 var(--spacing-block-vertical);
 
   color: var(--color-header);
-  font-size: var(--font-size-header);
+  font-family: var(--font-family-header);
   font-weight: var(--font-weight-header);
-  margin-bottom: var(--margin-bottom-header);
-  margin-top: var(--margin-top-header);
-}
-
-@media (prefers-color-scheme: dark) {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    --color-header: color-mix(
-      in srgb,
-      var(--grey) calc(10% + calc(5% * var(--h-level))),
-      white
-    );
-  }
-}
-
-:where(h1, h2, h3, h4, h5, h6):last-child {
-  margin-bottom: 0;
+  line-height: var(--line-height-header);
+  margin-block: var(--margin-block-header);
+  text-wrap: balance; /* keep multi-line titles from orphaning a word */
 }
 
 h1 {
-  --h-level: 1;
+  --font-size-header: var(--font-size-h1);
+  font-size: var(--font-size-header);
 }
 h2 {
-  --h-level: 2;
+  --font-size-header: var(--font-size-h2);
+  font-size: var(--font-size-header);
 }
 h3 {
-  --h-level: 3;
+  --font-size-header: var(--font-size-h3);
+  font-size: var(--font-size-header);
 }
 h4 {
-  --h-level: 4;
+  --font-size-header: var(--font-size-h4);
+  font-size: var(--font-size-header);
 }
 h5 {
-  --h-level: 5;
+  --font-size-header: var(--font-size-h5);
+  font-size: var(--font-size-header);
 }
 h6 {
-  --h-level: 6;
+  --font-size-header: var(--font-size-h6);
+  font-size: var(--font-size-header);
 }
 
-:where(address, blockquote, dl, figure, form, ol, p, pre, table, ul)
+:where(h1, h2, h3, h4, h5, h6):last-child {
+  margin-block-end: 0;
+}
+
+/* A heading that follows a block of running text gets extra space above it so
+   the new section reads as a break, not a continuation. */
+:where(address, blockquote, dl, figure, ol, p, pre, table, ul)
   ~ :is(h1, h2, h3, h4, h5, h6) {
-  --margin-top-trailing-h: var(--base-margin-size);
-  margin-top: var(--margin-top-trailing-h);
+  --margin-block-trailing-header: var(--spacing-block-vertical);
+  margin-block-start: var(--margin-block-trailing-header);
 }
 
+/* ---------------------------------------------------------------------------
+   Heading group. hgroup binds a title to its tagline: the inner headings lose
+   their own rhythm so the pair reads as one unit, and the group carries a
+   single block-vertical margin below it.
+   --------------------------------------------------------------------------- */
 hgroup {
-  --margin-bottom-hgroup: var(--base-margin-size);
-  margin-bottom: var(--spacing-typography-vertical);
+  --margin-block-hgroup: 0 var(--spacing-block-vertical);
+  margin-block: var(--margin-block-hgroup);
 
-  & > :where(h1, h2, h3, h4, h5, h6) {
-    margin-bottom: 0;
+  & > :where(h1, h2, h3, h4, h5, h6, p) {
+    margin-block: 0;
   }
 }
 
-:where(dl, ol, ul) :is(dl, ol, ul) {
-  --margin-top-list-nested: calc(var(--base-size) * 0.25);
-  margin: 0;
-  margin-top: var(--margin-top-list-nested);
+/* ---------------------------------------------------------------------------
+   Lists. Markers sit in a comfortable indent and the list rides the same body
+   rhythm. Nested lists drop their outer margin and tighten to the parent item.
+   --------------------------------------------------------------------------- */
+ul,
+ol {
+  --padding-inline-list: var(--spacing-block-horizontal);
+  padding-inline-start: var(--padding-inline-list);
 }
 
-ul li {
+ul {
+  list-style: disc;
+}
+
+ol {
+  list-style: decimal;
+}
+
+li {
+  --margin-block-list-item: var(--size-small);
+  margin-block: var(--margin-block-list-item);
+
+  &::marker {
+    color: var(--color-on-surface-variant);
+  }
+}
+
+ul ul {
   list-style: circle;
 }
 
+:where(dl, ol, ul) :is(dl, ol, ul) {
+  --margin-block-list-nested: var(--size-small) 0 0;
+  margin: 0;
+  margin-block: var(--margin-block-list-nested);
+}
+
+/* ---------------------------------------------------------------------------
+   Blockquote. An offset rail on the inline-start edge, on a tinted surface so
+   the quote reads as a lifted aside. The rail uses the M3 outline role; the
+   surface and its text use the surface-variant pair.
+   --------------------------------------------------------------------------- */
 blockquote {
-  --margin-blockquote: var(--base-size);
-  --padding-blockquote: var(--base-padding-with-border-size);
-  --color-blockquote-border: var(--grey);
-  --size-blockquote-border: var(--base-border-size);
+  --color-blockquote-rail: var(--color-outline);
+  --color-blockquote-surface: var(--color-surface-variant);
+  --color-blockquote-text: var(--color-on-surface-variant);
+  --size-blockquote-rail: var(--size-small);
+  --padding-blockquote: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  --radius-blockquote: var(--border-radius-item);
 
-  display: block;
-  margin: var(--margin-blockquote) 0;
+  color: var(--color-blockquote-text);
+  background-color: var(--color-blockquote-surface);
   padding: var(--padding-blockquote);
-  border-right: none;
-  border-left: var(--size-blockquote-border) solid
-    var(--color-blockquote-border);
-  border-inline-start: var(--size-blockquote-border) solid
-    var(--color-blockquote-border);
-  border-inline-end: none;
+  border-inline-start: var(--size-blockquote-rail) solid
+    var(--color-blockquote-rail);
+  border-radius: 0 var(--radius-blockquote) var(--radius-blockquote) 0;
 }
 
-pre {
-  cursor: text;
+/* ---------------------------------------------------------------------------
+   Textarea — block form-field BASE only. Surface + composed border + radius so
+   a multi-line field sits on the page as a recessed panel. Full form-control
+   polish (focus ring, sizing, validation states) is Phase 4 forms.
+   --------------------------------------------------------------------------- */
+textarea {
+  --color-textarea-surface: var(--color-surface);
+  --color-textarea-text: var(--color-on-surface);
+  --_fn-border-color: var(--color-outline);
+  --radius-textarea: var(--border-radius-input);
+  --padding-textarea: var(--base-padding-with-border-size);
+  --font-family-textarea: var(--body-font-family);
+  --font-size-textarea: var(--base-font-size);
+  --line-height-textarea: var(--base-line-height);
+
+  color: var(--color-textarea-text);
+  background-color: var(--color-textarea-surface);
+  border: var(--_fn-border);
+  border-radius: var(--radius-textarea);
+  padding: var(--padding-textarea);
+  font-family: var(--font-family-textarea);
+  font-size: var(--font-size-textarea);
+  line-height: var(--line-height-textarea);
 }
 
+/* ---------------------------------------------------------------------------
+   Monospace flow. The base block rule above set the body face on pre (it shares
+   the paragraph rhythm), but code/samp/pre must read the monospace role — and
+   this content-layer rule has to re-assert it because it overrides the reset
+   layer's monospace default. kbd keeps its own chrome treatment in
+   content/typography-inline.css.
+   --------------------------------------------------------------------------- */
 code,
-kbd,
 samp,
 pre {
   --font-family-monospace: var(--monospace-font-family);
   font-family: var(--font-family-monospace);
+}
+
+pre {
+  cursor: text;
 }

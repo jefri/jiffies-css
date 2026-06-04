@@ -4,10 +4,12 @@
    Heading sizes follow a major-third modular scale, --font-scale: 1.25, over the
    native CSS pow() engine:
 
-       font-size = calc(1rem * pow(var(--font-scale), 7 - n))   [ n = 1…6, h1…h6 ]
+       font-size = calc(var(--base-font-size) * pow(var(--font-scale), 7 - n))   [ n = 1…6, h1…h6 ]
 
-   so h1 = 1.25^6 ≈ 3.81rem and the ladder steps down by a constant 1.25 ratio to
-   h6 = 1.25^1 = 1.25rem. --small-font-size is the base divided by the same ratio.
+   Anchored on the responsive --base-font-size (NOT bare 1rem) so the whole
+   hierarchy rides the breakpoint ladder together; h1 = 1.25^6 ≈ 3.81 × base and
+   the ladder steps down by a constant 1.25 ratio to h6 = 1.25 × base (kept above
+   body at every step). --small-font-size is the base divided by the same ratio.
    The single dial is --font-scale; changing it re-tunes the whole hierarchy.
 
    Five font roles, each an Intent override that falls back to a named default

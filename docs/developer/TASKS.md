@@ -137,12 +137,12 @@ module to it.
 
 ## Phase 3 — Re-enable `content` (semantic element styles)
 
-- [ ] **re-enable content/containers** — Uncomment and review against the container
+- [x] **re-enable content/containers** — Uncomment and review against the container
   model (`body (> #root) > {main, header, footer, aside}`, overflow/`.scroll-*`).
   Screenshot.
-- [ ] **re-enable content/typography-block** — Uncomment and review block typography
+- [x] **re-enable content/typography-block** — Uncomment and review block typography
   (`html hgroup h1–h6 p ul ol blockquote textarea`) against *Typography*. Screenshot.
-- [ ] **re-enable content/typography-inline** — Uncomment and review inline typography
+- [x] **re-enable content/typography-inline** — Uncomment and review inline typography
   (`a[.secondary,.contrast] abbr strong b em i cite del ins kbd mark s small sub sup u`);
   `mark`/`ins`/`del` now read the M3 state roles. Screenshot.
 
