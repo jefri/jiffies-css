@@ -26,10 +26,12 @@
 
   /* Border composition — width (from sizing) + style + color, braided into a
    * reusable shorthand. --base-border-color resolves through the M3 outline
-   * role so it tracks the active color scheme; --base-border-size is owned by
-   * sizing.css. */
+   * role (NOT outline-variant): outline clears the WCAG 1.4.11 3:1 non-text
+   * floor against the surface (~4.3:1 light / ~5.7:1 dark) where outline-variant
+   * does not (~1.6:1). Reserve outline-variant for purely decorative hairlines.
+   * --base-border-size is owned by sizing.css. */
   --base-border-style: solid;
-  --base-border-color: var(--color-outline-variant);
+  --base-border-color: var(--color-outline);
   --base-border: var(--base-border-size) var(--base-border-style)
     var(--base-border-color);
 

@@ -155,6 +155,65 @@
   }
 }
 
+/* ---- Graceful-degradation floor ------------------------------------------
+ * The engine (functions.css) leans on relative color syntax
+ * `oklch(from …)` and @property-registered toe tokens — Baseline features whose
+ * support floor is roughly Chrome 119 / Safari 16.4 / Firefox 128. That floor is
+ * DELIBERATE (see README "2023 Standards"); below it the derived palettes
+ * collapse to nothing. Rather than render a blank page, supply a small STATIC
+ * fallback for the load-bearing roles so an older engine still shows a usable
+ * (un-themed, M3-baseline-blue) page. The bridge aliases and on-pairs inherit
+ * through these via var(). */
+@supports not (color: oklch(from white l c h)) {
+  :root {
+    --color-primary: #3a5bd9;
+    --color-on-primary: #ffffff;
+    --color-primary-container: #dbe1ff;
+    --color-on-primary-container: #001551;
+    --color-secondary: #585e72;
+    --color-on-secondary: #ffffff;
+    --color-secondary-container: #dde1f9;
+    --color-on-secondary-container: #151b2c;
+    --color-error: #ba1a1a;
+    --color-on-error: #ffffff;
+    --color-error-container: #ffdad6;
+    --color-on-error-container: #410002;
+    --color-background: #fbf8ff;
+    --color-on-background: #1b1b1f;
+    --color-surface: #fbf8ff;
+    --color-on-surface: #1b1b1f;
+    --color-surface-variant: #e2e1ec;
+    --color-on-surface-variant: #45464f;
+    --color-outline: #767680;
+    --color-outline-variant: #c6c5d0;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary: #b8c4ff;
+      --color-on-primary: #002585;
+      --color-primary-container: #1c3aa9;
+      --color-on-primary-container: #dbe1ff;
+      --color-secondary: #c1c5dd;
+      --color-on-secondary: #2a3042;
+      --color-secondary-container: #404659;
+      --color-on-secondary-container: #dde1f9;
+      --color-error: #ffb4ab;
+      --color-on-error: #690005;
+      --color-error-container: #93000a;
+      --color-on-error-container: #ffdad6;
+      --color-background: #1b1b1f;
+      --color-on-background: #e4e1e9;
+      --color-surface: #1b1b1f;
+      --color-on-surface: #e4e1e9;
+      --color-surface-variant: #45464f;
+      --color-on-surface-variant: #c6c5d0;
+      --color-outline: #90909a;
+      --color-outline-variant: #45464f;
+    }
+  }
+}
+
 @media print {
   :root {
     --hyperlink-color: none;

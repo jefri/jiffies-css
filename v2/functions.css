@@ -107,21 +107,22 @@
   --_p-99: oklch(from var(--brand-color) var(--_l-99) 0.13 h);
   --_p-100: oklch(from var(--brand-color) var(--_l-100) 0.13 h);
 
-  /* Secondary — muted accent. hue h, chroma 0.045 */
-  --_s-0: oklch(from var(--brand-color) var(--_l-0) 0.045 h);
-  --_s-10: oklch(from var(--brand-color) var(--_l-10) 0.045 h);
-  --_s-20: oklch(from var(--brand-color) var(--_l-20) 0.045 h);
-  --_s-30: oklch(from var(--brand-color) var(--_l-30) 0.045 h);
-  --_s-40: oklch(from var(--brand-color) var(--_l-40) 0.045 h);
-  --_s-50: oklch(from var(--brand-color) var(--_l-50) 0.045 h);
-  --_s-60: oklch(from var(--brand-color) var(--_l-60) 0.045 h);
-  --_s-70: oklch(from var(--brand-color) var(--_l-70) 0.045 h);
-  --_s-80: oklch(from var(--brand-color) var(--_l-80) 0.045 h);
-  --_s-90: oklch(from var(--brand-color) var(--_l-90) 0.045 h);
-  --_s-95: oklch(from var(--brand-color) var(--_l-95) 0.045 h);
-  --_s-98: oklch(from var(--brand-color) var(--_l-98) 0.045 h);
-  --_s-99: oklch(from var(--brand-color) var(--_l-99) 0.045 h);
-  --_s-100: oklch(from var(--brand-color) var(--_l-100) 0.045 h);
+  /* Secondary — muted accent. hue h, chroma 0.06 (above the ~0.05 OKLCH
+   * gray floor so .secondary controls read as tinted, not gray, for any brand). */
+  --_s-0: oklch(from var(--brand-color) var(--_l-0) 0.06 h);
+  --_s-10: oklch(from var(--brand-color) var(--_l-10) 0.06 h);
+  --_s-20: oklch(from var(--brand-color) var(--_l-20) 0.06 h);
+  --_s-30: oklch(from var(--brand-color) var(--_l-30) 0.06 h);
+  --_s-40: oklch(from var(--brand-color) var(--_l-40) 0.06 h);
+  --_s-50: oklch(from var(--brand-color) var(--_l-50) 0.06 h);
+  --_s-60: oklch(from var(--brand-color) var(--_l-60) 0.06 h);
+  --_s-70: oklch(from var(--brand-color) var(--_l-70) 0.06 h);
+  --_s-80: oklch(from var(--brand-color) var(--_l-80) 0.06 h);
+  --_s-90: oklch(from var(--brand-color) var(--_l-90) 0.06 h);
+  --_s-95: oklch(from var(--brand-color) var(--_l-95) 0.06 h);
+  --_s-98: oklch(from var(--brand-color) var(--_l-98) 0.06 h);
+  --_s-99: oklch(from var(--brand-color) var(--_l-99) 0.06 h);
+  --_s-100: oklch(from var(--brand-color) var(--_l-100) 0.06 h);
 
   /* Tertiary — contrasting accent. hue h + 60, chroma 0.090 */
   --_t-0: oklch(from var(--brand-color) var(--_l-0) 0.09 calc(h + 60));
@@ -259,10 +260,13 @@
       var(--_h, h)
   );
 
-  /* Structural string/border builders (Application tier consumers read these).
-   * Renamed to the --_ pseudo-private prefix per derivation-private-prefix. */
-  --_fn-merge: var(--_fn-merge-a) ", " var(--_fn-merge-b, "");
-
-  --_fn-border: var(--_fn-border-color) var(--_fn-border-style, solid)
-    var(--_fn-border-size);
+  /* Structural border builder. Application-tier consumers set the --_-prefixed
+   * parts, then read --_fn-border as a `border:` shorthand (see
+   * content/containers.css). The argument order is the shorthand's own
+   * <width> <style> <color>, and every part self-defaults so the builder
+   * resolves to a VALID border even before a consumer sets anything — no
+   * invalid-triple seam. (--_fn-merge was removed: it had no consumer.) */
+  --_fn-border: var(--_fn-border-size, var(--base-border-size))
+    var(--_fn-border-style, solid)
+    var(--_fn-border-color, var(--color-outline));
 }

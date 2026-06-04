@@ -31,13 +31,17 @@
      ------------------------------------------------------------------------ */
   --base-font-weight: normal;
 
-  /* Major-third modular scale via pow(): h(n) = 1rem * 1.25^(7 - n). */
-  --font-size-h1: calc(1rem * pow(var(--font-scale), 6)); /* ≈ 3.815rem */
-  --font-size-h2: calc(1rem * pow(var(--font-scale), 5)); /* ≈ 3.052rem */
-  --font-size-h3: calc(1rem * pow(var(--font-scale), 4)); /* ≈ 2.441rem */
-  --font-size-h4: calc(1rem * pow(var(--font-scale), 3)); /* ≈ 1.953rem */
-  --font-size-h5: calc(1rem * pow(var(--font-scale), 2)); /* ≈ 1.563rem */
-  --font-size-h6: calc(1rem * pow(var(--font-scale), 1)); /* = 1.25rem    */
+  /* Major-third modular scale via pow(): h(n) = base * 1.25^(7 - n).
+     Anchored on the responsive --base-font-size (NOT bare 1rem) so the whole
+     hierarchy scales with the breakpoint ladder together — otherwise headings
+     stay pinned to the 16px root while body grows to 24px at 4k, inverting h6
+     below the paragraph it titles. --small-font-size shares this base. */
+  --font-size-h1: calc(var(--base-font-size) * pow(var(--font-scale), 6)); /* ≈ 3.815× */
+  --font-size-h2: calc(var(--base-font-size) * pow(var(--font-scale), 5)); /* ≈ 3.052× */
+  --font-size-h3: calc(var(--base-font-size) * pow(var(--font-scale), 4)); /* ≈ 2.441× */
+  --font-size-h4: calc(var(--base-font-size) * pow(var(--font-scale), 3)); /* ≈ 1.953× */
+  --font-size-h5: calc(var(--base-font-size) * pow(var(--font-scale), 2)); /* ≈ 1.563× */
+  --font-size-h6: calc(var(--base-font-size) * pow(var(--font-scale), 1)); /* = 1.25×  */
 
   /* Small text is the base divided by the same ratio. Mirrors theme/sizing.css
      so it resolves whether or not sizing is loaded. */

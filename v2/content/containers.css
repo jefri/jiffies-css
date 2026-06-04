@@ -41,16 +41,16 @@ body > #root {
     padding: 0 var(--spacing-block-horizontal);
 
     --border-page-end: var(--page-end-border);
-    --fn-border-color: var(--base-border-color);
-    --fn-border-size: var(--base-border-size);
+    --_fn-border-color: var(--base-border-color);
+    --_fn-border-size: var(--base-border-size);
 
     &:is(header) {
-      border-bottom: var(--fn-border);
+      border-bottom: var(--_fn-border);
       align-items: end;
     }
 
     &:is(footer) {
-      border-top: var(--fn-border);
+      border-top: var(--_fn-border);
       align-items: baseline;
     }
   }

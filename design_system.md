@@ -63,13 +63,17 @@ Heading sizes follow a **major-third modular scale**, `--font-scale: 1.25`, over
 the native CSS `pow()` engine:
 
 ```
-font-size = calc(1rem * pow(var(--font-scale), 7 - n))   /* n = 1…6 for h1…h6 */
+font-size = calc(var(--base-font-size) * pow(var(--font-scale), 7 - n))   /* n = 1…6 for h1…h6 */
 ```
 
-So `h1` = `1.25^6` ≈ 3.81rem (≈ 61px at a 16px root) and the ladder steps down by
-a constant 1.25 ratio to `h6` = `1.25^1` = 1.25rem (≈ 20px, just above body text).
-`--small-font-size` is `calc(--base-font-size / --font-scale)`. The single dial is
-`--font-scale`; changing it re-tunes the whole hierarchy.
+The scale is anchored on the responsive `--base-font-size`, **not** a bare `1rem`,
+so the whole hierarchy rides the breakpoint ladder *together*. At the `md` step
+(16px base) `h1` = `1.25^6` ≈ 3.81 × 16px ≈ 61px and the ladder steps down by a
+constant 1.25 ratio to `h6` = `1.25^1` = 1.25 × base (just above body text) at
+every step. Anchoring on `1rem` instead would pin headings to the 16px root while
+body grew to 24px at `4k`, inverting `h6` below the paragraph it titles.
+`--small-font-size` is `calc(--base-font-size / --font-scale)` and shares the same
+base. The single dial is `--font-scale`; changing it re-tunes the whole hierarchy.
 
 Five font roles, each an Intent override that falls back to a base face:
 `--body-`, `--header-`, `--label-`, `--nav-`, `--monospace-font-family`, resolving
@@ -183,10 +187,15 @@ Fidelity, Vibrant, Expressive, Neutral, and Monochrome variants with different
 hue/chroma logic. (2) Chroma is held constant per ramp and left to the browser's
 gamut mapping at the light/dark extremes, where M3 deliberately tapers it. (3)
 Oklab hue ≠ CAM16 hue, so expect small hue drift in the blue–purple band — the
-exact region HCT was built to fix. (4) Contrast is *approximate*: the toe lands
-tones near their CIE L\* targets, but pairings are not formally verified to
-3:1 / 4.5:1 the way M3's contrast module enforces — CSS alone cannot run that
-verification pass.
+exact region HCT was built to fix. (4) Contrast is *approximate by construction*:
+the toe lands tones near their CIE L\* targets, but the tones are not *corrected*
+to hit the floor the way M3's contrast module does. CSS alone cannot run a
+verification pass — but the test harness can, and does: `test/computed/contrast.test.mjs`
+resolves every role / `on-` pair (and every load-bearing border vs. its surface)
+to sRGB in Chromium and asserts the WCAG ratio (text ≥ 4.5:1, non-text ≥ 3:1)
+across a spread of brand hues, so a pairing that drifts below the floor fails CI
+rather than shipping. The system targets perceptual (OKLCH/APCA-flavored) tone
+distance; the CI test is what makes a WCAG claim defensible for a given brand hue.
 
 *Grounded in:* [Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
 for the generative model — one source color → five key colors → tonal palettes →
@@ -232,10 +241,15 @@ Elliot Dahl's
 
 ### Motion & Iconography
 
-**Motion** is a single token triple: `--transition-time` (0.2s),
-`--transition-function` (`ease-in-out`), and the composed `--transition`.
-`prefers-reduced-motion: reduce` collapses `--transition-time` to `0s`, reinforced
-by the reset layer's `reduce-motion` rules — belt and suspenders.
+**Motion** ships a small named vocabulary: three durations —
+`--motion-duration-snap` (115ms), `--motion-duration-shake` (165ms),
+`--motion-duration-draw` (250ms) — and three curves — `--motion-curve-smooth`
+(the Material standard `cubic-bezier(.4, 0, .2, 1)`), `--motion-curve-sticky`,
+and `--motion-curve-draw` (emphasized decelerate). The composed `--transition`
+(with `--transition-time` / `--transition-function`) is kept as a back-compat
+alias resolving to `snap` + `smooth`. `prefers-reduced-motion: reduce` collapses
+the durations to `0s`, reinforced by the reset layer's `reduce-motion` rules —
+belt and suspenders.
 
 **Iconography** ships as inline data-URI SVGs in the theme so no asset fetch is
 needed: `--icon-chevron` (a stroked chevron) backs the accordion/nav disclosure
@@ -272,11 +286,20 @@ author intent to rendered property:
 Overriding an **Intent** token is coarse control: it moves everything downstream.
 Overriding an **Application** final is fine control: one property on one element.
 The **Derivation** tier sits between them on the universal selector `*`, so it
-re-derives per element and stays lazy — a derivation costs nothing until something
-reads it. Invariants that must always hold (contrast floors, the relationship
-between a base color and its hover/active states) live here rather than in Intent,
-so a consumer tuning the public dials cannot override them away. See
-[PHILOSOPHY.md](PHILOSOPHY.md) for the full rationale.
+re-derives per element. It stays lazy for *paint* — the `oklch()`/`color-mix()`
+math runs only when a property reads a token — though the `@property`-registered
+toe tokens (`--_l-*`) do carry a computed numeric value on every element. The
+per-element relationships that must re-derive at every local override (a base
+color and its hover/active states, the toe that maps tone to lightness) live here
+rather than in Intent, so tuning a public dial cannot break them.
+
+The semantic **role / `on-` pairs** (`--color-primary` / `--color-on-primary`)
+are role *defaults* on `:root`, deliberately reachable for fine control — a
+consumer may retune one. Their contrast guarantee therefore does **not** rest on
+tier placement; it rests on M3's canonical tone-distance pairing **and** on the
+CI contrast test (`test/computed/contrast.test.mjs`), which is what actually
+enforces the floor. A consumer who overrides a role owns re-verification: run the
+test against their brand hue. See [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 
 *Grounded in:* the tiered design-token pattern (global/primitive →
 semantic/alias → component) — Nathan Curtis,
