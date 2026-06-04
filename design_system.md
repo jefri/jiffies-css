@@ -20,14 +20,15 @@ prior art it rests on.
 
 A **6-step, min-width (mobile-first) ladder**, `xs`–`4k`:
 
-| Step | `min-width` | `--base-viewport-width` | `--base-font-size` | `--base-line-height` |
-|---|---|---|---|---|
-| `xs` | 0 (default) | 100% | 12px | 16px |
-| `sm` | 425px | 425px | 14px | 18px |
-| `md` | 768px | 768px | 16px | 20px |
-| `lg` | 1024px | 920px | 18px | 24px |
-| `xl` | 1440px | 1130px | 20px | 28px |
-| `4k` | 2560px | 2170px | 24px | 32px |
+| Step | `min-width` | `--base-viewport-width` | `--base-font-size` | `--base-line-height` | Text Columns | Typical Device |
+|---|---|---|---|---|---|---|
+| `xs` | 0 (default) | 100% | 12px | 16px | 1 | Phones |
+| `sm` | 425px | 425px | 14px | 18px | 1 | Phablet |
+| `md` | 768px | 768px | 16px | 20px | 1 | Tablet |
+| `lg` | 1024px | 920px | 18px | 24px | 2 | Laptop |
+| `xl` | 1440px | 1130px | 20px | 28px | 2 | Desktop |
+| `4k` | 2560px | 2170px | 24px | 32px | 4 | UltraWide |
+
 
 Each step resets the content-clamp width and the per-breakpoint type size; the
 `md`+ steps also set the `main`/`aside` split (`--base-main-width`,
@@ -38,13 +39,23 @@ smaller screens.
 The responsive table's target column counts drive `--content-columns`
 (1·1·1·2·2·4) across the steps.
 
+**Device profiles.** Each step targets a *class* of device, not a specific
+model: `xs` is the baseline for small phones in portrait (≈320–424px); `sm`
+covers large phones and phablets (and small phones in landscape); `md` is
+tablets in portrait (the classic 768px); `lg` is tablets in landscape and small
+laptops; `xl` is laptops and standard desktops; `4k` is large, ultra-wide, and
+high-resolution displays. The names are tier labels, not hardware widths — `4k`
+marks the largest tier (the 2560px WQHD width and up), not a literal 3840px
+panel.
+
 *Grounded in:* the mobile-first, min-width approach — Ethan Marcotte's
 [*Responsive Web Design*](https://alistapart.com/article/responsive-web-design/)
 (A List Apart, 2010), which introduced media-query-based responsive layout, and
 Luke Wroblewski's [*Mobile First*](https://mobile-first.abookapart.com/)
 (A Book Apart, 2011); see MDN's
 [media-query guide](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Media_queries)
-for the min-width technique.
+for the min-width technique. The 768px-tablet / 1024px-desktop split follows the
+de-facto convention shared by the major CSS frameworks (Bootstrap, Tailwind).
 
 ### Typography
 
@@ -76,31 +87,69 @@ function (Baseline 2023), which lets the whole scale be one `calc()`.
 ### Color
 
 Colors are stored as **parts, not values** — luminance, chroma, hue — and
-assembled at the use site with `oklch()`. The theming contract targets **one brand
-hue per page**: `--brand-hue` drives `--brand-primary-color: oklch(L C H)`, and the
-complementary, accent, and state colors derive from that single hue. Fine control
-is still available by overriding an Application final directly.
+assembled at the use site with `oklch()`. The theming contract targets **one
+brand hue per page**: `--brand-hue` drives the whole palette, and the
+complementary, accent, and state colors derive from that single hue. Fine
+control stays available by overriding an Application final directly, or by
+setting a local `--luminance`/`--chroma` and reading `--_fn-color`, the
+parts-based `oklch()` builder.
 
-- **Dark mode flips parts, not colors.** `prefers-color-scheme: dark` lowers
-  `--base-luminance` (95% → 30%) and `--brand-luminance` (95% → 58%); the whole
-  palette recomputes from the same hue/chroma.
-- **State hues** are single-hue dials: `--blue-hue` (info), `--green-hue`
-  (success/`ins`), `--amber-hue` (warning/`mark`), `--red-hue` (error/`del`).
-- **Interactive states** derive in the Derivation tier  via `color-mix`:
-  `--_color-hover`/`--_color-focus` mix toward white, `--_color-active` toward
-  black. `--_fn-color` is the parts-based entry point a component reads to build
-  its `oklch()` from local `--luminance`/`--chroma`/`--color-hue`.
+**The 12-step scale.** A single hue expands into a **12-step semantic ladder**,
+adopted from [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale).
+Each step is one `(luminance, chroma)` point fed through the `--_fn-color`
+builder, so the entire ladder is *computed* from the hue rather than hand-picked.
+The steps carry fixed roles:
 
-*Grounded in:* [OKLCH in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
+| Step | Role | Read by |
+|---|---|---|
+| `--_brand-1` | App background | page / app base (`--page-background-color`) |
+| `--_brand-2` | Subtle background | sunken wells, even table rows |
+| `--_brand-3` | Component background | card/panel surface, input field (`--card-background-color`) |
+| `--_brand-4` | Hovered component background | `:hover` surface |
+| `--_brand-5` | Active / selected component background | `:active`, `[aria-current]`, selected row |
+| `--_brand-6` | Subtle border | dividers, inner card borders (`--card-inner-border`) |
+| `--_brand-7` | Border & focus ring | input border, `:focus-visible` ring (`--_fn-border`) |
+| `--_brand-8` | Hovered border | `:hover` border |
+| `--_brand-9` | Solid (pure brand) | filled button, brand page-end (`--brand-primary-color`) |
+| `--_brand-10` | Hovered solid | filled button `:hover` |
+| `--_brand-11` | Low-contrast text | muted text, placeholders |
+| `--_brand-12` | High-contrast text | headings, emphasized body |
+
+**Step 9 is the pure hue** — the one step mixed with the least black or white,
+the most saturated point, and the brand color proper (`--brand-primary-color`).
+It is the fill for solid controls and brand page-ends.
+
+**Interactive states are steps, not mixes.** A component surface walks
+`3 → 4 → 5` (rest → hover → active); a solid control walks `9 → 10`
+(rest → hover); a border walks `6 → 7 → 8`; the focus ring is step 7. State no
+longer derives by mixing toward white or black — it is a defined position on the
+ladder, so the contrast between adjacent states is consistent across every hue.
+
+**Dark mode flips the ladder, not the colors.** `prefers-color-scheme: dark`
+lowers `--base-luminance` (95% → 30%) and `--brand-luminance` (95% → 58%); the
+same 12 roles recompute from the same hue/chroma at the darker luminances. This
+mirrors Radix's paired light/dark scales: identical roles, re-derived per theme.
+
+**State hues** are single-hue dials, each expanding into its own 12-step ladder:
+`--blue-hue` (info), `--green-hue` (success/`ins`), `--amber-hue` (warning/`mark`),
+`--red-hue` (error/`del`).
+
+**Step-9 text pairing.** Most step-9 fills take white foreground text; the warm
+exceptions take dark text — in Radix these are Sky, Mint, Lime, Yellow, and
+Amber — so the warning/`mark` hue (`--amber-hue`) pairs its step-9 fill with
+dark text, not white.
+
+*Grounded in:* [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
+for the 12-step semantic scale — the step→role mapping, step 9 as the pure
+color, and the paired light/dark scales; [OKLCH in CSS](https://evilmartians.com/chronicles/oklch-in-css-why-quit-rgb-hsl)
 (Evil Martians) and Lea Verou's
 [LCH colors in CSS](https://lea.verou.me/blog/2020/04/lch-colors-in-css-what-why-and-how/)
 for the parts-based, perceptually uniform model — because OKLCH separates
-lightness from hue and chroma, dropping lightness alone yields a dark theme;
-[Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
-and [Radix Colors](https://www.radix-ui.com/colors/docs/palette-composition/understanding-the-scale)
+lightness from hue and chroma, the same hue/chroma ramp yields both the light and
+dark ladders; [Material 3 dynamic color](https://m3.material.io/styles/color/system/how-the-system-works)
 for deriving a full scale from a single hue; and
 [`color-mix()`](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix)
-for the toward-white/black state derivations.
+for interpolating between adjacent steps.
 
 ### Spacing & Sizing
 
@@ -165,7 +214,7 @@ author intent to rendered property:
 | Tier | Lives on | Answers | Example |
 |---|---|---|---|
 | **Intent** | `:root` (public API) | "how will this be used?" | `--brand-hue`, `--base-size`, `--font-scale` |
-| **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_color-hover` |
+| **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_brand-9` |
 | **Application** | the element's own rule | "what does this change?" | `--color-header`, `--font-size-base` |
 
 Overriding an **Intent** token is coarse control: it moves everything downstream.
@@ -192,7 +241,7 @@ mid-name underscores.
   `--base-font-size`, `--color-header`, `--margin-card-vertical`.
 - **Derivation** intermediates carry a leading **`--_`** — Lea Verou's
   pseudo-private prefix — so a reader knows the value is part of the engine, not a
-  dial to override: `--_fn-color`, `--_color-hover`, `--_fn-border`.
+  dial to override: `--_fn-color`, `--_brand-9`, `--_fn-border`.
 
 **Decision D1 — Derivation prefix = `--_`.** The leading underscore is a naming
 convention only (CSS enforces no privacy); it signals "internal, do not override."
@@ -219,7 +268,7 @@ This section is the **single authority for the specific `@layer` order**:
 | `reset` | Browser normalize (vendored sanitize.css, wrapped in `:where()` for zero specificity) |
 | `layout` | Page-level structure (container, page-end) |
 | `content` | Semantic element styles (typography, tables, links) |
-| `component` | DOM + ARIA components (§4) |
+| `component` | DOM + ARIA components (see Components) |
 | `utility` | Class-based helpers (`.flex`, `.grid`) |
 | `user` | Untouched layer reserved for consumer overrides |
 | `theme` | `:root` Intent tokens — declared **last** |
@@ -286,9 +335,10 @@ an ARIA contract, never a class. Some necessary edge-classes add subtle addition
 - **DOM shape:** `button, a[role=button], input[type=button|submit|reset]`
 - **ARIA:** `[role=button]` promotes a link to a button; `[aria-disabled]`, `[aria-busy]` allow for disabled states and loading spinners in buttons.
 - **Tokens:** `--_fn-color` (built from local `--color`/`--luminance`/`--chroma`),
-  `--_color-hover`/`--_color-focus`/`--_color-active`, `--label-font-family`,
-  `--font-size-base`, `--border-radius-button`, `--size-small`/`--size-base`
-  (padding)
+  the solid steps `--_brand-9`/`--_brand-10` (fill + hover) and `--_brand-7`
+  (focus ring); `.secondary`/`.outline` read the component steps `--_brand-3`–
+  `--_brand-5`. Plus `--label-font-family`, `--font-size-base`,
+  `--border-radius-button`, `--size-small`/`--size-base` (padding)
 - **States:** `:hover`, `:focus-visible`, `:active`, `[disabled]`/`[aria-disabled]`,
   `[aria-busy]`
 - **Edge-classes:** `.secondary`, `.contrast`, `.outline`
@@ -355,8 +405,8 @@ A tablist whose selected state is driven entirely accessibly.
   (commonly inside a `section`)
 - **ARIA:** `[role=tab]`, `[role=tabpanel]`, `[aria-selected]`, `[aria-controls]`,
   `[tabpanel][hidden]`
-- **Tokens:** `--color-accent` (active-tab indicator), `--_color-hover`,
-  `--label-font-family`, `--_fn-border` (tablist baseline)
+- **Tokens:** `--color-accent` (active-tab indicator), `--_brand-4` (hover),
+  `--label-font-family`, `--_fn-border` (tablist baseline, step 7)
 - **States:** `[aria-selected=true]`, `:hover`, `:focus-visible`
 - **Edge-classes:** none
 
@@ -420,15 +470,17 @@ page structures.
 A surface with optional header/footer rails around a main body. `article` is the
 elevated card; `section` is the flat panel.
 
-- **DOM shape:** `:is(article, section) > :is(header, main, footer)`
+- **DOM shape:** `:is(article, section) > :is(header, main, footer)` — a `header`
+  or `footer` rail may carry a hero `figure` (see Hero)
 - **ARIA:** none beyond the native sectioning roles
 - **Tokens:** `--card-background-color`, `--border-radius-card` (`--base-size`),
   `--margin-card-vertical` (`--size-large`), `--card-inner-border`,
   `--spacing-block-vertical`/`--spacing-block-horizontal` (rail padding),
   `--content-columns` (multi-column `main`)
 - **States:** `& > header`/`& > footer` inner borders; `& > main:last-child`
-  bottom padding
-- **Edge-classes:** none (`.fluid` is a layout utility, see §5.4)
+  bottom padding; a hero `figure` in a rail bleeds past the rail padding and clips
+  to `--border-radius-card`
+- **Edge-classes:** none (`.fluid` is a layout utility, see Page layout & page-ends)
 
 ### Navigation
 
@@ -439,7 +491,7 @@ elevated card; `section` is the flat panel.
 - **ARIA:** `[aria-current]` marks the active link
 - **Tokens:** `--header-nav-background-color`/`--header-nav-color`,
   `--nav-item-spacing-vertical`/`--nav-item-spacing-horizontal`, `--nav-font-family`,
-  `--_color-hover`/`--color-accent`, `--toc-left-offset`, `--transition`
+  `--_brand-4`/`--color-accent`, `--toc-left-offset`, `--transition`
 - **States:** `:is([aria-current], :hover, :focus)` (underline);
   `li:has(a:hover)` (background); aside TOC hover-indent
 - **Edge-classes:** none
@@ -447,8 +499,8 @@ elevated card; `section` is the flat panel.
 ### Breadcrumb
 
 A trail rendered from a nav list with a separator glyph. It is **classless**: the
-`Breadcrumb` ARIA label selects it, not a class, so it stays within the §4 closed
-edge-class list.
+`Breadcrumb` ARIA label selects it, not a class, so it stays within the Components
+closed edge-class list.
 
 - **DOM shape:** `nav[aria-label="Breadcrumb"] > ol > li`
 - **ARIA:** `nav[aria-label="Breadcrumb"]`, `[aria-current=page]` on the last crumb
@@ -470,6 +522,31 @@ optional `aside` by `order`. It belongs to the `layout` layer.
   `-aside-order`/`-footer-order`, `--page-end-border`,
   `--background-color-page-end-brand-primary`
 - **States:** `:is(header, footer):has(> nav)` (brand page-end);
+  `:is(header, footer):has(> figure)` (hero page-end, see Hero);
   `:has(> aside)` (row-wrap reflow); responsive `order` swap at `md`
 - **Edge-classes:** none — `.fluid` (full-bleed opt-out of the content clamp) is a
   layout utility, not a component variant
+
+### Hero
+
+A banner image with an overlaid title. The hero is a `figure` holding an `img`
+and a heading, placed inside a `header` or `footer` rail. It is **classless**:
+the DOM shape selects it, and **its parent decides its scale** — inside a card
+(`article`/`section`) it bleeds to the card edge and clips to
+`--border-radius-card`; inside the page spine (`body > #root`) it is a full-bleed
+page banner.
+
+- **DOM shape:** `:is(header, footer) > figure > img` paired with a heading
+  (`figure > :is(h1, h2, h3, h4, h5, h6)`); card vs. page is read from the
+  `header`/`footer`'s parent — `:is(article, section)` (card) vs. the layout root
+  (page)
+- **ARIA:** structural only; the `img[alt]` carries the accessible name and the
+  heading carries the visible title
+- **Tokens:** `--border-radius-card` (card-hero corner clip), `--base-viewport-width`
+  (page hero may opt out of the clamp via `.fluid`), `--header-font-family`,
+  `--_brand-12`/`--_brand-1` (title contrast over the image)
+- **States:** `:is(article, section) > :is(header, footer) > figure` (card-scoped,
+  clipped); `(body > #root) > :is(header, footer) > figure` (page-scoped,
+  full-bleed); heading positioned over the image
+- **Edge-classes:** none — a full-bleed page hero reuses the `.fluid` utility (see
+  Page layout & page-ends)

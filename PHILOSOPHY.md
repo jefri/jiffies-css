@@ -1,8 +1,14 @@
 # Jiffies CSS — Philosophy
 
-Jiffies CSS is a classless reset for semantic HTML. Write semantic HTML with
-consistent, appropriate hierarchy and get full-page app & components for free.
-Set a few focused base variables to get your full branding.
+Jiffies CSS is a **Post-Modern CSS Full-Page Reset**, one global stylesheet that
+normalizes and styles an entire page from a single place. It provides beautiful semantic
+defaults, components built from element relationships, responsive layout, and
+theming. Where a classic reset only *neutralizes* the browser to a blank slate,
+Jiffies keeps the platform's semantics and builds the finished page on top of
+them, using the latest native CSS features. The *implementation* is purely 
+semantic: write semantic HTML with consistent, appropriate hierarchy and get a
+full-page app and its components in return. Set a few focused base variables to get
+your full branding.
 
 Customization happens in focused base variables that control large swaths of
 the app. Resetting a single size variable adjusts the sizing basis for the
@@ -129,7 +135,8 @@ Two organizing rules follow from this map:
 ## Scope and Boundaries
 
 Jiffies CSS targets **semantic documents**: articles, documentation, marketing
-pages, portfolios, MVPs. It is a reset, and the basis for a component framework.
+pages, portfolios, MVPs. It is a full-page reset, and the basis for a component
+framework.
 
 The standard critique of classless CSS is that the parent/child DOM contract is
 **brittle**: hand-authored markup drifts from the structure the stylesheet

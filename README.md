@@ -14,7 +14,7 @@ Post-Modern CSS Full-Page Reset
 - User extension with targeted layers
 - Opinionated tables, whitespace, & nav
 - Responsive typography & container layouts; flexbox & css grid native utilities
-- Pure-CSS Accordions, Tabs
+- Pure-CSS advanced components, including Accordions, Tabs, Cards, Tables, Forms, and more.
 - Accessible & Responsive
 
 ## Inspiration
@@ -55,7 +55,7 @@ Post-Modern CSS Full-Page Reset
 
 - Sanitize.css
 - Reduced Motion
-- Content
+- Content `p`, `figure`
 - Containers `body (> #root) > { main, header, footer, aside }(.fluid)`
 - Overflow `scrolling` `figure(.scroll-{x,y})`
 - Block Typography `html` `hgroup` `h1` `h2` `h3` `h4` `h5` `h6` `p` `ul` `ol` `blockquote` `textarea`
@@ -70,6 +70,10 @@ Post-Modern CSS Full-Page Reset
 ## Components
 
 - Card & Panel `{article, section} > {main, header, footer}`
+- Alerts `aside[data-variant+role]`, `[role=alert]`, `[role=status]`
+  - `[role=alert]` + `[data-variant=warning|error]`
+  - `[role=status]` + `[data-variant=info|success|neutral]`
+- Chips `small[data-variant=warning|error|info|success|neutral]`
 - Accordion `details { @nest summary }`
 - Tab `details \[role=tablist] summary\[role=tab]`
 - Modal `dialog`
@@ -86,27 +90,6 @@ Post-Modern CSS Full-Page Reset
 - Flex `.flex` `.row` `.inline` `.flex-{0-4}` `.justify-{around, between, center}` `.align-{baseline, center, stretch, end}`
 - Grid
 
-## Accessibility
-
-## Responsive
-
-| Size | Breakpoint | Viewport | Columns | base |
-| ---- | ---------- | -------- | ------- | ---- |
-| xs   | 0          |          | 1       | 12px |
-| sm   | 425px      | 425px    | 1       | 14px |
-| md   | 768px      | 768px    | 1       | 16px |
-| lg   | 1024px     | 920px    | 2       | 18px |
-| xl   | 1440px     | 1130px   | 2       | 20px |
-| 4k   | 2560px     | 2170px   | 4       | 24px |
-
-## Selectors
-
-### component
-
-### element
-
-### state
-
 ## Theming
 
 Override variables.
@@ -118,9 +101,6 @@ Override variables.
   - Iconography
 - Motion
 
-<!-- --{color, sizing, box}-{} -->
-<!-- --{component: accordian, card, form, link}[-{state: inactive, hover, disabled, focused, validation, error}][-{variant: }] -->
-
 ### Sizing
 
 `--base-size` (spacing unit, 8px default; `.compact` = 4px, `.loose` = 16px)
@@ -128,7 +108,7 @@ Override variables.
 
 ### Typography
 
-- `--font-scale: 1.25` (major third) — heading sizes derive from `calc(1rem * pow(var(--font-scale), calc(7 - n)))` where n = 1–6
+- `--font-scale: 1.25` (major third)
 - `--base-font-size` — responsive base; see the breakpoint table above
 - `--base-font-weight` — body weight (normal)
 - `--body-font-family`, `--header-font-family`, `--label-font-family`, `--nav-font-family`, `--monospace-font-family`
