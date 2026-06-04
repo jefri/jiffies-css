@@ -1,0 +1,99 @@
+/* Accordion (@layer component) — pure-CSS disclosure on native <details>.
+ * See design_system.md › Accordion.
+ *
+ * DOM:    details > summary (+ flow content sibling)
+ * ARIA:   native details[open]; summary exposes aria-expanded
+ * Tokens: --icon-chevron, --transition, --spacing-block-*, --_fn-border,
+ *         --border-radius-item, --color-{surface-variant,on-surface-variant,
+ *         on-surface,primary}
+ * States: [open], summary:hover, summary:focus-visible
+ * Edge:   none
+ */
+details {
+  /* Application — finals consumed by this block + its summary header. */
+  --_accordion-radius: var(--border-radius-item);
+  --_accordion-divider: var(--_fn-border);
+  --_accordion-pad-v: var(--spacing-block-vertical);
+  --_accordion-pad-h: var(--spacing-block-horizontal);
+  --_accordion-marker-size: 1em;
+
+  /* The group reads as one bordered, rounded surface; adjacent items share an
+   * interior divider so the run collapses into a single segmented control. */
+  border: var(--_accordion-divider);
+  border-radius: var(--_accordion-radius);
+
+  & + details {
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &:not(:last-of-type) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  & > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--_accordion-pad-h);
+    padding: var(--_accordion-pad-v) var(--_accordion-pad-h);
+    color: var(--color-on-surface);
+    font-family: var(--label-font-family);
+    cursor: pointer;
+    list-style: none; /* drop the native disclosure triangle (Firefox/standard) */
+    border-radius: inherit;
+    transition: background-color var(--transition), color var(--transition);
+
+    /* WebKit/Blink ship a separate marker pseudo-element. */
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    /* --icon-chevron is a currentColor-stroked SVG; per theme/icons.css it must
+     * be painted as a mask so the glyph tracks the header foreground (and dark
+     * mode) instead of being baked at authoring time. Rotates on [open]. */
+    &::after {
+      content: "";
+      flex: none;
+      inline-size: var(--_accordion-marker-size);
+      block-size: var(--_accordion-marker-size);
+      background-color: var(--color-on-surface-variant);
+      mask: var(--icon-chevron) center / contain no-repeat;
+      -webkit-mask: var(--icon-chevron) center / contain no-repeat;
+      transition: transform var(--transition);
+    }
+
+    &:hover {
+      background-color: var(--color-surface-variant);
+      color: var(--color-on-surface-variant);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  /* Flow sibling: the disclosed panel. Aligns to the header inset. */
+  & > summary ~ * {
+    padding: var(--_accordion-pad-v) var(--_accordion-pad-h);
+    padding-top: 0;
+    margin: 0;
+  }
+
+  &[open] {
+    & > summary {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+
+      /* Chevron points right at rest; a quarter-turn down signals expansion. */
+      &::after {
+        transform: rotate(90deg);
+      }
+    }
+  }
+}

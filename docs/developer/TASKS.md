@@ -154,41 +154,41 @@ Order = dependency / demo-prominence. `card`/`navigation`/`breadcrumb` already e
 and are *re-enabled + reviewed*; the rest are *parity ports* (commented stubs with no
 file yet) that get created and enabled.
 
-- [ ] **re-enable component-card** — Uncomment and review `card.css` against
+- [x] **re-enable component-card** — Uncomment and review `card.css` against
   *Card & Panel* (`:is(article, section) > :is(header, main, footer)`, M3 surface
   roles, inner borders, rail padding). Screenshot. Ref: Card & Panel.
-- [ ] **component-buttons** — Reference port that proves the philosophy.
+- [x] **component-buttons** — Reference port that proves the philosophy.
   `button, a[role=button], input[type=button/submit/reset]` + `.secondary .contrast
   .outline`. First consumer of the `--color-primary`/`--color-on-primary` role pair
   (`.secondary`→container pair, `.outline`→`--color-outline`). Screenshot. Ref: Buttons.
-- [ ] **component-forms** — `label input select textarea fieldset legend` +
+- [x] **component-forms** — `label input select textarea fieldset legend` +
   `[aria-invalid] [disabled] [readonly]`. Largest; grid via `--grid-column-count`
   on fieldset. Screenshot. Ref: Forms.
-- [ ] **component-form-switch** — `input[type=checkbox/radio][role=switch]`. Screenshot. Ref: Form switch.
-- [ ] **component-tables** — `table thead tbody tfoot tr th td`; even/odd,
+- [x] **component-form-switch** — `input[type=checkbox/radio][role=switch]`. Screenshot. Ref: Form switch.
+- [x] **component-tables** — `table thead tbody tfoot tr th td`; even/odd,
   Trebuchet family. Screenshot. Ref: Tables.
-- [ ] **component-accordion** — `details > summary`; chevron from `theme/icons.css`.
+- [x] **component-accordion** — `details > summary`; chevron from `theme/icons.css`.
   Screenshot. Ref: Accordion.
-- [ ] **component-tabs** — `section[role=tablist] [role=tab] [role=tabpanel]`;
+- [x] **component-tabs** — `section[role=tablist] [role=tab] [role=tabpanel]`;
   uses existing `accessibility.js` for `aria-selected`. Screenshot. Ref: Tabs.
-- [ ] **component-modal** — `dialog`; reset has base, needs component styling.
+- [x] **component-modal** — `dialog`; reset has base, needs component styling.
   Screenshot. Ref: Modal.
-- [ ] **component-property-sheet** — `dl dt dd`. Screenshot. Ref: Property sheet.
-- [ ] **component-progress** — `progress`; smallest. Screenshot. Ref: Progress.
-- [ ] **component-form-group** — `fieldset[role=group]`; joined-control row.
+- [x] **component-property-sheet** — `dl dt dd`. Screenshot. Ref: Property sheet.
+- [x] **component-progress** — `progress`; smallest. Screenshot. Ref: Progress.
+- [x] **component-form-group** — `fieldset[role=group]`; joined-control row.
   Screenshot. Ref: Form group.
-- [ ] **re-enable component-navigation** — Uncomment and review `navigation.css`
+- [x] **re-enable component-navigation** — Uncomment and review `navigation.css`
   against *Navigation*. Drop the old `--brand-primary-color`/`--color-primary-hover`
   for the `--color-*` role tokens (this is the caller flagged in
   **derivation-private-prefix**). Screenshot. Ref: Navigation.
-- [ ] **breadcrumb-classless** — Re-enable `breadcrumb.css` and reselect by the
+- [x] **breadcrumb-classless** — Re-enable `breadcrumb.css` and reselect by the
   `Breadcrumb` ARIA label rather than the `ol.breadcrumbs` class, keeping the
   pattern classless. Screenshot. Ref: Breadcrumb.
-- [ ] **hero-pattern** — New: a `figure > img` + heading inside a `header`/`footer`
+- [x] **hero-pattern** — New: a `figure > img` + heading inside a `header`/`footer`
   rail. Card scope bleeds the figure past the rail padding and clips it to
   `--border-radius-card`; page scope (`body > #root > …`) is a full-bleed banner
   reusing `.fluid`. No CSS ships today. Screenshot. Ref: Hero.
-- [ ] **component-color-swatches** — Tonal-palette/role swatches block in
+- [x] **component-color-swatches** — Tonal-palette/role swatches block in
   `index.html`; depends on the `--brand-color` palette plumbing from
   **m3-tonal-palettes**. Screenshot. Ref: Color.
 

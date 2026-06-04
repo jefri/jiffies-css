@@ -1,0 +1,89 @@
+/* Modal (@layer component) — filled in Phase 4. See design_system.md "### Modal".
+ *
+ * DOM shape: dialog (often dialog > article, reusing the card surface).
+ * ARIA: native dialog[open], [aria-modal], [aria-labelledby].
+ * Edge-classes: none.
+ *
+ * The reset (sanitize) gives the raw UA dialog. This file styles the surface,
+ * centers it, clamps its width to the content measure, paints the ::backdrop
+ * scrim, and animates the [open] entrance. The inner `article` reuses the card
+ * surface (owned by card.css) — it is NOT restyled here.
+ */
+
+dialog {
+  /* Derivation (--_) — modal-local tier. --modal-backdrop-color is a translucent
+   * scrim derived from the M3 inverse-surface role (the canonical "dim the page"
+   * tone), so it remaps automatically in dark mode. */
+  --_modal-backdrop-color: color-mix(in oklab, var(--color-inverse-surface) 60%, transparent);
+  --_modal-surface: var(--card-background-color);
+  --_modal-color: var(--color-on-surface);
+  --_modal-max-width: min(var(--base-viewport-width), calc(100vw - 2 * var(--spacing-block-horizontal)));
+
+  /* Application — surface + shape. Override the reset's white bg / solid border /
+   * fit-content sizing. */
+  margin: auto;
+  max-width: var(--_modal-max-width);
+  max-height: calc(100vh - 2 * var(--spacing-block-vertical));
+  padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  background-color: var(--_modal-surface);
+  color: var(--_modal-color);
+  border: 0;
+  border-radius: var(--border-radius-container);
+  overflow: auto;
+
+  /* When the dialog wraps an `article` (the card surface owns the chrome), let
+   * that surface carry the padding/border-radius and zero the dialog's own so
+   * the two do not double up. */
+  &:has(> article:only-child) {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  /* The page-dimming scrim. */
+  &::backdrop {
+    background-color: var(--_modal-backdrop-color);
+  }
+
+  /* Entrance — fade + lift the surface and fade the scrim in on [open].
+   * Driven by --transition so it honours the density/motion vocabulary. */
+  &[open] {
+    animation: modal-open var(--transition);
+
+    &::backdrop {
+      animation: modal-backdrop-open var(--transition);
+    }
+  }
+}
+
+@keyframes modal-open {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes modal-backdrop-open {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Reduced motion — drop the entrance animation entirely. */
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] {
+    animation: none;
+
+    &::backdrop {
+      animation: none;
+    }
+  }
+}

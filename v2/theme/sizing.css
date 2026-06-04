@@ -45,6 +45,11 @@
   /* Typography spacing — rhythm around heading groups and inline nav items. */
   --spacing-typography-vertical: var(--size-base); /* 8px */
   --spacing-typography-horizontal: var(--size-base); /* 8px */
+
+  /* Navigation item spacing — read by component/navigation.css and
+   * component/breadcrumb.css for nav-link padding and crumb separators. */
+  --nav-item-spacing-vertical: var(--size-small); /* 4px */
+  --nav-item-spacing-horizontal: var(--size-medium); /* 16px */
 }
 
 /* ---------------------------------------------------------------------------

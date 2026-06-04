@@ -1,50 +1,22 @@
-:root {
-  --header-nav-background-color: var(--color);
-  --header-nav-color: color-mix(in srgb, black 70%, var(--color));
-  --header-border-color: var(--color-accent);
-  --header-border-width: calc(var(--border-width) * 2);
-  --header-border-style: var(--border-style);
-  --nav-item-spacing-vertical: var(--size-small);
-  --nav-item-spacing-horizontal: var(--size-base);
-  --color: var(--brand-primary-color);
-  --color-accent: oklch(calc(var(--brand-luminance) * 0.6) var(--brand-chroma) var(--brand-hue));
-  --color-primary-hover: color-mix(in oklab, var(--brand-primary-color) 80%, white);
-  --color-text: var(--base-text-color);
-  --border-width: var(--base-border-size);
-  --border-style: solid;
-  --font-size-larger: calc(var(--base-font-size) * var(--font-scale));
-}
-
-nav {
-  & a {
-    --font-family-hyperlink: var(--nav-font-family);
-    --text-decoration-hyperlink: none;
-    &:is([aria-current], :hover, :focus) {
-      --text-decoration-hyperlink: underline;
-    }
-  }
-}
-
-aside > nav {
-  position: sticky;
-  top: calc(var(--spacing-block-vertical));
-  max-height: 100vh;
-  overflow-y: scroll;
-  padding-bottom: var(--nav-item-spacing-vertical);
-
-  & ol li a {
-    display: block;
-    padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
-  }
-
-  & li:hover > ol > li {
-    transition: padding var(--transition);
-    padding-left: var(--toc-left-offset);
-  }
-}
+/* component/navigation.css (@layer component) — design_system.md › "Navigation".
+ *
+ * `nav > ol` in two modes selected by ANCESTOR, not by class:
+ *   1. :is(header, footer) > nav > ol  — a horizontal page-end bar list.
+ *   2. aside > nav > ol                — a vertical, sticky table of contents.
+ *
+ * This file styles the nav LIST and its LINKS only. The brand page-end BAR
+ * (the header/footer band background + label color) is owned by layout.css
+ * (Page layout & page-ends) and is NOT restyled here.
+ *
+ * Colors come straight from the M3 --color-* role tokens (--color-primary,
+ * --color-on-surface, --color-surface-variant). The old v2-rewrite bridge
+ * (--brand-primary-color / --color-primary-hover, etc.) is dropped — the
+ * derivation-private-prefix caller flagged it, and the roles are read directly.
+ */
 
 :root {
-  --toc-left-offset: calc(var(--nav-item-spacing-horizontal) * 2);
+  /* Intent — TOC hover-indent depth for the aside table of contents. */
+  --toc-left-offset: var(--nav-item-spacing-horizontal);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -53,56 +25,117 @@ aside > nav {
   }
 }
 
-:is(header, footer) > nav ol {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
+nav {
+  /* Application (shared, both modes) */
+  --_nav-link-color: currentColor;
+  --_nav-link-active-decoration-color: currentColor;
+
+  font-family: var(--nav-font-family);
+
+  & ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  & li {
+    margin: 0;
+  }
+
+  & a {
+    color: var(--_nav-link-color);
+    text-decoration: none;
+    border-radius: var(--border-radius-inline);
+    transition: color var(--transition), background-color var(--transition),
+      padding var(--transition);
+    outline: none;
+
+    /* Active link (current page) and interaction get the underline. */
+    &:is([aria-current], :hover, :focus) {
+      text-decoration: underline;
+      text-decoration-thickness: var(--base-border-size);
+      text-underline-offset: var(--nav-item-spacing-vertical);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
 }
 
-nav:not(aside > nav) {
+/* ---------------------------------------------------------------------------
+   Page-end bar: :is(header, footer) > nav > ol.
+   A horizontal list. The bar band (background/label color) is layout.css; the
+   links inherit the page-end label color via currentColor, so they read
+   correctly on the brand band without re-declaring a color here.
+   --------------------------------------------------------------------------- */
+:is(header, footer) > nav {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
+  gap: var(--nav-item-spacing-horizontal);
 
   & > ol {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 0;
-    padding: 0;
-    list-style: none;
+    justify-content: space-between;
+    gap: var(--nav-item-spacing-horizontal);
+  }
 
-    & li {
-      display: inline-block;
-    }
+  & li {
+    padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
   }
 }
 
-nav {
+/* ---------------------------------------------------------------------------
+   Sticky table of contents: aside > nav > ol.
+   A vertical list. li:has(a:hover) gets a surface-variant background; the
+   aside (a second/nested ol) hover-indents one --toc-left-offset.
+
+   STICKY NOTE: the aside slot has `overflow: hidden` (content/containers.css),
+   which makes the aside its own scroll container. position:sticky resolves
+   against the nearest scrolling ancestor, so the nav sticks WITHIN the aside
+   box rather than the viewport. With the M3 reflow the aside is a column beside
+   main and is at least as tall as the nav, so the sticky nav travels with the
+   aside's scroll extent (it clamps to the aside box, which is the desired
+   "stays put while you scroll the TOC column" behavior). It does NOT and cannot
+   stick relative to the document viewport from inside an overflow:hidden aside;
+   to get viewport-sticky the aside slot would need overflow:visible upstream.
+   --------------------------------------------------------------------------- */
+aside > nav {
+  --_nav-link-color: var(--color-on-surface);
+
+  position: sticky;
+  top: var(--spacing-block-vertical);
+  max-height: 100vh;
+  overflow-y: auto;
+  padding-block-end: var(--nav-item-spacing-vertical);
+
+  & > ol {
+    display: flex;
+    flex-direction: column;
+  }
+
   & li {
-    margin: 0;
-    transition: background-color var(--transition);
-    --background-color: transparent;
-    background-color: var(--background-color);
-    padding: 0 var(--spacing-typography-horizontal);
-    transition: padding var(--transition);
+    transition: background-color var(--transition), padding var(--transition);
 
-    &:has(a:hover) {
-      --background-color: var(--color-primary-hover);
+    &:has(> a:hover) {
+      background-color: var(--color-surface-variant);
     }
+  }
 
-    & a {
-      --text-color: var(--color-accent);
-      font-size: var(--font-size-larger);
-      transition: color 0s linear;
-      --text-decoration: none;
-      &:hover {
-        --text-color: color-mix(
-          in oklab,
-          var(--color-text) 65%,
-          var(--header-nav-color)
-        );
-      }
-    }
+  & a {
+    display: block;
+    padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
+  }
+
+  /* Nested list hover-indent: hovering a row nudges its sub-rows in. */
+  & li:hover > ol > li {
+    padding-inline-start: var(--toc-left-offset);
   }
 }

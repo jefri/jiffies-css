@@ -1,0 +1,145 @@
+/* Hero (@layer component) — banner image with an overlaid title.
+ *
+ * DOM shape (classless):  :is(header, footer) > figure > img  paired with a
+ * heading  (figure > :is(h1..h6)).  The figure is the stage; the img is the
+ * backdrop (object-fit: cover); the heading overlays the image on a legible
+ * scrim.  ITS PARENT DECIDES SCALE:
+ *   - inside a card  :is(article, section) > :is(header, footer) > figure
+ *       bleeds past the rail padding and clips to --border-radius-card.
+ *   - inside the page spine  (body > #root) > :is(header, footer) > figure,
+ *       or any .fluid header/footer  is a full-bleed page banner (square).
+ *
+ * See design_system.md › Hero.  No edge-classes of its own — a full-bleed page
+ * hero reuses the .fluid layout utility (layout.css already makes the spine
+ * header/footer full-width; here we own the figure/img/title treatment).
+ */
+
+/* -------------------------------------------------------------------------
+   BASE — the figure is the stage.  Select only the hero shape (a figure that
+   holds both an img and a heading) so ordinary content figures are untouched.
+   ------------------------------------------------------------------------- */
+:is(header, footer)
+  > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6)) {
+  /* Application finals */
+  --_hero-radius: 0;
+  --_hero-min-height: calc(var(--base-size) * 20);
+  --_hero-title-color: var(--color-inverse-on-surface);
+  /* Scrim: darken toward the inverse surface so light overlay text clears
+     WCAG against an arbitrary photo.  A bottom-anchored gradient keeps the
+     image readable while seating the title. */
+  --_hero-scrim: linear-gradient(
+    to top,
+    color-mix(in oklab, var(--color-inverse-surface) 78%, transparent) 0%,
+    color-mix(in oklab, var(--color-inverse-surface) 38%, transparent) 45%,
+    color-mix(in oklab, var(--color-inverse-surface) 8%, transparent) 100%
+  );
+
+  position: relative;
+  display: grid;
+  /* Single cell: img and heading share the same grid area and stack. */
+  grid-template: 1fr / 1fr;
+  place-items: end start;
+  isolation: isolate;
+  overflow: hidden;
+  /* Override the content-layer figure margin/flow (component wins content). */
+  margin-block: 0;
+  border-radius: var(--_hero-radius);
+  transition: border-radius var(--transition);
+
+  & > img {
+    grid-area: 1 / 1;
+    z-index: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    min-block-size: var(--_hero-min-height);
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    /* Square the image to the stage; the figure owns the corner clip. */
+    border-radius: inherit;
+  }
+
+  /* The scrim sits between the image and the title so the title stays legible
+     over any photo.  Pinned to the figure, fading up from the seated edge. */
+  &::after {
+    content: "";
+    grid-area: 1 / 1;
+    z-index: 1;
+    inline-size: 100%;
+    block-size: 100%;
+    background: var(--_hero-scrim);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  & > :is(h1, h2, h3, h4, h5, h6) {
+    grid-area: 1 / 1;
+    z-index: 2;
+    margin: 0;
+    align-self: end;
+    justify-self: start;
+    max-inline-size: 100%;
+    padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    color: var(--_hero-title-color);
+    font-family: var(--header-font-family);
+    /* A soft cast under the glyphs as a belt-and-suspenders legibility aid
+       on the brightest part of an image. */
+    text-shadow: 0 1px 3px
+      color-mix(in oklab, var(--color-inverse-surface) 60%, transparent);
+    text-wrap: balance;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   CARD-SCOPED — the figure sits in a card rail.  Bleed past the header/footer
+   padding (card.css: --spacing-block-vertical / --spacing-block-horizontal)
+   and clip to the card corner so the banner meets the card edge cleanly.
+   ------------------------------------------------------------------------- */
+:is(article, section)
+  > :is(header, footer)
+  > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6)) {
+  --_hero-radius: var(--border-radius-card, var(--border-radius-container));
+  --_hero-min-height: calc(var(--base-size) * 16);
+
+  /* Cancel the rail's inner padding on every side so the image bleeds to the
+     card edge.  Top bleed also absorbs the card header's bottom margin gap. */
+  margin-block: calc(-1 * var(--spacing-block-vertical));
+  margin-inline: calc(-1 * var(--spacing-block-horizontal));
+}
+
+/* A card header keeps a bottom border/margin from card.css; when it holds only
+   a hero, drop that seam so the banner is the header's full bleed. */
+:is(article, section)
+  > header:has(
+    > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6))
+  ) {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+:is(article, section)
+  > footer:has(
+    > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6))
+  ) {
+  margin-top: 0;
+  border-top: 0;
+}
+
+/* -------------------------------------------------------------------------
+   PAGE-SCOPED — a header/footer hero directly in the layout spine, or any
+   .fluid header/footer hero (the sanctioned full-bleed opt-out), is a
+   full-bleed page banner: full width (owned by layout.css), square corners,
+   taller stage.  Scope .fluid to the hero shape so page-end brand bars
+   (.fluid > nav) are never matched.
+   ------------------------------------------------------------------------- */
+:is(body:not(:has(> #root)), body > #root)
+  > :is(header, footer)
+  > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6)),
+:is(header, footer).fluid
+  > figure:has(> img):has(> :is(h1, h2, h3, h4, h5, h6)) {
+  --_hero-radius: 0;
+  --_hero-min-height: calc(var(--base-size) * 28);
+
+  margin-block: 0;
+  margin-inline: 0;
+}

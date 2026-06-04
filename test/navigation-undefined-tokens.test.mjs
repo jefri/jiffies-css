@@ -1,17 +1,17 @@
 // Feature test for: navigation-undefined-tokens
 // Design: docs/developer/2026-06-02-A-navigation-undefined-tokens/design.md
 //
-// User story:
+// User story (Phase 4 rewrite):
 //   A developer includes Jiffies CSS v2 on a page with no customization. The
-//   navigation component's header background, border, link sizing, and hover
-//   states must all resolve to visible, non-zero values instead of silently
-//   falling through to CSS initial values, because the seven undefined token
-//   references in navigation.css are now bridged to their v2 theme equivalents
-//   in the component's own :root block.
+//   navigation component no longer bridges the seven legacy aliases
+//   (--brand-primary-color / --color-primary-hover / --color-accent / ...).
+//   Instead the rewritten navigation.css reads the M3 --color-* role tokens
+//   directly (--color-primary, --color-on-surface, --color-surface-variant),
+//   which are defined upstream in v2/theme/colors.css. Every color the nav
+//   component references must therefore still resolve to a defined token rather
+//   than falling through to a CSS initial value.
 //
 // Harness: zero-dependency static (grep) verification. Run with `node --test`.
-// Encodes the design's "all seven tokens resolve to non-zero values" and
-// "no new undefined-token references introduced" metrics.
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -36,125 +36,65 @@ function readAllCss(dir) {
   return out;
 }
 
-const TOKENS = [
-  "--color",
-  "--color-accent",
-  "--color-primary-hover",
-  "--color-text",
-  "--border-width",
-  "--border-style",
-  "--font-size-larger",
+// The M3 role tokens the rewritten navigation.css is allowed to consume for
+// color. These are defined in v2/theme/colors.css.
+const COLOR_ROLES = [
+  "--color-primary",
+  "--color-on-surface",
+  "--color-surface-variant",
 ];
 
-// zero-out (Phase 0): component/navigation.css import is commented out, and the
-// module is rewritten in Phase 4 to drop the old --brand-primary-color /
-// --color-primary-hover bridging aliases asserted below in favor of --color-*
-// role tokens.
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("all seven bridging aliases are defined in navigation.css :root block", () => {
+// The legacy bridge aliases that the Phase 4 rewrite DROPS. None of these may
+// be defined in navigation.css :root anymore.
+const DROPPED_ALIASES = [
+  "--brand-primary-color",
+  "--color-primary-hover",
+  "--color-accent",
+  "--font-size-larger",
+  "--header-nav-color",
+  "--header-nav-background-color",
+];
+
+test("navigation.css reads the M3 --color-* role tokens directly", () => {
   const css = readFileSync(navPath, "utf8");
-  const rootStart = css.indexOf(":root");
-  const rootEnd = css.indexOf("}", rootStart) + 1;
-  const rootBlock = css.slice(rootStart, rootEnd);
-  for (const token of TOKENS) {
+  for (const role of COLOR_ROLES) {
     assert.match(
-      rootBlock,
-      new RegExp(`${token}:`),
-      `${token} must be defined in navigation.css :root block`,
+      css,
+      new RegExp(`var\\(${role}[,)]`),
+      `${role} must be read directly by navigation.css`,
     );
   }
 });
 
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("every reference to the seven tokens in v2 has a definition", () => {
+test("navigation.css no longer defines the dropped legacy bridge aliases", () => {
+  const css = readFileSync(navPath, "utf8");
+  for (const alias of DROPPED_ALIASES) {
+    assert.doesNotMatch(
+      css,
+      new RegExp(`${alias}\\s*:`),
+      `${alias} must not be (re)defined in navigation.css — it was dropped`,
+    );
+  }
+});
+
+test("every --color-* role referenced by navigation.css is defined in v2", () => {
   const allFiles = readAllCss(v2Dir);
   const definitions = new Set();
-  const references = [];
-
-  for (const { path, text } of allFiles) {
-    for (const token of TOKENS) {
-      if (new RegExp(`${token}:`).test(text)) definitions.add(token);
-      if (new RegExp(`var\\(${token}[,)]`).test(text))
-        references.push({ path, token });
+  for (const { text } of allFiles) {
+    for (const role of COLOR_ROLES) {
+      if (new RegExp(`${role}\\s*:`).test(text)) definitions.add(role);
     }
   }
-
-  const undefined_ = references.filter((r) => !definitions.has(r.token));
+  const undefined_ = COLOR_ROLES.filter((role) => {
+    const navCss = readFileSync(navPath, "utf8");
+    const referenced = new RegExp(`var\\(${role}[,)]`).test(navCss);
+    return referenced && !definitions.has(role);
+  });
   assert.deepEqual(
     undefined_,
     [],
-    `undefined token references remain:\n${undefined_
-      .map((r) => `  ${r.path} uses ${r.token}`)
+    `undefined --color-* role references remain:\n${undefined_
+      .map((role) => `  navigation.css uses ${role} with no definition`)
       .join("\n")}`,
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--color bridges to var(--brand-primary-color)", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--color:\s*var\(--brand-primary-color\)/,
-    "--color must resolve to var(--brand-primary-color)",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--color-accent bridges to oklch derived from brand primitives", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--color-accent:\s*oklch\(calc\(var\(--brand-luminance\)/,
-    "--color-accent must resolve to oklch(...) using --brand-luminance",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--color-primary-hover bridges to color-mix toward white", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--color-primary-hover:\s*color-mix\(in oklab,\s*var\(--brand-primary-color\)/,
-    "--color-primary-hover must resolve to color-mix(in oklab, var(--brand-primary-color) ...)",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--color-text bridges to var(--base-text-color)", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--color-text:\s*var\(--base-text-color\)/,
-    "--color-text must resolve to var(--base-text-color)",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--border-width bridges to var(--base-border-size)", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--border-width:\s*var\(--base-border-size\)/,
-    "--border-width must resolve to var(--base-border-size)",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--border-style bridges to solid", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--border-style:\s*solid/,
-    "--border-style must be solid",
-  );
-});
-
-// re-enable with component-navigation (Phase 4 re-enable component-navigation).
-test.skip("--font-size-larger bridges to calc(base-font-size * font-scale)", () => {
-  const css = readFileSync(navPath, "utf8");
-  assert.match(
-    css,
-    /--font-size-larger:\s*calc\(var\(--base-font-size\)\s*\*\s*var\(--font-scale\)\)/,
-    "--font-size-larger must resolve to calc(var(--base-font-size) * var(--font-scale))",
   );
 });

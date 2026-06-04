@@ -1,0 +1,121 @@
+/* Progress (@layer component) — a styled native <progress>.
+ * design_system.md › Progress.
+ *
+ * DOM shape: progress (progress[value] = determinate; valueless = indeterminate).
+ * ARIA:      native progress role; [aria-label] for context.
+ * Tokens:    --_fn-color (value fill), --progress-track-color (surface-variant),
+ *            --border-radius-inline, --base-line-height (bar height basis).
+ * States:    [value] (determinate) vs indeterminate sweep; ::-webkit-progress-value,
+ *            ::-moz-progress-bar.
+ * Edge:      .round (fully rounded ends).
+ *
+ * Cross-engine note: WebKit/Blink expose ::-webkit-progress-bar (the track) and
+ * ::-webkit-progress-value (the fill); Firefox paints the track on the element
+ * itself and exposes the fill as ::-moz-progress-bar. Pseudo-element rules are
+ * split per engine because an unrecognized vendor pseudo invalidates the whole
+ * selector list.
+ */
+progress {
+  /* Intent — track defaults to the surface-variant role; consumers may override
+   * --progress-track-color upstream without touching the component. */
+  --progress-track-color: var(--color-surface-variant);
+
+  /* Application — the fill reads the M3 primary role through the parts-based
+   * builder, so a local --color override re-tints the bar via --_fn-color. */
+  --color: var(--color-primary);
+  --_progress-fill-color: var(--_fn-color);
+  --_progress-track-color: var(--progress-track-color);
+  --_progress-radius: var(--border-radius-inline);
+  --_progress-height: var(--base-line-height);
+
+  display: block;
+  inline-size: 100%;
+  block-size: var(--_progress-height);
+  /* Strip native chrome so the engine paints only what we declare. */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 0;
+  vertical-align: middle;
+  overflow: hidden;
+  background-color: var(--_progress-track-color);
+  border-radius: var(--_progress-radius);
+  color: var(--_progress-fill-color);
+
+  /* ---- WebKit / Blink ---------------------------------------------------- */
+  &::-webkit-progress-bar {
+    background-color: var(--_progress-track-color);
+    border-radius: var(--_progress-radius);
+  }
+
+  &::-webkit-progress-value {
+    background-color: var(--_progress-fill-color);
+    border-radius: var(--_progress-radius);
+    transition: inline-size var(--transition);
+  }
+
+  /* ---- Firefox ----------------------------------------------------------- */
+  &::-moz-progress-bar {
+    background-color: var(--_progress-fill-color);
+    border-radius: var(--_progress-radius);
+    transition: inline-size var(--transition);
+  }
+
+  /* ---- Indeterminate sweep ----------------------------------------------- */
+  /* A valueless <progress> has no [value]. Paint a moving highlight across the
+   * track instead of a fixed fill. WebKit hides ::-webkit-progress-value when
+   * valueless, so the sweep rides the element background; Firefox keeps a full
+   * ::-moz-progress-bar that we override to the sweep gradient. */
+  &:not([value]) {
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      transparent 30%,
+      var(--_progress-fill-color) 50%,
+      transparent 70%,
+      transparent 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 35% 100%;
+    background-position: -35% 0;
+    animation: progress-indeterminate 1.2s ease-in-out infinite;
+  }
+
+  &:not([value])::-webkit-progress-bar {
+    background-color: transparent;
+  }
+
+  &:not([value])::-moz-progress-bar {
+    background-color: transparent;
+  }
+
+  /* ---- Round ends -------------------------------------------------------- */
+  &.round {
+    --_progress-radius: 9999px;
+  }
+}
+
+@keyframes progress-indeterminate {
+  0% {
+    background-position: -35% 0;
+  }
+  100% {
+    background-position: 135% 0;
+  }
+}
+
+/* Honor reduced-motion: drop the sweep animation and the fill transition, then
+ * present a stable, accessible mid-track band so the control still reads as busy. */
+@media (prefers-reduced-motion: reduce) {
+  progress {
+    &::-webkit-progress-value,
+    &::-moz-progress-bar {
+      transition: none;
+    }
+
+    &:not([value]) {
+      animation: none;
+      background-position: 50% 0;
+    }
+  }
+}

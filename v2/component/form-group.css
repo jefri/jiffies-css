@@ -1,0 +1,110 @@
+/* Form Group (@layer component) — filled in Phase 4. See design_system.md
+ * "### Form group".
+ *
+ * A `fieldset[role=group]` that joins adjacent controls into ONE segmented row.
+ * The members (button / input / select) sit shoulder to shoulder: interior
+ * borders and radii are flattened so the seam between two members reads as a
+ * single shared hairline, and only the row's outer corners stay rounded. There
+ * is no JS and no wrapper class — the `[role=group]` selects the set and
+ * `[aria-label]` names it for assistive tech.
+ *
+ * How the seam is built:
+ *   - The row is a flex line with NO gap; members overlap by exactly one border
+ *     width (a negative inline margin of --base-border-size) so two adjacent
+ *     1px borders fuse into one instead of stacking into a 2px double line.
+ *     --size-base is the density atom that --base-border-size derives from, so
+ *     the collapse tracks the .compact / .loose switch.
+ *   - The leading member keeps only its inline-START radius; the trailing member
+ *     keeps only its inline-END radius; every interior edge flattens to 0. All
+ *     radii use logical longhands so the row mirrors under RTL.
+ *   - :focus-within raises the focused member with z-index so its border and its
+ *     2px focus ring paint ABOVE the neighbors it overlaps, never clipped by the
+ *     seam. A non-focused member sits flat in the overlap order.
+ *
+ * DOM shape : fieldset[role=group] > :is(button, input, select)
+ * ARIA      : [role=group]; [aria-label] names the joined set
+ * Tokens    : --border-radius-input, --_fn-border, --size-base (gap collapse),
+ *             --base-border-size, M3 role colors below
+ * States    : :first-child / :last-child (outer radius), :focus-within (raise)
+ * Edge      : none
+ */
+
+fieldset[role="group"] {
+  /* Application tier — the seam geometry. The members overlap by one border so
+   * adjacent borders merge; --_group-radius is the row's outer corner. */
+  --_group-overlap: var(--base-border-size);
+  --_group-radius: var(--border-radius-input);
+
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  /* No flex `gap`: the members must touch so their borders can fuse. The
+   * --size-base collapse is carried by the per-member negative margin below. */
+  gap: 0;
+  /* A grouped row is one control: shed the default fieldset chrome and inset. */
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+
+  & > :is(button, input, select) {
+    /* Each member reads the structural border builder so its hairline matches
+     * every other form control in the system (--_fn-border self-defaults to
+     * --base-border-size solid --color-outline). */
+    position: relative;
+    z-index: 0;
+    margin: 0;
+    border: var(--_fn-border);
+    /* Square every corner by default; the first/last members re-round their
+     * outer edge below. Logical longhands keep the seam correct under RTL. */
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    transition:
+      border-color var(--transition),
+      outline-color var(--transition),
+      z-index var(--transition);
+
+    /* Pull every member after the first back by one border width so its leading
+     * border lands ON its neighbor's trailing border — two hairlines become one. */
+    &:not(:first-child) {
+      margin-inline-start: calc(-1 * var(--_group-overlap));
+    }
+
+    /* Outer corners: leading member rounds its inline-start edge, trailing
+     * member rounds its inline-end edge; interior members stay square. */
+    &:first-child {
+      border-start-start-radius: var(--_group-radius);
+      border-end-start-radius: var(--_group-radius);
+    }
+    &:last-child {
+      border-start-end-radius: var(--_group-radius);
+      border-end-end-radius: var(--_group-radius);
+    }
+
+    /* Raise a hovered member so its full border outlines cleanly over the seam. */
+    &:hover {
+      z-index: 1;
+    }
+  }
+
+  /* :focus-within raises the focused member above the ones it overlaps so its
+   * border AND its fixed 2px focus ring paint on top of the seam, uncut. The
+   * ring itself lives on the member's own :focus-visible (a FIXED 2px ring —
+   * never derived from --base-border-size). */
+  & > :is(button, input, select):focus-within {
+    z-index: 2;
+  }
+
+  & > :is(button, input, select):focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Disabled member — dim, no pointer; the row stays usable around it. */
+  & > :is(button, input, select):is([disabled], [aria-disabled="true"]) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

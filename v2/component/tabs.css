@@ -1,0 +1,141 @@
+/* Tabs (@layer component) — see design_system.md › Tabs.
+ *
+ * Adapted from the v1 jiffies-css implementation
+ * (github.com/jefri/jiffies-css /component/tabs.css), re-tokenized to the v2 M3
+ * role surface. Pure-CSS AND ARIA-driven: selection is carried by a
+ * visually-hidden radio inside each [role=tab] label (:checked — no JS needed)
+ * OR by [aria-selected="true"] (set by the CDN accessibility.js). Either path
+ * drives the connected-tab indicator and reveals the adjacent [role=tabpanel].
+ *
+ * DOM shape: [role=tablist] holds alternating ([role=tab] + [role=tabpanel])
+ * pairs; each tab wraps a <label> (and, for the no-JS path, a radio).
+ * The tablist is a grid: a tab strip on row 1 (with ::before/::after baseline
+ * fillers) and the active panel spanning row 2.
+ */
+
+[role="tablist"] {
+  /* --_tab-border is the strip hairline (load-bearing → outline via
+   * --card-inner-border); --_tab-active is the selected tab's brand top edge;
+   * --_tab-empty is a same-width transparent border so selecting never shifts
+   * layout. */
+  --_tab-border: var(--card-inner-border);
+  --_tab-active: var(--base-border-size) solid var(--color-primary);
+  --_tab-empty: var(--base-border-size) solid transparent;
+
+  /* Raise on the tablist if you have more than 5 tabs:
+   *   <section role="tablist" style="--tab-count: 8"> */
+  --tab-count: 5;
+  --_tab-edge: calc(var(--spacing-block-horizontal) / 2);
+
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns:
+    var(--_tab-edge)
+    repeat(var(--tab-count), min-content)
+    1fr;
+
+  /* Baseline fillers left/right of the tab strip so the hairline runs full width. */
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    grid-row: 1;
+    min-width: var(--_tab-edge);
+    border-bottom: var(--_tab-border);
+  }
+  &::before {
+    order: -1;
+  }
+  &::after {
+    order: 1;
+    grid-column-end: -1;
+  }
+
+  /* ---- Tab ---------------------------------------------------------------- */
+  & > [role="tab"] {
+    grid-row: 1;
+    order: 0;
+    height: min-content;
+    white-space: nowrap;
+    border: var(--_tab-empty);
+    border-bottom: var(--_tab-border);
+    color: var(--color-on-surface-variant);
+    background-color: transparent;
+    cursor: pointer;
+    transition:
+      color var(--transition),
+      background-color var(--transition),
+      border-color var(--transition);
+
+    /* Padding sits on the label so the whole cell is the click target. */
+    & > label {
+      display: block;
+      margin: 0;
+      padding: var(--spacing-block-vertical) var(--spacing-block-horizontal)
+        calc(var(--spacing-block-vertical) / 2);
+      font-family: var(--label-font-family);
+      color: inherit;
+      cursor: inherit;
+    }
+
+    /* The radio carries selection on the no-JS path: focusable, not visible. */
+    & :is([type="radio"], [type="checkbox"]) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+    }
+
+    /* Hover — lift the label to on-surface over a surface-variant tint. */
+    &:hover {
+      color: var(--color-on-surface);
+      background-color: var(--color-surface-variant);
+    }
+
+    /* Keyboard focus — the shared fixed 2px brand ring, inset so it does not
+     * collide with the adjacent tab cells. */
+    &:focus-visible,
+    &:has(:focus-visible) {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+
+    /* Selected (either path) — the connected tab: brand top edge, side
+     * hairlines, and an open bottom so it joins the panel below. */
+    &:where(:has(:checked), [aria-selected="true"]) {
+      color: var(--color-on-surface);
+      border-top: var(--_tab-active);
+      border-inline: var(--_tab-border);
+      border-bottom: var(--_tab-empty);
+    }
+
+    &[aria-disabled="true"] {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &:hover {
+        color: var(--color-on-surface-variant);
+        background-color: transparent;
+      }
+    }
+  }
+
+  /* ---- Tab panel ---------------------------------------------------------- */
+  & > [role="tabpanel"] {
+    grid-area: 2 / 1 / span 1 / -1;
+    display: none;
+    padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  }
+
+  /* Reveal the panel adjacent to the selected tab (CSS path or ARIA path). */
+  & > [role="tab"]:where(:has(:checked), [aria-selected="true"]) + [role="tabpanel"] {
+    display: block;
+  }
+}

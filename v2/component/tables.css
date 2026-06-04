@@ -1,0 +1,161 @@
+/* Tables (@layer component). See design_system.md "### Tables".
+ *
+ * table > thead, tbody, tfoot > tr > th, td. Opinionated zebra-striped table
+ * with a type face (Trebuchet MS) separate from body or code text. Row
+ * hairlines and the outer frame are drawn through the --_fn-border builder.
+ * Cell padding flows from --spacing-block-vertical/-horizontal, so the
+ * .compact/.loose density switch (which rescales the spacing atom upstream)
+ * automatically tightens or loosens the cells. */
+
+table {
+  /* Intent → Derivation. Introduce --table-font-family (Trebuchet MS stack)
+   * and the zebra row pair (surface / surface-variant). The hairline between
+   * rows is decorative (outline-variant); the outer frame is load-bearing
+   * (outline). Both are assembled via the --_fn-border shorthand. */
+  --table-font-family: var(
+    --brand-table-font-family,
+    "Trebuchet MS",
+    "Segoe UI",
+    "Helvetica Neue",
+    var(--base-body-font-family)
+  );
+  --table-row-even-color: var(--color-surface);
+  --table-row-odd-color: var(--color-surface-variant);
+  --_table-cell-padding: var(--spacing-block-vertical)
+    var(--spacing-block-horizontal);
+  --_table-row-border: var(--base-border-size) solid
+    var(--color-outline-variant);
+  --_table-frame-border: var(--base-border-size) solid var(--color-outline);
+
+  width: 100%;
+  margin-block: var(--spacing-block-vertical);
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: var(--table-font-family);
+  color: var(--color-on-surface);
+  background-color: var(--table-row-even-color);
+  /* Outer frame: load-bearing outline (clears WCAG 3:1). */
+  border: var(--_table-frame-border);
+  border-radius: var(--border-radius-container);
+  /* Clip striping/hover fills to the rounded frame. */
+  overflow: hidden;
+
+  & > thead,
+  & > tbody,
+  & > tfoot {
+    & > tr {
+      transition: var(--transition);
+      transition-property: color, background-color, border-color, outline-color;
+
+      & > th,
+      & > td {
+        padding: var(--_table-cell-padding);
+        text-align: start;
+        vertical-align: middle;
+        /* Hairline between rows (decorative outline-variant). */
+        border-bottom: var(--_table-row-border);
+      }
+    }
+  }
+
+  /* Header & footer cells: label-weight, separated from the body by the
+   * heavier frame color so the caps band reads as structure, not data. */
+  & > thead > tr > th,
+  & > tfoot > tr > th {
+    font-weight: 600;
+    color: var(--color-on-surface);
+    background-color: var(--color-surface-variant);
+  }
+
+  & > thead > tr > th {
+    border-bottom: var(--_table-frame-border);
+  }
+
+  & > tfoot > tr > th {
+    border-top: var(--_table-frame-border);
+  }
+
+  /* scope-bearing header cells advertise their axis. A row header leads its
+   * row with a hairline divider so the label column reads as an axis. */
+  & > tbody > tr > th[scope="row"] {
+    font-weight: 600;
+    border-inline-end: var(--_table-row-border);
+  }
+
+  /* Sortable column affordance. th[aria-sort] gains room for a directional
+   * caret and a primary-tinted underline marking the active sort key. The
+   * caret rotates with the sort direction. */
+  & th[aria-sort] {
+    cursor: pointer;
+    position: relative;
+    padding-inline-end: calc(
+      var(--spacing-block-horizontal) + var(--size-medium)
+    );
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset-inline-end: var(--spacing-block-horizontal);
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-inline: var(--size-small) solid transparent;
+      /* Neutral (unsorted) caret = subdued on-surface color. */
+      border-top: var(--size-small) solid var(--color-on-surface-variant);
+      transform: translateY(-50%);
+    }
+  }
+
+  /* Active sort key: primary underline + filled caret in the sort direction. */
+  & th[aria-sort="ascending"],
+  & th[aria-sort="descending"] {
+    color: var(--color-primary);
+    box-shadow: inset 0 calc(-1 * var(--size-small)) 0
+      calc(-1 * var(--size-xsmall)) var(--color-primary);
+
+    &::after {
+      border-top-color: var(--color-primary);
+    }
+  }
+
+  & th[aria-sort="ascending"]::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* aria-sort=none: sortable but inactive — keep the neutral caret. */
+  & th[aria-sort="none"] {
+    color: var(--color-on-surface);
+  }
+
+  /* Zebra striping. Body rows alternate surface / surface-variant. The hover
+   * highlight is a primary state layer that sits above either stripe. */
+  & > tbody > tr {
+    background-color: var(--table-row-even-color);
+
+    &:nth-child(odd) {
+      background-color: var(--table-row-odd-color);
+    }
+
+    &:hover {
+      background-color: color-mix(
+        in oklab,
+        var(--color-primary) 8%,
+        var(--table-row-even-color)
+      );
+    }
+
+    &:nth-child(odd):hover {
+      background-color: color-mix(
+        in oklab,
+        var(--color-primary) 8%,
+        var(--table-row-odd-color)
+      );
+    }
+  }
+
+  /* Last row in the body sits flush against the frame — drop its hairline. */
+  & > tbody > tr:last-child > th,
+  & > tbody > tr:last-child > td {
+    border-bottom: 0;
+  }
+}

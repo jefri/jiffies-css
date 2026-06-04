@@ -1,0 +1,117 @@
+/* Property Sheet (@layer component) — design_system.md › Property sheet.
+ *
+ * A `dl` rendered as aligned label/value rows. Terms (`dt`) sit in the inline-
+ * start column in the label typeface on the surface-variant ink; definitions
+ * (`dd`) sit in the value column on the surface ink. The two share the table
+ * striping language via --table-row-even-color / --table-row-odd-color, so a
+ * property sheet and a data table read as the same material. Rows highlight on
+ * :hover. On narrow viewports the grid collapses to a single stacked column.
+ *
+ * DOM shape:  dl > dt, dd
+ * ARIA:       none beyond the native dl term/definition association
+ * Edge-classes: none
+ */
+
+dl {
+  /* ---- Derivation (*) — shared striping + density basis ------------------- */
+  /* Striping tokens are owned by the table component's language. Read them
+   * here so a property sheet matches its sibling table; fall back to M3
+   * surface roles when the table layer has not contributed them, so the sheet
+   * stripes correctly on its own. Even = a faint surface-variant tint, odd =
+   * the plain surface (transparent so the page surface shows through). */
+  --_row-even-color: var(
+    --table-row-even-color,
+    color-mix(in oklab, var(--color-surface-variant) 40%, transparent)
+  );
+  --_row-odd-color: var(--table-row-odd-color, transparent);
+
+  /* Row rhythm: vertical from --size-small, inline gutter from --size-base. */
+  --_row-padding-block: var(--size-small);
+  --_row-gap-inline: var(--size-base);
+
+  --_hover-color: color-mix(
+    in oklab,
+    var(--color-on-surface) 6%,
+    transparent
+  );
+
+  /* ---- Application — the sheet container --------------------------------- */
+  display: grid;
+  /* dt sizes to its content (capped) | dd takes the remaining track. */
+  grid-template-columns: minmax(min-content, max-content) 1fr;
+  align-items: baseline;
+  border-radius: var(--border-radius-container);
+  overflow: hidden;
+
+  & > dt,
+  & > dd {
+    margin: 0;
+    padding-block: var(--_row-padding-block);
+    transition: background-color var(--transition);
+  }
+
+  /* ---- dt — the term / label --------------------------------------------- */
+  & > dt {
+    grid-column: 1;
+    padding-inline: var(--_row-gap-inline) var(--size-small);
+    color: var(--color-on-surface-variant);
+    font-family: var(--label-font-family);
+    font-weight: 500;
+  }
+
+  /* ---- dd — the value ----------------------------------------------------- */
+  & > dd {
+    grid-column: 2;
+    padding-inline: var(--size-small) var(--_row-gap-inline);
+    color: var(--color-on-surface);
+  }
+
+  /* ---- Row striping ------------------------------------------------------ */
+  /* Each dt/dd pair is one logical row. Pair them by source order: an even
+   * (1-based: 1st, 3rd, …) term and the dd that follows it share the odd
+   * track; the next pair shares the even track. Tint the dt and dd together
+   * so the stripe spans the full row across both columns. */
+  & > dt:nth-of-type(even),
+  & > dt:nth-of-type(even) + dd {
+    background-color: var(--_row-even-color);
+  }
+
+  & > dt:nth-of-type(odd),
+  & > dt:nth-of-type(odd) + dd {
+    background-color: var(--_row-odd-color);
+  }
+
+  /* ---- :hover row highlight ---------------------------------------------- */
+  /* Highlight the hovered term and its paired value as one row. */
+  & > dt:hover,
+  & > dt:hover + dd,
+  & > dd:hover {
+    background-color: var(--_hover-color);
+  }
+
+  /* A dd hovered also lifts the term that precedes it. :has keeps the pair in
+   * sync when the pointer is on the value side. */
+  & > dt:has(+ dd:hover) {
+    background-color: var(--_hover-color);
+  }
+
+  /* ---- Narrow viewports — stack to one column ---------------------------- */
+  @media (width < 30rem) {
+    grid-template-columns: 1fr;
+
+    & > dt,
+    & > dd {
+      grid-column: 1;
+    }
+
+    & > dt {
+      padding-block: var(--_row-padding-block) 0;
+      padding-inline: var(--_row-gap-inline);
+    }
+
+    & > dd {
+      padding-block: 0 var(--_row-padding-block);
+      padding-inline: var(--_row-gap-inline);
+    }
+  }
+}

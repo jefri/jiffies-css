@@ -1,0 +1,119 @@
+/* Form Switch (@layer component) — filled in Phase 4. See design_system.md
+ * "### Form switch".
+ *
+ * A pure-CSS toggle: a native checkbox or radio painted as a sliding switch via
+ * `appearance: none` and a `::before` knob. Native `:checked` (reflected as
+ * `aria-checked` through `[role=switch]`) drives the on state — no JS, no extra
+ * markup. Off = --color-surface-variant track; on = --color-primary track with a
+ * --color-on-primary knob. The knob slides on --transition.
+ *
+ * DOM shape : input[type=checkbox][role=switch], input[type=radio][role=switch]
+ * Tokens    : --transition, --size-base / --size-medium (track geometry),
+ *             --border-radius-input (pill), M3 role colors below.
+ * States    : :checked, :focus-visible, [disabled]
+ * Edge      : none
+ */
+
+:where(input[type="checkbox"], input[type="radio"])[role="switch"] {
+  /* Application tier — track geometry derived from the t-shirt scale.
+   * The knob is one --size-medium (2× base) circle; the track is one knob plus
+   * a knob's worth of travel, with a half-base inset gutter on every side. */
+  --_switch-knob: var(--size-medium);
+  --_switch-gap: var(--size-small);
+  --_switch-height: calc(var(--_switch-knob) + 2 * var(--_switch-gap));
+  --_switch-width: calc(2 * var(--_switch-knob) + 2 * var(--_switch-gap));
+
+  /* Off (unchecked) palette — neutral-variant surface + readable knob. */
+  --_switch-track: var(--color-surface-variant);
+  --_switch-track-border: var(--color-outline);
+  --_switch-knob-color: var(--color-on-surface-variant);
+
+  appearance: none;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  position: relative;
+  inline-size: var(--_switch-width);
+  block-size: var(--_switch-height);
+  margin: 0;
+  padding: 0;
+  border: var(--base-border-size) solid var(--_switch-track-border);
+  border-radius: var(--border-radius-input);
+  background-color: var(--_switch-track);
+  cursor: pointer;
+  transition:
+    background-color var(--transition),
+    border-color var(--transition);
+
+  /* The knob. Sits in the gutter at the off (start) edge; slides on :checked. */
+  &::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: var(--_switch-gap);
+    inline-size: var(--_switch-knob);
+    block-size: var(--_switch-knob);
+    border-radius: 50%;
+    background-color: var(--_switch-knob-color);
+    translate: 0 -50%;
+    transition:
+      translate var(--transition),
+      background-color var(--transition);
+  }
+
+  /* On (checked) — primary track, on-primary knob, knob slid one knob-width. */
+  &:checked {
+    --_switch-track: var(--color-primary);
+    --_switch-track-border: var(--color-primary);
+    --_switch-knob-color: var(--color-on-primary);
+
+    &::before {
+      translate: var(--_switch-knob) -50%;
+    }
+  }
+
+  /* State layers (M3): tint the filled track with its on-color on hover/active. */
+  &:not([disabled]):hover {
+    --_switch-track: color-mix(
+      in oklab,
+      var(--color-on-surface-variant) 8%,
+      var(--color-surface-variant)
+    );
+  }
+  &:not([disabled]):active {
+    --_switch-track: color-mix(
+      in oklab,
+      var(--color-on-surface-variant) 12%,
+      var(--color-surface-variant)
+    );
+  }
+  &:checked:not([disabled]):hover {
+    --_switch-track: color-mix(
+      in oklab,
+      var(--color-on-primary) 8%,
+      var(--color-primary)
+    );
+  }
+  &:checked:not([disabled]):active {
+    --_switch-track: color-mix(
+      in oklab,
+      var(--color-on-primary) 12%,
+      var(--color-primary)
+    );
+  }
+
+  /* Focus — FIXED 2px ring (do not derive from --base-border-size). */
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Disabled — dim, no pointer, no state layers (handled by :not([disabled])). */
+  &[disabled],
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

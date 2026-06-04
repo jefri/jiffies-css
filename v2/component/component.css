@@ -1,21 +1,30 @@
-/* zero-out (Phase 0): component sub-imports commented; re-enable one at a time in Phase 4. */
-/* Card & Panel {article, section} > {main, header, footer} */
-/* re-enable with component-card + theme/colors + theme/borders (Phase 4 re-enable component-card) */
-/* @import "./card.css"; */
-/* Accordion details, summary */
-/* @import "./accordion.css"; */
-/* Tab details[role=tablist] summary[role=tab] */
-/* @import "./tabs.css"; */
-/* @import "./form-grid.css"; */
-/* Modal dialog */
-/* Navigation nav > ol, ul */
-/* re-enable with component-navigation + theme/colors (Phase 4 re-enable component-navigation) */
-/* @import "./navigation.css"; */
-/* Breadcrumb nav > ol.breadcrumb */
-/* re-enable with breadcrumb-classless + theme/colors (Phase 4 breadcrumb-classless) */
-/* @import "./breadcrumb.css"; */
-/* Progress progress */
-/* @import "./property.css"; */
-/* Property Sheet dl, dt, dd */
-
-/* Form group fieldset[role=group] */
+/* component.css — Phase 4 barrel (@layer component, assigned by parent index.css). */
+/* Imports the 14 component files in order. One @import per line, no layer keyword. */
+/* card           — Card & Panel {article, section} > {main, header, footer} */
+/* buttons        — Buttons & button-like controls */
+/* forms          — Form controls (input, select, textarea) */
+/* form-switch    — Switch / toggle control */
+/* tables         — Tables */
+/* accordion      — Accordion details, summary */
+/* tabs           — Tabs details[role=tablist] summary[role=tab] */
+/* modal          — Modal dialog */
+/* property-sheet — Property Sheet dl, dt, dd */
+/* progress       — Progress progress */
+/* form-group     — Form group fieldset[role=group] */
+/* navigation     — Navigation nav > ol, ul */
+/* breadcrumb     — Breadcrumb nav > ol.breadcrumb */
+/* hero           — Hero */
+@import "./card.css";
+@import "./buttons.css";
+@import "./forms.css";
+@import "./form-switch.css";
+@import "./tables.css";
+@import "./accordion.css";
+@import "./tabs.css";
+@import "./modal.css";
+@import "./property-sheet.css";
+@import "./progress.css";
+@import "./form-group.css";
+@import "./navigation.css";
+@import "./breadcrumb.css";
+@import "./hero.css";

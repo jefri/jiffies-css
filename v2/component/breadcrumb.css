@@ -1,11 +1,48 @@
-ol.breadcrumbs {
-  justify-content: start;
-  & li::before {
-    content: var(--breadcrumb-marker);
-    padding: 0 var(--nav-item-spacing-horizontal);
-  }
-}
+/* Breadcrumb — design_system.md › Breadcrumb.
+ * Classless: the `Breadcrumb` ARIA label selects it, not a class, so it stays
+ * inside the closed Components edge-class list. DOM shape:
+ *   nav[aria-label="Breadcrumb"] > ol > li   (with [aria-current=page] last)
+ *
+ * navigation.css (loaded earlier in @layer component) already turns
+ * `nav:not(aside > nav) > ol` into a flex row with `list-style: none`,
+ * zero padding, and `li { display: inline-block }`. This file specialises that
+ * base for the trail: pack to the start, wrap gracefully, draw the separator
+ * glyph, and render the current page as plain on-surface text instead of a link.
+ */
 
 :root {
+  /* Intent — separator glyph for the trail. "/" or "→". */
   --breadcrumb-marker: "→";
+}
+
+nav[aria-label="Breadcrumb"] {
+  & > ol {
+    /* Pack the trail to the start; the navigation base spreads bar items with
+     * space-between, which is wrong for a contiguous breadcrumb. Wrap softly. */
+    flex-wrap: wrap;
+    justify-content: start;
+
+    & > li {
+      /* Application — keep the row baseline-aligned as crumbs wrap. */
+      display: inline-flex;
+      align-items: baseline;
+
+      /* Separator glyph precedes every crumb except the first. */
+      &:not(:first-child)::before {
+        content: var(--breadcrumb-marker);
+        padding: 0 var(--nav-item-spacing-horizontal);
+        color: var(--color-on-surface-variant);
+      }
+
+      /* Current page — the last crumb is the destination, not a link.
+       * Read as plain on-surface text; no decoration, no pointer. */
+      & > [aria-current="page"] {
+        --text-color: var(--color-on-surface);
+        --text-decoration-hyperlink: none;
+        color: var(--color-on-surface);
+        text-decoration: none;
+        cursor: default;
+      }
+    }
+  }
 }

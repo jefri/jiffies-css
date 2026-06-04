@@ -1,0 +1,237 @@
+/* Buttons (@layer component) — the reference port for the design system.
+ *
+ * THE first consumer of the --color-primary / --color-on-primary role pair, and
+ * the canonical M3 state-layer + focus pattern that the other 13 components
+ * echo. One file = one component; the whole button family is a single nested
+ * block keyed off the DOM-shape selector. State (:hover / :active / focus /
+ * disabled / busy) lives next to structure, and every Application final is
+ * declared at the top of the block that consumes it.
+ *
+ * DOM shape (design_system.md › Buttons):
+ *   button, a[role=button], input[type=button|submit|reset]
+ * ARIA:  [aria-disabled], [aria-busy] (links promoted via [role=button]).
+ * Edge-classes: .secondary (tonal pair), .contrast (high-contrast), .outline.
+ *
+ * Color comes ONLY from M3 role tokens. Dark mode is automatic — the roles
+ * remap upstream in theme/colors.css, so there is no second dark rule here.
+ *
+ * State layers (M3): a filled control overlays its ON-color onto the fill at
+ *   8% (:hover) / 12% (:active) via color-mix in oklab. A tonal control does the
+ *   same on its container/on-container pair. An outlined control is transparent
+ *   with an --color-outline border + label color, and tints with its own label
+ *   color on hover/active.
+ */
+
+button,
+a[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  /* ---- Application finals (filled primary — the default) ------------------ */
+  --_button-fill: var(--color-primary);
+  --_button-label: var(--color-on-primary);
+  --_button-border-color: transparent;
+
+  /* Per-control geometry/type, declared where they are consumed. */
+  --font-size-base: var(--base-font-size);
+  --_button-padding-block: var(--size-small);
+  --_button-padding-inline: var(--size-base);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-small);
+  vertical-align: middle;
+
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--_button-padding-block) var(--_button-padding-inline);
+  border: var(--base-border-size) solid var(--_button-border-color);
+  border-radius: var(--border-radius-button);
+
+  font-family: var(--label-font-family);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: var(--base-line-height);
+  text-align: center;
+  /* Reset the link affordance an a[role=button] inherits from @layer content. */
+  text-decoration: none;
+
+  background-color: var(--_button-fill);
+  color: var(--_button-label);
+
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition), outline-color var(--transition);
+
+  /* ---- State layers: overlay the ON-color onto the fill -------------------
+   * Filled + tonal share this overlay; .outline overrides it below. The
+   * mixed-in color is the control's own label color, so the layer tracks
+   * whichever pair the variant resolved to. */
+  &:hover {
+    --_button-fill: color-mix(
+      in oklab,
+      var(--_button-label) 8%,
+      var(--color-primary)
+    );
+  }
+
+  &:active {
+    --_button-fill: color-mix(
+      in oklab,
+      var(--_button-label) 12%,
+      var(--color-primary)
+    );
+  }
+
+  /* ---- Focus: a FIXED 2px brand ring (does not halve under .compact) ------ */
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* ---- Secondary: the tonal container/on-container pair ------------------- */
+  &.secondary {
+    --_button-fill: var(--color-secondary-container);
+    --_button-label: var(--color-on-secondary-container);
+
+    &:hover {
+      --_button-fill: color-mix(
+        in oklab,
+        var(--color-on-secondary-container) 8%,
+        var(--color-secondary-container)
+      );
+    }
+
+    &:active {
+      --_button-fill: color-mix(
+        in oklab,
+        var(--color-on-secondary-container) 12%,
+        var(--color-secondary-container)
+      );
+    }
+  }
+
+  /* ---- Contrast: high-contrast filled (inverse surface pair) -------------- */
+  &.contrast {
+    --_button-fill: var(--color-inverse-surface);
+    --_button-label: var(--color-inverse-on-surface);
+
+    &:hover {
+      --_button-fill: color-mix(
+        in oklab,
+        var(--color-inverse-on-surface) 8%,
+        var(--color-inverse-surface)
+      );
+    }
+
+    &:active {
+      --_button-fill: color-mix(
+        in oklab,
+        var(--color-inverse-on-surface) 12%,
+        var(--color-inverse-surface)
+      );
+    }
+  }
+
+  /* ---- Outline: transparent fill, load-bearing outline border + label -----
+   * Comes last so it overrides the fill/border of whichever colour variant it
+   * is combined with (e.g. .contrast.outline keeps the inverse-surface label
+   * but drops the fill). The hover/active state layer becomes a tint of the
+   * label color painted onto the transparent surface. */
+  &.outline {
+    --_button-label: var(--color-primary);
+
+    background-color: transparent;
+    border-color: var(--color-outline);
+    color: var(--_button-label);
+
+    &:hover {
+      --_button-fill: transparent;
+      background-color: color-mix(
+        in oklab,
+        var(--_button-label) 8%,
+        transparent
+      );
+    }
+
+    &:active {
+      --_button-fill: transparent;
+      background-color: color-mix(
+        in oklab,
+        var(--_button-label) 12%,
+        transparent
+      );
+    }
+
+    &.contrast {
+      --_button-label: var(--color-inverse-surface);
+    }
+  }
+
+  /* ---- Disabled: inert, no state layers ----------------------------------
+   * Pin the fill/label back to their resting tokens so :hover/:active cannot
+   * re-derive them, and block the pointer. Roles stay legible (~0.5 opacity)
+   * rather than recoloring, keeping the disabled control on-theme. */
+  &:is([disabled], [aria-disabled="true"]) {
+    cursor: not-allowed;
+    opacity: 0.5;
+
+    &:hover,
+    &:active {
+      --_button-fill: var(--color-primary);
+    }
+
+    &.secondary:hover,
+    &.secondary:active {
+      --_button-fill: var(--color-secondary-container);
+    }
+
+    &.contrast:hover,
+    &.contrast:active {
+      --_button-fill: var(--color-inverse-surface);
+    }
+
+    &.outline:hover,
+    &.outline:active {
+      background-color: transparent;
+    }
+  }
+
+  /* ---- Loading: keep the label accessible, add a leading spinner ----------
+   * The control stays interactive-looking but communicates progress; the label
+   * text is preserved for assistive tech (do not hide it). The spinner is a
+   * bordered ::before ring spun with the motion engine; reduce-motion zeroes
+   * --transition-time upstream but the spin keyframes are separately guarded. */
+  &[aria-busy="true"] {
+    cursor: progress;
+
+    &::before {
+      content: "";
+      width: 1em;
+      height: 1em;
+      flex: none;
+      border: var(--base-border-size) solid currentColor;
+      border-inline-start-color: transparent;
+      border-radius: 50%;
+      animation: button-spin 0.6s linear infinite;
+    }
+  }
+}
+
+@keyframes button-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(button, a[role="button"], input[type="button"], input[type="submit"], input[type="reset"])[aria-busy="true"]::before {
+    animation: none;
+  }
+}

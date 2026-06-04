@@ -1,0 +1,237 @@
+/* Forms (@layer component). See design_system.md › "### Forms".
+ *
+ * Form controls share ONE border / radius / focus language. Validity and
+ * editability are read from ARIA + native attributes, never from classes.
+ *
+ *   DOM shape : label, input, select, textarea, fieldset, legend
+ *   ARIA      : [aria-invalid], [aria-describedby], [required], [disabled],
+ *               [readonly]
+ *   States    : :focus-visible, :placeholder-shown, [aria-invalid],
+ *               [disabled], [readonly]
+ *   Edge-cls  : none
+ *
+ * Variable tiers (per the engine grammar):
+ *   - Intent      :root  (e.g. --color-surface, --border-radius-input)
+ *   - Derivation  *      (the --_fn-border builder, --color-form-* family)
+ *   - Application element finals declared at the top of the block that reads
+ *     them.
+ *
+ * The four --color-form-* roles named by the spec are the component's
+ * Derivation tier: they alias upstream M3 role tokens so a consumer can retune
+ * one validity state without reaching into the controls. They live on * so a
+ * scoped override (e.g. on a single fieldset) re-derives for its subtree.
+ *
+ * Buttons (button, input[type=button|submit|reset]) and switches
+ * (input[role=switch]) live in their own components; the text-control
+ * selectors here deliberately exclude those types so the three files do not
+ * fight over the same elements inside a <form>.
+ */
+
+@layer component {
+  /* ---- Derivation: validity / editability color roles --------------------
+   * base    : the resting outline color (M3 outline; clears WCAG 3:1).
+   * invalid : the error role — used for both the raised border and the text.
+   * disabled: the muted on-surface-variant, paired with opacity at the site.
+   * required: the marker accent on a [required] label. */
+  * {
+    --color-form-base: var(--color-outline);
+    --color-form-invalid: var(--color-error);
+    --color-form-disabled: var(--color-on-surface-variant);
+    --color-form-required: var(--color-error);
+  }
+
+  /* =======================================================================
+     LABEL — the field's text + its wrapped control. Stacks vertically and
+     supplies the label type face.
+     ======================================================================= */
+  label {
+    --_label-color: var(--color-on-surface);
+
+    display: block;
+    margin-block-end: var(--spacing-block-vertical);
+    font-family: var(--label-font-family);
+    color: var(--_label-color);
+
+    /* A [required] field flags its label with an accent asterisk. */
+    &:has(> :required)::after,
+    &[data-required]::after {
+      content: " *";
+      color: var(--color-form-required);
+      font-weight: 700;
+    }
+
+    /* The wrapped control gets a little breathing room under the text. */
+    & > :is(input, select, textarea) {
+      margin-block-start: var(--size-small);
+    }
+
+    /* A label that only wraps a checkbox/radio (the switch/choice pattern in
+       the demo) lays its control and text on one inline row instead. */
+    &:has(> input:is([type="checkbox"], [type="radio"])) {
+      display: flex;
+      align-items: center;
+      gap: var(--size-small);
+
+      & > input {
+        margin-block-start: 0;
+      }
+    }
+  }
+
+  /* =======================================================================
+     TEXT CONTROLS — input (text-like), select, textarea share the surface,
+     border, radius, padding, and focus language. Buttons, switches, and the
+     bare color/range/file widgets are excluded.
+     ======================================================================= */
+  :is(
+    input:not(
+        [type="button"],
+        [type="submit"],
+        [type="reset"],
+        [type="checkbox"],
+        [type="radio"],
+        [type="range"],
+        [type="color"],
+        [type="file"],
+        [role="switch"]
+      ),
+    select,
+    textarea
+  ) {
+    /* Application finals — read just below. */
+    --_field-surface: var(--color-surface);
+    --_field-ink: var(--color-on-surface);
+    --_field-placeholder: var(--color-on-surface-variant);
+    /* The structural border builder reads these parts and resolves to a valid
+       `border:` shorthand. Resting state = the form base color. */
+    --_fn-border-color: var(--color-form-base);
+
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    padding: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    font-family: inherit;
+    line-height: var(--base-line-height);
+    color: var(--_field-ink);
+    background-color: var(--_field-surface);
+    border: var(--_fn-border);
+    border-radius: var(--border-radius-input);
+    outline: none;
+    transition: color var(--transition), background-color var(--transition),
+      border-color var(--transition), outline-color var(--transition);
+
+    /* Placeholder text reads as muted on-surface-variant. */
+    &::placeholder {
+      color: var(--_field-placeholder);
+      opacity: 1;
+    }
+
+    /* ---- FOCUS — fixed 2px primary ring + raised primary border --------- */
+    &:focus-visible {
+      --_fn-border-color: var(--color-primary);
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* ---- INVALID — error border + error text (ARIA-driven) ------------- */
+    &[aria-invalid="true"] {
+      --_fn-border-color: var(--color-form-invalid);
+      color: var(--color-form-invalid);
+
+      &:focus-visible {
+        outline-color: var(--color-form-invalid);
+      }
+    }
+
+    /* A control explicitly marked valid keeps the success role on its border
+       so the state reads at a glance without color-only reliance elsewhere. */
+    &[aria-invalid="false"] {
+      --_fn-border-color: var(--color-success);
+    }
+
+    /* ---- READONLY — flat: drop the framed surface, keep it legible ----- */
+    &[readonly] {
+      --_field-surface: transparent;
+      --_fn-border-color: var(--color-outline-variant);
+      cursor: default;
+    }
+
+    /* ---- DISABLED — dimmed, non-interactive --------------------------- */
+    &[disabled],
+    &[aria-disabled="true"] {
+      --_field-ink: var(--color-form-disabled);
+      --_fn-border-color: var(--color-form-disabled);
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ---- LOADING — keep accessible while busy ------------------------- */
+    &[aria-busy="true"] {
+      cursor: progress;
+    }
+  }
+
+  /* textarea may grow; lock the minimum to the rhythm and allow vertical
+     resize only. */
+  textarea {
+    min-block-size: calc(var(--base-line-height) * 3);
+    resize: vertical;
+  }
+
+  /* select — the reset already strips the native appearance and paints a
+     down-pointing disclosure arrow on the inline end. Re-anchor that arrow to
+     the component's horizontal rhythm and reserve room for it so long option
+     text never runs under the glyph. */
+  select:not([multiple]) {
+    background-position: right var(--spacing-block-horizontal) center;
+    padding-inline-end: calc(var(--spacing-block-horizontal) * 2 + 1em);
+    cursor: pointer;
+  }
+
+  /* =======================================================================
+     FIELDSET — a borderless grouping box that lays its fields out on a grid.
+     The column count is a per-fieldset Intent dial (--grid-column-count),
+     consumed in the demo as an inline style on each <fieldset>.
+     ======================================================================= */
+  fieldset {
+    --_grid-columns: var(--grid-column-count, 1);
+
+    margin: 0;
+    margin-block-end: var(--spacing-block-vertical);
+    padding: 0;
+    border: 0;
+
+    display: grid;
+    grid-template-columns: repeat(var(--_grid-columns), minmax(0, 1fr));
+    gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+    align-items: end;
+
+    /* The legend titles the whole group, so it spans every column. */
+    & > legend {
+      grid-column: 1 / -1;
+    }
+
+    /* Labels and group wrappers participate as grid cells; their own bottom
+       margin would double the grid gap, so neutralize it here. */
+    & > :is(label, div) {
+      margin-block-end: 0;
+    }
+
+    /* A disabled fieldset dims and locks its whole subtree. */
+    &[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  /* =======================================================================
+     LEGEND — the group title, in the label face.
+     ======================================================================= */
+  legend {
+    padding: 0;
+    margin-block-end: var(--spacing-block-vertical);
+    font-family: var(--label-font-family);
+    font-weight: 700;
+    color: var(--color-on-surface);
+  }
+}
