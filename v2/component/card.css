@@ -93,8 +93,7 @@
 }
 
 /* Elevated card — elevation and color read from bridge tokens so themes can
- * override without element-selector rules. The default --card-shadow reproduces
- * the previous M3 resting elevation exactly. */
+ * override without element-selector rules. */
 article {
   color: var(--card-color);
   box-shadow: var(--card-shadow);

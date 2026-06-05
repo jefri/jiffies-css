@@ -49,8 +49,9 @@ fieldset[role="group"] {
 
   & > :is(button, input, select) {
     /* Each member reads the structural border builder so its hairline matches
-     * every other form control in the system (--_fn-border self-defaults to
-     * --base-border-size solid --color-outline). */
+     * every other form control in the system. --_fn-border falls back through
+     * --base-border-color so a theme that sets it to transparent (e.g. neumorphism)
+     * removes member borders without element-selector rules. */
     position: relative;
     z-index: 0;
     margin: 0;

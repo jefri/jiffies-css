@@ -88,8 +88,8 @@
    * button labels (500, medium) and form field labels (700, bold) serve different
    * visual roles and must not be conflated.
    *
-   * --table-font-family defaults to --body-font-family (no special face unless
-   * the theme overrides — canvas sets "Trebuchet MS" to replace its @layer user rule). */
+   * --table-font-family defaults to --body-font-family; canvas overrides it to
+   * "Trebuchet MS" for a distinct tabular face. */
   --heading-font-weight: 700;
   --label-font-weight: 500;
   --form-label-font-weight: 700;
