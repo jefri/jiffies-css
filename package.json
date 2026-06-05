@@ -2,8 +2,21 @@
   "name": "@davidsouther/jiffies-css",
   "version": "2.0.0-alpha",
   "description": "Post-modern full-app CSS reset.",
-  "main": "index.css",
-  "unpkg": "jiffies-css-bundle.min.css",
+  "main": "jiffies-css-v2-bundle.css",
+  "style": "jiffies-css-v2-bundle.css",
+  "unpkg": "jiffies-css-v2-bundle.min.css",
+  "files": [
+    "jiffies-css-v2-bundle.css",
+    "jiffies-css-v2-bundle.css.map",
+    "jiffies-css-v2-bundle.min.css",
+    "jiffies-css-v2-bundle.min.css.map",
+    "accessibility.js",
+    "v2",
+    "index.html",
+    "design_system.md",
+    "README.md",
+    "PHILOSOPHY.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jefri/jiffies-css.git"
@@ -15,6 +28,8 @@
   },
   "homepage": "https://github.com/jefri/jiffies-css#readme",
   "scripts": {
+    "build": "sh build.sh",
+    "prepublishOnly": "sh build.sh",
     "pretest": "npx playwright install chromium",
     "test": "node --test 'test/**/*.test.mjs'",
     "screenshots": "node test/screenshots.mjs"

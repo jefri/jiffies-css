@@ -593,7 +593,7 @@ public:
         <h1 id="tab-sample-header">Tabs</h1>
         <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
         <section role="tablist" aria-labelledby="tab-sample-header">
-          <div role="tab" id="tab-1" aria-controls="tabpanel-1">
+          <div role="tab" id="tab-1" aria-controls="tabpanel-1" aria-selected="false">
             <label>
               Tab 1
               <input
@@ -611,7 +611,7 @@ public:
               Etiam venenatis nisl ut orci consequat, vitae tempus quam commodo.
             </p>
           </div>
-          <div role="tab" id="tab-2" aria-controls="tabpanel-2">
+          <div role="tab" id="tab-2" aria-controls="tabpanel-2" aria-selected="true">
             <label>
               Tab 2
               <input type="radio" name="tablist-1" value="tab-2" checked />
@@ -955,7 +955,6 @@ public:
         </ol>
       </nav>
     </footer>
-    <!-- <script src="./accessibility.js"></script> -->
-    <script src="https://unpkg.com/@davidsouther/jiffies-css@1.0.1/accessibility.js"></script>
+    <script src="./accessibility.js"></script>
   </body>
 </html>

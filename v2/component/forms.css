@@ -10,16 +10,18 @@
  *               [disabled], [readonly]
  *   Edge-cls  : none
  *
- * Variable tiers (per the engine grammar):
- *   - Intent      :root  (e.g. --color-surface, --border-radius-input)
- *   - Derivation  :root  (the --color-form-* family) + the control rule
- *                 (the --_fn-border builder)
- *   - Application element finals declared at the top of the block that reads
- *     them.
+ * Variable tiers (per design_system.md › Variable model):
+ *   - Intent           :root  (e.g. --color-surface, --border-radius-input)
+ *   - Public component alias  :root  (the --color-form-* family)
+ *   - Derivation       the control rule (the --_fn-border builder)
+ *   - Application      element finals declared at the top of the block that
+ *                      reads them.
  *
  * The four --color-form-* roles named by the spec are the component's
- * Derivation tier: they alias upstream M3 role tokens so a consumer can retune
- * one validity state without reaching into the controls. They are declared once
+ * Public component alias tier (design_system.md › Variable model): a scoped,
+ * static, intentionally-overridable role-forwarder. They alias upstream M3 role
+ * tokens so a consumer can retune one validity state without reaching into the
+ * controls. They are declared once
  * on :root and inherit down; a scoped override (e.g. on a single fieldset)
  * re-sets a value that then cascades to that fieldset's controls. Declaring the
  * defaults on the universal * selector would defeat that — every element would
@@ -31,7 +33,8 @@
  * fight over the same elements inside a <form>.
  */
 
-/* ---- Derivation: validity / editability color roles --------------------
+/* ---- Public component alias: validity / editability color roles --------
+ * (design_system.md › Variable model)
  * base    : the resting outline color (M3 outline; clears WCAG 3:1).
  * valid   : the success role — the raised border on a control marked valid.
  * invalid : the error role — used for both the raised border and the text.

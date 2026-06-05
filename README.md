@@ -50,13 +50,20 @@ token surface and [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 - [Cloudscape foundations](https://cloudscape.design/foundation/)
 - [Material design tokens](https://m3.material.io/foundations/design-tokens/overview)
 
-## 2023 Standards
+## Support floor (Chrome 119 / Safari 16.4 / Firefox 128, mid-2024 Baseline)
 
-- [@nest](https://caniuse.com/?search=%40nest)
-- [color-mix()](https://caniuse.com/?search=color-mix)
-- [env()](<https://caniuse.com/?search=env()>) for user-defined (not user-agent) ([spec](https://drafts.csswg.org/css-env-1/#css-environment-variable))
-- [:has](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
-- [hwb](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hwb)
+The engine is built on a recent slice of the platform. These are the load-bearing
+features it actually uses; the support floor is set by the latest of them
+(approximately Chrome 119, Safari 16.4, Firefox 128 — a mid-2024 Baseline):
+
+- [oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) — every color is assembled here from parts.
+- [relative color syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors) — `oklch(from var(--brand-color) <L> <C> h)` derives every palette from the one seed.
+- [@property](https://developer.mozilla.org/en-US/docs/Web/CSS/@property) — registers the toe tokens (`--_l-*`) with a typed numeric value.
+- [color-mix()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/color-mix) — state layers (hover/active) mix a role with its surface.
+- [:has()](https://developer.mozilla.org/en-US/docs/Web/CSS/:has) — selects a parent by what it contains (page-ends, breadcrumbs).
+- [:is() / :where()](https://developer.mozilla.org/en-US/docs/Web/CSS/:is) — group variants; `:where()` keeps reset/defaults at zero specificity.
+- [@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) — the cascade order that makes the token contract win.
+- [pow()](https://developer.mozilla.org/en-US/docs/Web/CSS/pow) — the modular type scale is one `calc()`.
 
 ## Fonts
 
@@ -70,7 +77,10 @@ token surface and [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 
 Jiffies stacks its styles in `@layer`s, each with one job:
 
-- `fns` — the Derivation engine (`* { --_fn-* }`); lazy, costs nothing until read.
+- `fns` — the Derivation engine (`* { --_fn-* }`). Derivations cost no paint until
+  a property reads one, but the `@property`-registered toe tokens (`--_l-*`) do
+  carry a computed numeric value on every element, so the tier carries its
+  per-element declaration footprint even where it goes unread.
 - `reset` — browser normalize (vendored sanitize.css at zero specificity).
 - `layout` — page-level structure (container clamp, page-ends, aside reflow).
 - `content` — semantic element styles (typography, tables, links).
@@ -106,7 +116,7 @@ the single authority; this list is only the concept.
   - `\[role=alert]` + `\[data-variant=warning|error]`
   - `\[role=status]` + `\[data-variant=info|success|neutral]`
 - Chips `small\[data-variant=warning|error|info|success|neutral]`
-- Accordion `details { @nest summary }`
+- Accordion `details > summary`
 - Tab `details \[role=tablist] summary\[role=tab]`
 - Modal `dialog`
 - Navigation `nav > ol`
@@ -136,6 +146,46 @@ per-component edge-class lists.
 - Tooltip `\[data-tooltip][data-direction]`
 - Flex `.flex` `.row` `.inline` `.flex-{0-4}` `.justify-{around, between, center}` `.align-{baseline, center, stretch, end}`
 - Grid `.grid` with the `--grid-column-count` dial
+
+## Customizing
+
+Two kinds of override, two different places to put them.
+
+**Structural rule overrides go in `@layer user`.** The `user` layer is reserved for
+your rules and sits above the library layers, so you win on specificity without
+fighting it:
+
+```css
+@layer user {
+  /* a one-off rule the library does not ship */
+  article.callout {
+    border-inline-start: var(--size-small) solid var(--color-primary);
+    padding-inline-start: var(--size-medium);
+  }
+}
+```
+
+**Token retuning should be UNLAYERED or in `:root`.** Do **not** retune tokens
+inside `@layer user`. The declared order is
+`@layer fns, reset, layout, content, component, utility, user, theme` — `user`
+sits **below** `theme`, so for a conflicting `:root` token a declaration in
+`@layer theme` wins over the same token set in `@layer user`. Set the seed (and any
+other Intent token) unlayered, where an unlayered declaration outranks every layer:
+
+```css
+/* unlayered :root — outranks all @layers, including theme */
+:root {
+  --brand-color: oklch(0.55 0.15 270);
+}
+```
+
+That one dial re-derives the whole scheme. See
+[design_system.md › @layer order](design_system.md#layer-order) for why `theme` is
+last and what that means for token conflicts.
+
+**Dark mode** follows the OS via `prefers-color-scheme`; each role reassigns to a
+different tone of the same palette. A manual `[data-theme]` toggle is **not** built
+in — OS-driven theming is the current, intentional behavior.
 
 ## Theming
 

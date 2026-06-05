@@ -16,8 +16,10 @@
  * selector list.
  */
 progress {
-  /* Intent — track defaults to the surface-variant role; consumers may override
-   * --progress-track-color upstream without touching the component. */
+  /* Public component alias (design_system.md › Variable model) — a scoped,
+   * static, intentionally-overridable role-forwarder. The track defaults to the
+   * surface-variant role; consumers may override --progress-track-color upstream
+   * without touching the component. */
   --progress-track-color: var(--color-surface-variant);
 
   /* Application — the fill reads the M3 primary role through the parts-based

@@ -131,7 +131,7 @@ derived from the source — as in M3.
 | Palette | Prefix | Hue | Chroma | Role |
 |---|---|---|---|---|
 | Primary | `--_p-*` | source `h` | 0.130 | brand accent |
-| Secondary | `--_s-*` | source `h` | 0.045 | muted accent |
+| Secondary | `--_s-*` | source `h` | 0.06 | muted accent |
 | Tertiary | `--_t-*` | `h + 60` | 0.090 | contrasting accent |
 | Neutral | `--_n-*` | source `h` | 0.008 | backgrounds, surfaces, text |
 | Neutral variant | `--_nv-*` | source `h` | 0.016 | outlines, surface variants |
@@ -185,6 +185,13 @@ from the 98 end to the 10 end, and each `on-` partner flipping with it, is M3's
 canonical light/dark mapping: the same roles, different tones. The six palettes
 are theme-independent — every tone of every hue exists at all times — so a theme
 switch is a remap, not a recompute.
+
+**Dark mode is `prefers-color-scheme` (OS) only.** The dark remap is driven
+entirely by the `@media (prefers-color-scheme: dark)` block — there is **no
+built-in `[data-theme]` manual trigger**. This is intentional for the single-seed
+model: one brand color drives one scheme that follows the OS preference. A consumer
+wanting a manual toggle re-declares the dark role tones under their own selector
+(e.g. `[data-theme="dark"]`).
 
 **Contrast is by tone distance, not a warm-hue exception.** M3 pairs a role with
 its `on-` foreground so the tone gap clears the contrast floor: a gap of 40 in
@@ -322,7 +329,8 @@ Overriding an **Application** final is fine control: one property on one element
 The **Derivation** tier sits between them on the universal selector `*`, so it
 re-derives per element. It stays lazy for *paint* — the `oklch()`/`color-mix()`
 math runs only when a property reads a token — though the `@property`-registered
-toe tokens (`--_l-*`) do carry a computed numeric value on every element. The
+toe tokens (`--_l-*`) do carry a computed numeric value on every element: no paint
+cost until read, but a per-element computed-style footprint. The
 per-element relationships that must re-derive at every local override (a base
 color and its hover/active states, the toe that maps tone to lightness) live here
 rather than in Intent, so tuning a public dial cannot break them.
@@ -412,7 +420,7 @@ This section is the **single authority for the specific `@layer` order**:
 
 | Layer | Role |
 |---|---|
-| `fns` | Derivation engine (`* { --_fn-* }`) — declared first, defined before any consumer; lazy, so it costs nothing until read |
+| `fns` | Derivation engine (`* { --_fn-* }`) — declared first, defined before any consumer; lazy for *paint* (the `oklch()`/`color-mix()` math runs only when a property reads a token), though the `@property`-registered `--_l-*` toe tokens carry a computed numeric value on every element — no paint cost until read, but a per-element computed-style footprint |
 | `reset` | Browser normalize (vendored sanitize.css, wrapped in `:where()` for zero specificity) |
 | `layout` | Page-level structure (container, page-end) |
 | `content` | Semantic element styles (typography, tables, links) |
@@ -421,7 +429,7 @@ This section is the **single authority for the specific `@layer` order**:
 | `user` | Untouched layer reserved for consumer overrides |
 | `theme` | `:root` Intent tokens — declared **last** |
 
-Two sub-questions are settled:
+Four sub-questions are settled:
 
 - **(a) `theme` last is intentional.** Custom properties are ordinary properties,
   so they participate in the cascade like any other. Declaring `theme` last therefore makes its `:root` token
@@ -439,6 +447,13 @@ Two sub-questions are settled:
   `@import` statements within one layer only breaks ties between sub-sheets that
   already share that layer. Import order is **not** itself the cascade order — the
   layer order (above) is.
+- **(d) `@layer user` is for structural overrides, not token retuning.** Because
+  `@layer user` is declared **before** `theme`, `theme` wins for any `:root` token
+  conflict — a token re-declared inside `@layer user` would lose to the theme's
+  `:root` declaration. Consumer **token** retuning therefore belongs **unlayered /
+  in `:root`** (where it outranks any layered declaration), while `@layer user` is
+  for **structural rule overrides** (selecting and restyling elements above the
+  library layers without fighting specificity).
 
 *Grounded in:* [`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)
 (MDN) and [CSS Cascading and Inheritance Level 5](https://www.w3.org/TR/css-cascade-5/):
