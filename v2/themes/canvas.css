@@ -11,13 +11,7 @@
        and the theme switcher has a concrete baseline to compare against. */
     --border-radius-container: 0.5rem;
     --border-radius-item: 0.25rem;
-  }
-}
-
-/* Tables have no dedicated brand token — they inherit --brand-body-font-family.
-   Trebuchet MS is a distinct tabular face, so it gets a structural override. */
-@layer user {
-  [data-theme="canvas"] table {
-    font-family: "Trebuchet MS", sans-serif;
+    /* Table face: Trebuchet MS is a distinct tabular face; bridge token override. */
+    --table-font-family: "Trebuchet MS", sans-serif;
   }
 }

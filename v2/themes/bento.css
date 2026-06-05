@@ -7,17 +7,10 @@
     --brand-monospace-font-family: "JetBrains Mono";
     --border-radius-container: 8px;
     --border-radius-item: 4px;
-  }
-}
-
-@layer user {
-  /* Cards read as bento tiles: surface-variant fill, no extra border. */
-  [data-theme="bento"] article {
-    background-color: var(--color-surface-variant);
-    color: var(--color-on-surface-variant);
-  }
-  /* Tighter grid gaps so the tile density reads differently from canvas. */
-  [data-theme="bento"] .grid {
-    gap: var(--size-small);
+    /* Cards read as bento tiles: surface-variant fill. */
+    --card-background-color: var(--color-surface-variant);
+    --card-color: var(--color-on-surface-variant);
+    /* Tighter grid gaps so the tile density reads differently from canvas. */
+    --grid-gap: var(--size-small);
   }
 }

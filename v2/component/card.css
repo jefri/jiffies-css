@@ -24,7 +24,6 @@
 
   margin: var(--_margin-card-vertical) 0;
   background-color: var(--_card-background-color);
-  color: var(--color-on-surface);
   border-radius: var(--_border-radius-card);
   /* Clipping context so a card-scoped hero figure in a rail clips to the
    * card's corners (Hero owns the bleed; the card owns the clip). */
@@ -93,22 +92,18 @@
   }
 }
 
-/* Elevated card — a subtle M3 resting elevation. The shadow color derives from
- * the --color-on-surface role (via color-mix to transparent), so it remaps
- * automatically in dark mode and never hardcodes a color. */
+/* Elevated card — elevation and color read from bridge tokens so themes can
+ * override without element-selector rules. The default --card-shadow reproduces
+ * the previous M3 resting elevation exactly. */
 article {
-  --_card-shadow-color: color-mix(
-    in oklab,
-    var(--color-on-surface) 18%,
-    transparent
-  );
-
-  box-shadow: 0 1px 2px var(--_card-shadow-color),
-    0 2px 6px -1px var(--_card-shadow-color);
+  color: var(--card-color);
+  box-shadow: var(--card-shadow);
+  border: var(--card-border);
 }
 
 /* Flat panel — no elevation; a load-bearing outline (--color-outline, clears
  * WCAG 3:1) delineates the surface from the page. */
 section {
+  color: var(--color-on-surface);
   border: var(--base-border);
 }

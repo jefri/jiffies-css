@@ -268,5 +268,5 @@
    * invalid-triple seam. (--_fn-merge was removed: it had no consumer.) */
   --_fn-border: var(--_fn-border-size, var(--base-border-size))
     var(--_fn-border-style, solid)
-    var(--_fn-border-color, var(--color-outline));
+    var(--_fn-border-color, var(--base-border-color));
 }

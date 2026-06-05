@@ -8,17 +8,11 @@
  * automatically tightens or loosens the cells. */
 
 table {
-  /* Intent → Derivation. Introduce --table-font-family (Trebuchet MS stack)
-   * and the zebra row pair (surface / surface-variant). The hairline between
-   * rows is decorative (outline-variant); the outer frame is load-bearing
-   * (outline). Both are assembled via the --_fn-border shorthand. */
-  --table-font-family: var(
-    --brand-table-font-family,
-    "Trebuchet MS",
-    "Segoe UI",
-    "Helvetica Neue",
-    var(--base-body-font-family)
-  );
+  /* Zebra row pair (surface / surface-variant). The hairline between rows is
+   * decorative (outline-variant); the outer frame is load-bearing (outline).
+   * Both are assembled via the --_fn-border shorthand.
+   * --table-font-family reads the global bridge token from theme/typography.css;
+   * themes override it there (canvas sets "Trebuchet MS"). */
   --table-row-even-color: var(--color-surface);
   --table-row-odd-color: var(--color-surface-variant);
   --_table-cell-padding: var(--spacing-block-vertical)
@@ -62,7 +56,7 @@ table {
    * heavier frame color so the caps band reads as structure, not data. */
   & > thead > tr > th,
   & > tfoot > tr > th {
-    font-weight: 600;
+    font-weight: var(--table-header-font-weight);
     color: var(--color-on-surface);
     background-color: var(--color-surface-variant);
   }
@@ -78,7 +72,7 @@ table {
   /* scope-bearing header cells advertise their axis. A row header leads its
    * row with a hairline divider so the label column reads as an axis. */
   & > tbody > tr > th[scope="row"] {
-    font-weight: 600;
+    font-weight: var(--table-header-font-weight);
     border-inline-end: var(--_table-row-border);
   }
 

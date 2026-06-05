@@ -50,6 +50,10 @@
    * component/breadcrumb.css for nav-link padding and crumb separators. */
   --nav-item-spacing-vertical: var(--size-small); /* 4px */
   --nav-item-spacing-horizontal: var(--size-medium); /* 16px */
+
+  /* Grid gap token. Defaults to --size-base; themes can tighten density
+   * (bento uses --size-small for a tighter tile grid). */
+  --grid-gap: var(--size-base);
 }
 
 /* ---------------------------------------------------------------------------

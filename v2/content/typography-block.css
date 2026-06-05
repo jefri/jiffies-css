@@ -108,7 +108,7 @@ h5,
 h6 {
   --color-header: var(--color-on-surface);
   --font-family-header: var(--header-font-family);
-  --font-weight-header: 700;
+  --font-weight-header: var(--heading-font-weight);
   --line-height-header: 1.15; /* tight: headings set solid, not on the body lead */
   --margin-block-header: 0 var(--spacing-block-vertical);
 

@@ -12,45 +12,27 @@
     /* Sanctioned surface override: the paired shadows need a mid-tone ground. */
     --color-surface: #e0e0e0;
     --color-on-surface: #1a1a1a;
+    /* Remove flat borders — shadow alone carries the edge. */
+    --base-border-color: transparent;
+    /* Depth reads from shadows, not from animated transitions. */
+    --motion-duration-snap: 0s;
+    /* Paired light/dark box-shadow gives the pillowed effect. */
+    --card-shadow:
+      6px 6px 12px rgba(0, 0, 0, 0.25),
+      -6px -6px 12px rgba(255, 255, 255, 0.7);
+    --card-border: none;
+    /* Inset on active press for interactive elements. */
+    --button-shadow-active:
+      inset 3px 3px 6px rgba(0, 0, 0, 0.25),
+      inset -3px -3px 6px rgba(255, 255, 255, 0.7);
   }
   @media (prefers-color-scheme: dark) {
     :root[data-theme="neumorphism"] {
       --color-surface: #2a2a2a;
       --color-on-surface: #e8e8e8;
+      --card-shadow:
+        6px 6px 12px rgba(0, 0, 0, 0.5),
+        -6px -6px 12px rgba(255, 255, 255, 0.1);
     }
-  }
-}
-
-@layer user {
-  /* Paired light/dark box-shadow gives the pillowed effect. */
-  [data-theme="neumorphism"] article,
-  [data-theme="neumorphism"] .card {
-    box-shadow:
-      6px 6px 12px rgba(0,0,0,0.25),
-      -6px -6px 12px rgba(255,255,255,0.7);
-    border: none;
-  }
-  @media (prefers-color-scheme: dark) {
-    [data-theme="neumorphism"] article,
-    [data-theme="neumorphism"] .card {
-      box-shadow:
-        6px 6px 12px rgba(0,0,0,0.5),
-        -6px -6px 12px rgba(255,255,255,0.1);
-    }
-  }
-  /* Inset on active press for interactive elements. */
-  [data-theme="neumorphism"] button:active,
-  [data-theme="neumorphism"] input:active {
-    box-shadow:
-      inset 3px 3px 6px rgba(0,0,0,0.25),
-      inset -3px -3px 6px rgba(255,255,255,0.7);
-  }
-  /* Remove flat borders — shadow alone carries the edge. */
-  [data-theme="neumorphism"] article,
-  [data-theme="neumorphism"] .card,
-  [data-theme="neumorphism"] button,
-  [data-theme="neumorphism"] input,
-  [data-theme="neumorphism"] select {
-    border-color: transparent;
   }
 }

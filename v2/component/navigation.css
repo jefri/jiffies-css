@@ -45,6 +45,7 @@ nav {
   & a {
     color: var(--_nav-link-color);
     text-decoration: none;
+    text-transform: var(--nav-text-transform);
     border-radius: var(--border-radius-inline);
     transition: color var(--transition), background-color var(--transition),
       padding var(--transition);

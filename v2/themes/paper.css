@@ -7,17 +7,12 @@
     --brand-monospace-font-family: "PT Mono";
     --border-radius-container: 2px;
     --border-radius-item: 1px;
-  }
-}
-
-@layer user {
-  /* Flatten: remove all card depth, replace with a hairline ink border.
-     transition: none disables the card's box-shadow transition so the flat
-     state takes effect immediately — consistent with paper's static aesthetic. */
-  [data-theme="paper"] article,
-  [data-theme="paper"] .card {
-    box-shadow: none;
-    border: 1px solid var(--color-outline-variant);
-    transition: none;
+    /* Flatten: remove all card depth, replace with a hairline ink border. */
+    --card-shadow: none;
+    --card-border: 1px solid var(--color-outline-variant);
+    /* Zero motion durations — consistent with paper's static aesthetic. */
+    --motion-duration-snap: 0s;
+    --motion-duration-shake: 0s;
+    --motion-duration-draw: 0s;
   }
 }

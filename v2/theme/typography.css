@@ -80,4 +80,21 @@
     "JetBrains Mono",
     var(--base-monospace-font-family)
   );
+
+  /* Weight and transform tokens. Defaults reproduce current hardcoded values so
+   * no existing render changes when these are introduced.
+   *
+   * --label-font-weight and --form-label-font-weight are intentionally separate:
+   * button labels (500, medium) and form field labels (700, bold) serve different
+   * visual roles and must not be conflated.
+   *
+   * --table-font-family defaults to --body-font-family (no special face unless
+   * the theme overrides — canvas sets "Trebuchet MS" to replace its @layer user rule). */
+  --heading-font-weight: 700;
+  --label-font-weight: 500;
+  --form-label-font-weight: 700;
+  --table-header-font-weight: 600;
+  --table-font-family: var(--body-font-family);
+  --label-letter-spacing: normal;
+  --nav-text-transform: none;
 }
