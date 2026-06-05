@@ -79,9 +79,11 @@
     column-gap: var(--size-large);
   }
 
-  /* A header above main already supplies the gap; trim main's top padding so
-   * the rail divider and body content do not double up. */
-  & > header + main {
+  /* A NORMAL header rail's padding-bottom already supplies the gap, so trim
+   * main's top padding to avoid doubling. A HERO header (> figure) has padding:0
+   * (the figure bleeds to the edge) and supplies NO gap, so keep main's top
+   * padding there — otherwise the body content collides with the hero. */
+  & > header:not(:has(> figure)) + main {
     padding-top: 0;
   }
 

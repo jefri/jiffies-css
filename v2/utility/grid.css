@@ -28,5 +28,5 @@
     var(--grid-column-count, var(--content-columns, 2)),
     minmax(0, 1fr)
   );
-  gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
+  gap: var(--size-base);
 }

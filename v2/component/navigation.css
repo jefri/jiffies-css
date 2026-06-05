@@ -70,19 +70,23 @@ nav {
    links inherit the page-end label color via currentColor, so they read
    correctly on the brand band without re-declaring a color here.
    --------------------------------------------------------------------------- */
-:is(header, footer) > nav {
-  /* Re-assert the page-end bar's on-primary label color. layout.css sets it on
-     the bar, but the content layer paints h1..h6 with --color-on-surface and the
-     inline layer paints links with --color-primary — both would render
-     dark/low-contrast on the brand bar. This rule (component layer, after
-     content) forces the bar's headings + links to inherit the on-primary
-     foreground so they clear contrast against the brand background. */
+/* Page-end bar FOREGROUND (component layer, after content). layout.css sets the
+   bar's --color-on-primary label color, but the content layer paints text
+   elements explicitly — p → --color-on-background, h1..h6 → --color-on-surface,
+   inline links → --color-primary — so on the brand bar they would render
+   dark/low-contrast. Re-assert the on-primary foreground on the WHOLE bar (not
+   just the nav — the footer's copyright <p> is a direct bar child, not inside
+   the nav) and force its text to inherit, so every label on the bar clears the
+   gated primary/on-primary contrast. */
+:is(header, footer):has(> nav) {
   color: var(--color-page-end-brand-primary);
 
-  & :is(h1, h2, h3, h4, h5, h6, a) {
+  & :is(p, h1, h2, h3, h4, h5, h6, a, li, small, b, strong, em, i, cite) {
     color: inherit;
   }
+}
 
+:is(header, footer) > nav {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;

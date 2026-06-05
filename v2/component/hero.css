@@ -101,10 +101,11 @@
   --_hero-radius: var(--border-radius-card, var(--border-radius-container));
   --_hero-min-height: calc(var(--base-size) * 16);
 
-  /* Cancel the rail's inner padding on every side so the image bleeds to the
-     card edge.  Top bleed also absorbs the card header's bottom margin gap. */
-  margin-block: calc(-1 * var(--spacing-block-vertical));
-  margin-inline: calc(-1 * var(--spacing-block-horizontal));
+  /* card.css already zeroes the hero rail's padding (and border), so the figure
+     fills the rail edge-to-edge at margin 0. No negative bleed: a negative
+     margin here would over-bleed past the already-zeroed rail and spill into the
+     sibling main, colliding the title with the body copy. */
+  margin: 0;
 }
 
 /* A card header keeps a bottom border/margin from card.css; when it holds only
