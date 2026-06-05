@@ -7,17 +7,25 @@ practices and common patterns for each component or feature.
 
 ## Active topics
 
-- [ ] **table-font-token** — Introduce `--brand-table-font-family` as a sixth
-  font role alongside the existing five (body/header/label/nav/monospace). Add
-  it to `v2/theme/typography.css` following the same `--brand-*` → named face →
-  base stack pattern. Wire `--table-font-family` into the tables component
-  (`component/tables.css`) and to any `table` selector in content. Once landed,
-  replace the `@layer user` structural override in `themes/canvas.css` with a
-  proper `--brand-table-font-family: "Trebuchet MS"` token declaration, and
-  audit the other theme files for their table face (or leave them inheriting the
-  body default). Also reconciles the `symposium-doc-debt` note (line 252–254)
-  which already flagged this gap. Gated on theme-skins landing so canvas.css
-  exists as the right edit target.
+- [ ] **card-shadow-active** — Add `--card-shadow-active` bridge token for hover-state
+  elevation progression (card rises on hover). No existing theme needs it yet; add when
+  a theme requires it. Declare in `theme/borders.css` alongside `--card-shadow`, wire in
+  `card.css` `article:hover` rule. Deferred from tier-3-tokens design.
+
+- [ ] **button-border-style-token** — Buttons hardcode `solid` in their border shorthand
+  (`border: var(--base-border-size) solid var(--_button-border-color)`). A future
+  `--button-border-style` token would let themes control the border style without element
+  selectors. Currently `--base-border-color: transparent` is sufficient. Deferred from
+  tier-3-tokens design.
+
+- [ ] **table-font-token** — The tier-3 token work introduced `--table-font-family`
+  as a bridge token in `theme/typography.css` (defaults to `--body-font-family`;
+  canvas overrides to "Trebuchet MS"). The `--brand-table-font-family` sixth-role
+  design in the original task is now superseded. Remaining work: decide whether to
+  add `--brand-table-font-family` as a named face override in the font-role pattern
+  (so it follows the same brand→named→stack chain as the five existing roles), or
+  accept `--table-font-family` as a direct bridge token and document the gap.
+  Also reconciles `symposium-doc-debt` note (line 252–254).
 
 - [ ] **theme-skins-final-review** — After the theme-skins feature test passes,
   run a final refactor + review pass over the topic (themes/ files, panel theme
