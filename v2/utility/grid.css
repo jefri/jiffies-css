@@ -1,6 +1,32 @@
+/* Grid utility — the sanctioned class-based helper for equal-column grids.
+   See README "Layout" › Grid and design_system.md "@layer order" (utility).
+
+   `.grid` lays its children out in N equal columns. N is the
+   `--grid-column-count` dial — the same OVERRIDE token that component/forms.css
+   reads on a <fieldset> and that index.html sets on its <fieldset> and
+   swatch-grid demos, so one dial name overrides every grid. (The unset DEFAULT
+   differs by consumer: a bare `.grid` reflows via --content-columns, while a
+   fieldset stacks to a single column — each picks the no-dial behavior that
+   suits it.)
+
+   Contract:
+   - Columns: repeat(var(--grid-column-count), 1fr), each column an equal
+     share. minmax(0, 1fr) so a wide child can't blow the track out.
+   - Default: --grid-column-count is NOT declared on .grid (that would shadow a
+     per-element inline override). Instead the count is read with a responsive
+     fallback — the breakpoint-driven --content-columns ladder (1·1·1·2·2·4
+     from theme/sizing.css), itself falling back to 2 — so a bare `.grid` with
+     no dial set still reflows sensibly across breakpoints.
+   - Gap: the block-rhythm spacing scale (theme/sizing.css), no magic numbers.
+
+   Override the count per element (inline, parent, or @layer user):
+     <div class="grid" style="--grid-column-count: 3"> */
+
 .grid {
-  --grid-column-count: 2;
   display: grid;
-  grid-template-columns: repeat(var(--grid-column-count), 1fr);
+  grid-template-columns: repeat(
+    var(--grid-column-count, var(--content-columns, 2)),
+    minmax(0, 1fr)
+  );
   gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
 }

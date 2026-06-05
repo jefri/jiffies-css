@@ -1,60 +1,90 @@
+/* Flex utilities — the sanctioned class-based helpers for flex layout.
+   See README "Layout" › Flex and design_system.md "@layer order" (utility).
+
+   These live in @layer utility, which sits AFTER component, so a helper
+   placed on an element wins over the component's own flow. They are small,
+   composable, classless-friendly: `.flex` is the container switch, `.row`
+   flips the main axis, `.inline` makes the container inline, `.flex-{0-4}`
+   are grow/shrink steps for children, and the `.justify-*`/`.align-*`
+   modifiers map 1:1 onto justify-content / align-items.
+
+   Surface (README): .flex .row .inline .flex-{0-4}
+   .justify-{around, between, center} .align-{baseline, center, stretch, end}
+
+   Gap derives from the spacing scale (theme/sizing.css) so flex rows breathe
+   on the same rhythm as the rest of the system — no magic numbers. */
+
+/* Container. Default axis is column (vertical stack); `.row` flips it. */
 .flex {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-block-vertical) var(--spacing-block-horizontal);
 }
 
-.flex.row {
+/* Inline flex container: like `.flex` but the box itself participates inline.
+   Standalone it defaults to a gapless row (browser flex default); compose with
+   `.flex` for the column + gap defaults, or with `.row` to be explicit. */
+.inline {
+  display: inline-flex;
+}
+
+/* Main-axis control. `.row` lays children left-to-right; absent it, the
+   `.flex` default (column) governs. Scoped to `.flex`/`.inline` so the word
+   only carries meaning on a flex container. */
+.flex.row,
+.inline.row {
   flex-direction: row;
 }
 
-.flex.row.inline > * {
-  display: inline-block;
-}
-
-.flex.justify-around {
+/* justify-content — distribution along the main axis. */
+.justify-around {
   justify-content: space-around;
 }
 
-.flex.justify-between {
+.justify-between {
   justify-content: space-between;
 }
 
-.flex.justify-center {
+.justify-center {
   justify-content: center;
 }
 
-.flex.align-baseline {
+/* align-items — alignment across the cross axis. */
+.align-baseline {
   align-items: baseline;
 }
 
-.flex.align-center {
+.align-center {
   align-items: center;
 }
 
-.flex.align-stretch {
+.align-stretch {
   align-items: stretch;
 }
 
-.flex.align-end {
-  align-items: end;
+.align-end {
+  align-items: flex-end;
 }
 
-.flex > .flex-0 {
-  flex-basis: 0;
+/* Child grow/shrink steps. `.flex-0` holds its size (no grow, no shrink);
+   `.flex-1`..`.flex-4` take proportional shares of free space. Apply to any
+   child of a flex container. */
+.flex-0 {
+  flex: 0 0 auto;
 }
 
-.flex > .flex-1 {
+.flex-1 {
   flex: 1;
 }
 
-.flex > .flex-2 {
+.flex-2 {
   flex: 2;
 }
 
-.flex > .flex-3 {
+.flex-3 {
   flex: 3;
 }
 
-.flex > .flex-4 {
+.flex-4 {
   flex: 4;
 }

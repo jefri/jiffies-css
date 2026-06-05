@@ -1,5 +1,5 @@
-/* zero-out (Phase 0): utility sub-imports commented; re-enable in Phase 5. */
-/* re-enable with utility/flex (Phase 5 re-enable utility/flex) */
-/* @import "./flex.css"; */
-/* re-enable with utility/grid (Phase 5 re-enable utility/grid) */
-/* @import "./grid.css"; */
+/* utility — the sanctioned class-based helper layer (@layer utility).
+   Sits AFTER component in the @layer order so a helper placed on an element
+   wins over the component's own flow. See design_system.md "@layer order". */
+@import "./flex.css";
+@import "./grid.css";

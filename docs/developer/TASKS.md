@@ -196,9 +196,9 @@ file yet) that get created and enabled.
 
 ## Phase 5 — Re-enable `utility`
 
-- [ ] **re-enable utility/flex** — Uncomment and review against *Flex*
+- [x] **re-enable utility/flex** — Uncomment and review against *Flex*
   (`.flex .row .inline .flex-{0-4} .justify-* .align-*`). Screenshot.
-- [ ] **re-enable utility/grid** — Uncomment and review the grid utilities
+- [x] **re-enable utility/grid** — Uncomment and review the grid utilities
   (`--grid-column-count`). Screenshot.
 
 ---
