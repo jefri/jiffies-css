@@ -205,20 +205,20 @@ file yet) that get created and enabled.
 
 ## Phase 6 — Docs & hardening
 
-- [ ] **color-doc-alignment** — Realign the consumer-facing color docs to M3. The
+- [x] **color-doc-alignment** — Realign the consumer-facing color docs to M3. The
   README `### Color` section still lists the old parts API
   (`--color-primary-hue`/`--primary-luminance`/`--primary-chroma`); reduce it to
   `--brand-color` plus the `--color-*` role surface. Sweep PHILOSOPHY for any
   remaining brand-hue/luminance color language. Ref: Color.
-- [ ] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
+- [x] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
   the layering *concept*; the `@layer order` section of `design_system.md` owns
   the canonical `fns, reset, layout, content, component, utility, user, theme`
   order. Ref: @layer order.
-- [ ] **computed-thresholds** — Expand the seed `test/computed/` tests with exact
+- [x] **computed-thresholds** — Expand the seed `test/computed/` tests with exact
   threshold assertions: specific non-zero pixel sizes for padding, exact color
   comparisons for brand colors. Depends on modules landing stable values.
 
-- [ ] **symposium-doc-debt** — Deferred doc-honesty items raised by the foundation
+- [x] **symposium-doc-debt** — Deferred doc-honesty items raised by the foundation
   and typography-base symposia (fix here so they don't propagate as more components
   land):
   - README: add a Usage / Getting-Started section (install / CDN `<link>` / "write

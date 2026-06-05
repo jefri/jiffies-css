@@ -80,7 +80,6 @@
    * through these once their layers re-enable. */
   --page-background-color: var(--color-background);
   --card-background-color: var(--color-surface);
-  --brand-primary-color: var(--color-primary);
 
   /* Typography state application tokens map to the matching state roles:
    * mark = warning, ins = success, del = error. */

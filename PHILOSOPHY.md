@@ -14,11 +14,12 @@ Customization happens in focused base variables that control large swaths of
 the app. Resetting a single size variable adjusts the sizing basis for the
 entire app, including layouts, fonts, and whitespace. But another variable
 override can switch the entire page to compact or open whitespace. Colors work
-the same way. A single root brand color can theme the entire page, including
-complementary and highlight colors. Or you can fine-tune those colors directly,
-bypassing the calculated variant. The theming contract targets a single brand
-per page — one brand hue drives the derived complementary and highlight colors;
-multiple brands per page are out of scope.
+the same way. A single `--brand-color` seeds the whole scheme: every role —
+primary, secondary, tertiary, the neutrals, and their container/text pairs —
+is derived from it through Material 3's generative color model, computed in
+pure CSS. Or you can fine-tune a derived role or an Application final directly,
+bypassing the derivation for that one outcome. The theming contract targets a
+single brand color per page; multiple brands per page are out of scope.
 
 ## Semantic HTML & Classless CSS
 
@@ -30,12 +31,27 @@ utility classes) and BEM (which puts meaning in `block__element--modifier`
 classes). Tailwind, Bootstrap CSS, and BEM require every element to be annotated
 by hand; in Jiffies CSS the HTML stays semantic and the styling is implicit.
 
-Classes appear only at the **edges**, where a semantic variant has no element or
-role to carry it. The sanctioned edge-classes are a closed list, kept closed so
-it cannot sprawl:
+Classes appear only at the **edges**, governed by a single **sanctioning
+criterion**: a class is warranted only when an element cannot infer its intent
+from its shape or its ARIA. If a `& >` relationship or a role already carries the
+meaning, no class is added. The criterion is the gate that keeps the class
+surface from sprawling — not a frozen enumeration. New edge-classes are added by
+meeting the criterion and recording them, not by amending a closed list.
 
-- `.secondary`, `.contrast`, `.outline` — button and control variants.
-- _(extended only by amending this list, with rationale, in this document.)_
+Two distinct sanctioned categories pass this gate:
+
+- **Control edge-classes** carry a semantic variant of a control that its element
+  and role do not express — `.secondary`, `.contrast`, `.outline` on buttons, for
+  example.
+- **Utilities** are class-based layout and density helpers that sit in their own
+  `utility` layer, deliberately opt-in because the behaviour they request is not
+  implied by any element — `.fluid`, `.compact`/`.loose`, `.round`,
+  `figure.scroll-x`/`.scroll-y`, and the `.flex`/`.grid` family.
+
+These are different in kind: a control edge-class refines a component, a utility
+requests a behaviour. design_system.md › Components and › Patterns hold the
+canonical census of which classes each component sanctions; this document owns
+only the criterion.
 
 ## Variable Model: Intent → Derivation → Application
 
@@ -75,10 +91,24 @@ rule actually consumes: `--color-header`, `--font-size-base`,
 `--margin-card-vertical`. Named from the inside, after the property and element
 it sets. Declared in the element's own rule, kebab-case.
 
-Non-negotiable invariants — contrast first among them — belong in **Derivation**,
-not Intent. Intent is the public surface to overridde, not an appropriate place 
-for invariants. When placed in Derivation, the invariant re-derives at every local
-override and cannot be negotiated away.
+The **Derivation** tier holds the per-element re-derivation engine: the relations
+that must recompute at every local override (a base color and its hover/active
+states, the inverse-Oklab toe that maps M3 tone to OKLCH lightness). Placing them
+here means tuning a public Intent dial cannot break them — they re-derive in terms
+of the new input rather than going stale.
+
+Contrast is **not** kept honest by tier placement, and this document does not
+claim it is. The semantic role and `--color-on-*` pairs (`--color-primary` /
+`--color-on-primary`) are role **defaults on `:root`** — Intent the system ships,
+deliberately reachable for fine control, which a consumer may retune. The contrast
+guarantee rests on two things, neither of which is "make the pair unoverridable":
+M3's canonical tone-distance pairing (each role ships an `on-` foreground whose
+HCT-tone gap clears the WCAG floor) **and** the CI contrast test
+(`test/computed/contrast.test.mjs`), which resolves every role / `on-` pair to
+sRGB and asserts the ratio across a spread of brand hues, so a pairing that drifts
+below the floor fails CI rather than shipping. A consumer who overrides a role
+therefore owns re-verification: re-run the test against their brand hue. The floor
+is enforced where it can actually be checked, not asserted by hiding the dial.
 
 ## Selectors & Nesting
 
@@ -124,13 +154,14 @@ Two organizing rules follow from this map:
   reads it; its nested `&:has(a:hover)` re-sets the same final. State lives next
   to the structure it modifies, not in a distant override rule.
 - One file per component; nesting is the component's shape, layers are the
-  assembly. The file boundary matches the component boundary, and the `@layer`
-  order fixes how the files stack: reset, then content, then component, then
-  utility. A reader meets the browser reset before the elements, the elements
-  before the components, and the components before the adjustments. The cascade
-  order is the reading order. This holds for normal author declarations kept
-  within the layer order: it depends on every author style being layered, since
-  an unlayered rule or an `!important` declaration escapes that order.
+  assembly. The file boundary matches the component boundary, and an explicit
+  `@layer` order fixes how the files stack so that the cascade order is the
+  reading order: a reader meets the browser reset before the elements, the
+  elements before the components, and the components before the adjustments. The
+  canonical order is owned by design_system.md › @layer order; this document
+  argues only the concept. The concept holds only for normal author declarations
+  kept within the layer order: it depends on every author style being layered,
+  since an unlayered rule or an `!important` declaration escapes that order.
 
 ## Scope and Boundaries
 

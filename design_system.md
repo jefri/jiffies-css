@@ -72,14 +72,33 @@ so the whole hierarchy rides the breakpoint ladder *together*. At the `md` step
 constant 1.25 ratio to `h6` = `1.25^1` = 1.25 × base (just above body text) at
 every step. Anchoring on `1rem` instead would pin headings to the 16px root while
 body grew to 24px at `4k`, inverting `h6` below the paragraph it titles.
+
+The **`h1` = `1.25^6` ceiling is a deliberate editorial default**, not a derived
+maximum: the exponent `6` (for the six heading levels `h1`…`h6`, via `7 − n`) caps
+the scale at six steps above body, fixing `h1` at ≈ 3.81 × base. It is an editorial
+choice about how loud the largest heading should be, pinned here so the ceiling is
+intentional rather than incidental; a project wanting a taller or shorter top
+heading retunes by changing `--font-scale` (the whole hierarchy moves with it),
+since the level count is fixed by HTML's six heading elements.
 `--small-font-size` is `calc(--base-font-size / --font-scale)` and shares the same
 base. The single dial is `--font-scale`; changing it re-tunes the whole hierarchy.
 
-Five font roles, each an Intent override that falls back to a base face:
-`--body-`, `--header-`, `--label-`, `--nav-`, `--monospace-font-family`, resolving
+The shipped theme exposes **five** font roles, each an Intent override that falls
+back to a base face: `--body-`, `--header-`, `--label-`, `--nav-`,
+`--monospace-font-family`, resolving
 `var(--brand-<role>-font-family, var(--base-<role>-font-family))`. Default faces:
-Body **Poppins**, Text Header **Libre Baskerville**, App Header **Roboto**, Tables
-**Trebuchet MS**, Code **JetBrains Mono**.
+Body **Poppins**, Header **Libre Baskerville**, Label/Nav **Roboto**, Code
+**JetBrains Mono**.
+
+Two reconciliations with the code:
+
+- **Tables are not a sixth theme role.** Tables use `--table-font-family`
+  (**Trebuchet MS**), a token *introduced by the tables component*, not one of the
+  five theme roles. It lives with the component that needs it, so the theme's role
+  surface stays at five.
+- **App-Header is not its own role.** The application header maps to the
+  **label/nav (Roboto)** role rather than a distinct `--app-header-` face. There is
+  no sixth "app header" font role; the App-Header surface reuses label/nav.
 
 *Grounded in:* modular scales — Tim Brown,
 [*More Meaningful Typography*](https://alistapart.com/article/more-meaningful-typography/)
@@ -150,7 +169,7 @@ palette:
 
 | Role / on-pair | Light tones | Dark tones | Read by |
 |---|---|---|---|
-| `--color-primary` / `--color-on-primary` | `--_p-40` / `--_p-100` | `--_p-80` / `--_p-20` | filled button, focus ring, brand page-end (`--brand-primary-color`) |
+| `--color-primary` / `--color-on-primary` | `--_p-40` / `--_p-100` | `--_p-80` / `--_p-20` | filled button, focus ring, brand page-end (via `--background-color-page-end-brand-primary`) |
 | `--color-primary-container` / `--color-on-primary-container` | `--_p-90` / `--_p-10` | `--_p-30` / `--_p-90` | tonal surfaces |
 | `--color-secondary` / `--color-secondary-container` (+ `on-`) | `--_s-40` / `--_s-90` | `--_s-80` / `--_s-30` | muted accents, `.secondary` controls |
 | `--color-tertiary` / `--color-tertiary-container` (+ `on-`) | `--_t-40` / `--_t-90` | `--_t-80` / `--_t-30` | contrasting accents |
@@ -174,12 +193,26 @@ partner, a light fill always carries a dark foreground and a dark fill a light
 one — there is no per-hue special case (the old "amber takes dark text" rule is
 folded into the pairing).
 
-**State colors are M3 custom colors.** Info, success, and warning sit outside the
-core M3 scheme; each is a **fixed source hue expanded into its own tonal palette
-and role pair** by the same toe + chroma machinery, then mapped to
-container/`on-container` roles exactly like error. The dials are `--blue-hue`
-(info), `--green-hue` (success / `ins`), `--amber-hue` (warning / `mark`); error
-(`del`) is the built-in fixed red.
+**State colors are PROJECT EXTENSIONS, not M3-canonical.** Info, success, and
+warning are **Jiffies extensions** — they are *not* part of the canonical M3 color
+scheme (M3 ships only the core roles plus a fixed error). Each is a **fixed source
+hue expanded into its own tonal palette and role pair** by the same toe + chroma
+machinery, then mapped to container/`on-container` roles exactly like error. The
+dials are `--blue-hue` (info), `--green-hue` (success / `ins`), `--amber-hue`
+(warning / `mark`); error (`del`) is the built-in fixed red. Because they are
+project extensions outside the M3 pairing guarantees, **each carries its own,
+independent contrast obligation**: their role / `on-` pairs are subject to the same
+CI contrast test as the core roles, and a consumer who retunes a state hue owns
+re-verifying that pair — the M3 tone-distance argument does not automatically cover
+them.
+
+**`--brand-color`'s blast radius reaches prose.** Setting `--brand-color` no longer
+only repaints buttons and surfaces — its blast radius now reaches **prose links and
+marks** (`a`, `mark`, `ins`, `del` read through the role/state surface). This is a
+**recorded coarse-control decision**: one dial deliberately moves the whole
+read-content palette with the chrome, accepting that fine-grained per-element link or
+mark color now requires overriding the relevant role or alias token rather than
+sitting independent of the brand.
 
 **Where this honestly diverges from M3.** (1) Key-color derivation uses fixed
 OKLCH chroma per role — a translation of the TonalSpot variant; M3 also ships
@@ -274,13 +307,14 @@ component shape.
 
 ### Variable model
 
-Every custom property lives in one of three tiers, a gradient of meaning from
-author intent to rendered property:
+Every custom property lives in one of four classifications, a gradient of meaning
+from author intent to rendered property:
 
-| Tier | Lives on | Answers | Example |
+| Classification | Lives on | Answers | Example |
 |---|---|---|---|
 | **Intent** | `:root` (public API) | "how will this be used?" | `--brand-color`, `--base-size`, `--font-scale` |
 | **Derivation** | `*` (private engine) | connects intent to outcome, re-derived per element | `--_fn-color`, `--_p-40` |
+| **Public component alias** | `:root` or a component scope (public) | "which role does this component forward?" | `--color-form-base`, `--progress-track-color`, `--mark-background-color` |
 | **Application** | the element's own rule | "what does this change?" | `--color-header`, `--font-size-base` |
 
 Overriding an **Intent** token is coarse control: it moves everything downstream.
@@ -301,6 +335,29 @@ CI contrast test (`test/computed/contrast.test.mjs`), which is what actually
 enforces the floor. A consumer who overrides a role owns re-verification: run the
 test against their brand hue. See [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 
+**Public component alias.** A fourth classification sits between Intent and
+Application: a **scoped, static, intentionally-overridable role-forwarder**. It is
+neither `--_`-private (it is meant to be overridden) nor part of the re-computing
+Derivation engine (it does no `oklch()`/`color-mix()` math — it simply forwards a
+role token to one component family, giving that family one named seam to retune).
+It is static where Derivation re-derives per element, and component-public where an
+Application final is element-local. The members are:
+
+- **`--color-form-*`** (`--color-form-base`/`-invalid`/`-disabled`/`-required`) —
+  the form-control border/state palette, scoped to `:root`/`fieldset` so a fieldset
+  can retune its own controls.
+- **`--progress-track-color`** — the progress bar's unfilled track.
+- The **Application bridges** — `--mark-*` / `--ins-*` / `--del-*`
+  (`--mark-background-color`, `--mark-color`, `--ins-color`, `--del-color`),
+  `--page-background-color`, `--card-background-color`, and
+  `--background-color-page-end-brand-primary` — each forwarding an M3 role to a
+  specific element family (prose marks, the page base, the card surface, the brand
+  page-end).
+
+These ship **as-is** in code; they are documented as the alias tier rather than
+renamed. They are the named override seams a consumer reaches for when a single
+role is right everywhere except one component family.
+
 *Grounded in:* the tiered design-token pattern (global/primitive →
 semantic/alias → component) — Nathan Curtis,
 [Naming Tokens in Design Systems](https://medium.com/eightshapes-llc/naming-tokens-in-design-systems-9e86c7444676)
@@ -312,15 +369,31 @@ the Derivation engine lives on `*` and re-computes per element.
 Names are **kebab-case, category/element-first**. Tier is not encoded with
 mid-name underscores.
 
-- **Intent and Application** tokens are plain kebab-case: `--brand-color`,
+- **Intent and public Application** tokens are plain kebab-case: `--brand-color`,
   `--base-font-size`, `--color-header`, `--margin-card-vertical`.
-- **Derivation** intermediates carry a leading **`--_`** — Lea Verou's
-  pseudo-private prefix — so a reader knows the value is part of the engine, not a
-  dial to override: `--_fn-color`, `--_p-40`, `--_fn-border`.
+- **`--_`-prefixed** names are **private to their declaring scope** — Lea Verou's
+  pseudo-private prefix — so a reader knows the value is internal to wherever it is
+  declared, not a dial to override from outside: `--_fn-color`, `--_p-40`,
+  `--_fn-border`.
 
-**Decision D1 — Derivation prefix = `--_`.** The leading underscore is a naming
-convention only (CSS enforces no privacy); it signals "internal, do not override."
-No major design system encodes tier via a mid-name underscore.
+**Decision D1 — `--_` = private to its declaring scope.** The leading underscore is
+a naming convention only (CSS enforces no privacy); it signals "internal to this
+scope, do not override from outside." It covers **two** kinds of internals, by the
+same rule:
+
+- **Engine intermediates** declared in the `@layer fns` Derivation tier on `*`
+  (`--_fn-color`, `--_p-40`, `--_l-40`, `--_k1`): private to the engine, the global
+  declaring scope.
+- **Component-local Application finals** declared inside a single component's rule
+  block (the component files use `--_`-prefixed locals heavily — a base color plus
+  its computed hover/active states, a local geometry intermediate): private to that
+  component's selector subtree, the local declaring scope.
+
+The distinction that matters is not *tier* but *scope of declaration*: a `--_` name
+is owned by whatever rule declares it and is not part of any public surface. This is
+why the component layer's pervasive `--_` locals conform to the grammar without any
+rename — they are correctly marked private to the component that declares them. No
+major design system encodes tier via a mid-name underscore.
 
 *Grounded in:* Lea Verou,
 [Custom properties with defaults: 3+1 strategies](https://lea.verou.me/blog/2021/10/custom-properties-with-defaults/),
@@ -358,11 +431,20 @@ Two sub-questions are settled:
 - **(b) `fns` stays a separate layer, declared first.** The Derivation tier lives
   on `*` and is distinct from `theme`'s `:root` Intent tier; it is not merged into
   `theme`, and it must be defined before any consumer reads it.
+- **(c) Imported sheets nest in the importing layer.** Each layer is assembled by a
+  barrel that `@import`s its sub-sheets *inside* a layer assignment. The layer is
+  fixed by **where the import is made**, not by import order: an `@import` written
+  into the `component` layer puts that sheet in `component` regardless of when it is
+  imported. So a sub-sheet's *cascade position is its enclosing layer*; the order of
+  `@import` statements within one layer only breaks ties between sub-sheets that
+  already share that layer. Import order is **not** itself the cascade order — the
+  layer order (above) is.
 
 *Grounded in:* [`@layer`](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)
 (MDN) and [CSS Cascading and Inheritance Level 5](https://www.w3.org/TR/css-cascade-5/):
 for normal declarations, the declaration whose cascade layer is last wins;
-the first `@layer` statement fixes the order.
+the first `@layer` statement fixes the order; and an `@import` made within a layer
+places the imported sheet into that layer.
 
 ### Selector & nesting conventions
 
@@ -391,18 +473,66 @@ specificity), [`:is()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:is)
 "parent" selector), and the
 [child combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator).
 
+### Scope of reach
+
+Three consequences of styling bare elements are deliberate, and worth stating
+plainly so consumers can plan around them.
+
+- **Bare-element selectors restyle *all* matching content.** Because the content
+  layer targets `p`, `a`, `table`, `ul`, and the rest by element, it restyles **every
+  matching element on the page** — including **CMS output, third-party widgets, and
+  embedded markup** the author did not write. This is by design: making semantic HTML
+  look right without classes is the whole proposition. Reconciling foreign markup is
+  declared the **construction layer's job** (normalize the markup, or wrap it). The
+  escape hatch is the cascade itself: the reserved **`@layer user`** sits above the
+  library layers (and below `theme`), so a consumer can scope an override or re-isolate
+  a foreign subtree there without fighting specificity.
+- **The blessed SPA mount id is `#root`.** The page spine keys off `#root`:
+  `body > #root` is treated as the layout root for a single-page app mounted there.
+  Other frameworks (and plain documents) fall to the **`body:not(:has(> #root))`**
+  branch, which applies the same spine directly to `body`. A SPA that mounts under a
+  different id should either rename its mount to `#root` or accept the
+  `:not(:has(> #root))` branch.
+- **Base line-height is a frozen px ladder, not a unitless ratio.**
+  `--base-line-height` is set per breakpoint as an **absolute px value** (16/18/20/24/
+  28/32px across `xs`…`4k`; see [Breakpoints](#breakpoints)), not a unitless
+  multiplier of font size. A practical consequence: a smaller element such as `<small>`
+  **rides the full base leading** — its line box keeps the breakpoint's px leading even
+  though its font is smaller, rather than computing a tighter leading from its own
+  reduced size.
+
 ---
 
 ## Components
 
 Each entry is the **contract** for one component. A component is a DOM shape plus
-an ARIA contract, never a class. Some necessary edge-classes add subtle additional intent: `.secondary`, `.contrast`, `.outline`. Each component description uses one format:
+an ARIA contract, never a class. Each component description uses one format:
 
 - **DOM shape** — the element tree / nesting the rule targets.
 - **ARIA** — roles/attributes that select modalities or states.
 - **Tokens** — the Application finals  it consumes.
 - **States** — the interactive/ARIA states it styles.
 - **Edge-classes** — sanctioned classes, if any.
+
+**Edge-classes: the sanctioning criterion.** Classes are not a closed list; they
+are sanctioned by a **criterion**. A class is added **only when an element cannot
+infer its intent from its shape or its ARIA** — when two presentations are both
+valid for the same DOM shape and ARIA contract, and nothing in the markup
+distinguishes them. The class names the choice; everything else is selected by shape
+or role. The full census of sanctioned classes is:
+
+- **Control variants** — `.secondary`, `.contrast`, `.outline` (a button or control
+  whose fill role cannot be read from shape/ARIA alone).
+- **Density utilities** — `.compact`, `.loose` (rescale the spacing atom for a
+  subtree; cannot be inferred from shape).
+- **Shape/flow utilities** — `.fluid` (opt out of the content clamp / full-bleed),
+  `.round` (round progress and similar), `figure.scroll-x` / `figure.scroll-y`
+  (scroll axis for an overflowing figure).
+- **Layout utilities** — `.flex`, `.row`, `.inline`, `.flex-0`…`.flex-4`,
+  `.justify-*`, `.align-*`, `.grid` (one-shot Flexbox/Grid composition the markup
+  shape cannot encode).
+
+Any class outside this census is out of contract.
 
 ### Buttons
 
@@ -466,10 +596,21 @@ Opinionated tables with zebra striping and a type face separate from body or cod
 
 Pure-CSS disclosure using native `details`; the chevron is the theme icon.
 
+The custom chevron **replaces the native disclosure marker**: the UA `summary`
+marker is removed (`list-style`/`::-webkit-details-marker`) and `--icon-chevron`
+draws the affordance, which rotates on `[open]`. **State-announcement
+consideration:** the expanded/collapsed state must still ride the native
+`details`/`summary` semantics — `details[open]` is what assistive tech announces
+(exposed as `aria-expanded` on `summary`). Because the visual marker is now purely
+decorative CSS, it carries no state on its own; correctness depends on keeping the
+native `details` element (not re-implementing disclosure on generic elements), so
+the state stays announced even though the marker is custom.
+
 - **DOM shape:** `details > summary` (+ flow content sibling)
 - **ARIA:** native `details[open]` carries expansion state (exposed as
   `aria-expanded` on `summary`)
-- **Tokens:** `--icon-chevron` (disclosure marker), `--transition` (rotation),
+- **Tokens:** `--icon-chevron` (disclosure marker, replacing the native one),
+  `--transition` (rotation),
   `--spacing-block-vertical`/`--spacing-block-horizontal`, `--_fn-border`
 - **States:** `[open]`, `summary:hover`, `summary:focus-visible`
 - **Edge-classes:** none
@@ -593,8 +734,8 @@ elevated card; `section` is the flat panel.
 ### Breadcrumb
 
 A trail rendered from a nav list with a separator glyph. It is **classless**: the
-`Breadcrumb` ARIA label selects it, not a class, so it stays within the Components
-closed edge-class list.
+`Breadcrumb` ARIA label selects it, not a class — its intent is fully inferable from
+its ARIA contract, so the sanctioning criterion adds no class for it.
 
 - **DOM shape:** `nav[aria-label="Breadcrumb"] > ol > li`
 - **ARIA:** `nav[aria-label="Breadcrumb"]`, `[aria-current=page]` on the last crumb
