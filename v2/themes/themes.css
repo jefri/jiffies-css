@@ -1,0 +1,7 @@
+/* Theme skins — plain imports preserve each file's internal @layer blocks.
+   Do NOT wrap in layer() here; each theme self-assigns to @layer theme and
+   @layer user internally. */
+@import "./canvas.css";
+@import "./bento.css";
+@import "./neumorphism.css";
+@import "./paper.css";

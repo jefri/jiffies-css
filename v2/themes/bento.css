@@ -1,0 +1,23 @@
+/* Bento: clean editorial grid. Inter-first type, tight tile geometry. */
+@layer theme {
+  :root[data-theme="bento"] {
+    --brand-body-font-family: "Inter";
+    --brand-header-font-family: "Inter";
+    --brand-nav-font-family: "Inter";
+    --brand-monospace-font-family: "JetBrains Mono";
+    --border-radius-container: 8px;
+    --border-radius-item: 4px;
+  }
+}
+
+@layer user {
+  /* Cards read as bento tiles: surface-variant fill, no extra border. */
+  [data-theme="bento"] article {
+    background-color: var(--color-surface-variant);
+    color: var(--color-on-surface-variant);
+  }
+  /* Tighter grid gaps so the tile density reads differently from canvas. */
+  [data-theme="bento"] .grid {
+    gap: var(--size-small);
+  }
+}

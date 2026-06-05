@@ -1,0 +1,23 @@
+/* Canvas: the baseline treatment. Formalized as a theme so the font roles live
+   inside @layer theme — where [data-theme] specificity (0,1,1) beats a bare :root
+   (0,1,0) and other themes can override them. */
+@layer theme {
+  :root[data-theme="canvas"] {
+    --brand-body-font-family: "Poppins";
+    --brand-header-font-family: "Libre Baskerville";
+    --brand-nav-font-family: "Lato";
+    --brand-monospace-font-family: "JetBrains Mono";
+    /* Radius: carry the borders.css defaults explicitly so canvas is selectable
+       and the theme switcher has a concrete baseline to compare against. */
+    --border-radius-container: 0.5rem;
+    --border-radius-item: 0.25rem;
+  }
+}
+
+/* Tables have no dedicated brand token — they inherit --brand-body-font-family.
+   Trebuchet MS is a distinct tabular face, so it gets a structural override. */
+@layer user {
+  [data-theme="canvas"] table {
+    font-family: "Trebuchet MS", sans-serif;
+  }
+}

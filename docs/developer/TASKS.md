@@ -5,6 +5,27 @@ practices and common patterns for each component or feature.
 
 ---
 
+## Active topics
+
+- [ ] **table-font-token** — Introduce `--brand-table-font-family` as a sixth
+  font role alongside the existing five (body/header/label/nav/monospace). Add
+  it to `v2/theme/typography.css` following the same `--brand-*` → named face →
+  base stack pattern. Wire `--table-font-family` into the tables component
+  (`component/tables.css`) and to any `table` selector in content. Once landed,
+  replace the `@layer user` structural override in `themes/canvas.css` with a
+  proper `--brand-table-font-family: "Trebuchet MS"` token declaration, and
+  audit the other theme files for their table face (or leave them inheriting the
+  body default). Also reconciles the `symposium-doc-debt` note (line 252–254)
+  which already flagged this gap. Gated on theme-skins landing so canvas.css
+  exists as the right edit target.
+
+- [ ] **theme-skins-final-review** — After the theme-skins feature test passes,
+  run a final refactor + review pass over the topic (themes/ files, panel theme
+  row + JS, canvas font-role migration, contrast assertions) and tidy with
+  `developer:cleanup`. Gated on the feature test being green.
+
+---
+
 ## Conventions
 
 **Re-enablement model.** The v2 stylesheet has accumulated cruft and has drifted

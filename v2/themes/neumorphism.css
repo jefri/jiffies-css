@@ -1,0 +1,56 @@
+/* Neumorphism: soft geometry, paired light/dark shadows, mid-gray surface.
+   This is the structural showcase — the one theme that overrides --color-surface.
+   The override ships its own dark-mode block and a contrast assertion in the test. */
+@layer theme {
+  :root[data-theme="neumorphism"] {
+    --brand-body-font-family: "Space Mono";
+    --brand-header-font-family: "Space Mono";
+    --brand-nav-font-family: "Space Mono";
+    --brand-monospace-font-family: "JetBrains Mono";
+    --border-radius-container: 1rem;
+    --border-radius-item: 0.75rem;
+    /* Sanctioned surface override: the paired shadows need a mid-tone ground. */
+    --color-surface: #e0e0e0;
+    --color-on-surface: #1a1a1a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root[data-theme="neumorphism"] {
+      --color-surface: #2a2a2a;
+      --color-on-surface: #e8e8e8;
+    }
+  }
+}
+
+@layer user {
+  /* Paired light/dark box-shadow gives the pillowed effect. */
+  [data-theme="neumorphism"] article,
+  [data-theme="neumorphism"] .card {
+    box-shadow:
+      6px 6px 12px rgba(0,0,0,0.25),
+      -6px -6px 12px rgba(255,255,255,0.7);
+    border: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    [data-theme="neumorphism"] article,
+    [data-theme="neumorphism"] .card {
+      box-shadow:
+        6px 6px 12px rgba(0,0,0,0.5),
+        -6px -6px 12px rgba(255,255,255,0.1);
+    }
+  }
+  /* Inset on active press for interactive elements. */
+  [data-theme="neumorphism"] button:active,
+  [data-theme="neumorphism"] input:active {
+    box-shadow:
+      inset 3px 3px 6px rgba(0,0,0,0.25),
+      inset -3px -3px 6px rgba(255,255,255,0.7);
+  }
+  /* Remove flat borders — shadow alone carries the edge. */
+  [data-theme="neumorphism"] article,
+  [data-theme="neumorphism"] .card,
+  [data-theme="neumorphism"] button,
+  [data-theme="neumorphism"] input,
+  [data-theme="neumorphism"] select {
+    border-color: transparent;
+  }
+}

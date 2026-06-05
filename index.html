@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en-US" data-theme="canvas">
   <head>
     <meta charset="utf-8" />
     <title>Jiffies CSS</title>
@@ -17,26 +17,116 @@
       href="https://unpkg.com/@davidsouther/jiffies-css@1.0.1"
     /> -->
     <style>
-      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@400;700&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400;700&family=Lato:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=PT+Mono&family=Roboto:wght@400;700&family=Space+Mono:wght@400;700&display=swap");
 
-      /*
-        NEW Intent surface (design_system.md › Foundations) — the public-API
-        dials a consumer overrides. These are LIVE: the fns engine + theme layer
-        resolve them into the M3 scheme.
-
-        - One brand color seeds the whole M3-derived scheme.
-        - Density is a class on :root (.compact / .loose) that rescales --base-size.
-        - Font roles are per-role --brand-*-font-family overrides (faces loaded by
-          the @import above).
-      */
+      /* Canvas default: low chroma so the page reads as a blank slate.
+         Any oklch() seed drives the whole M3 scheme — the panel below
+         makes that visible live. */
       :root {
-        --brand-color: oklch(55% 0.18 255deg);
+        --brand-color: oklch(55% 0.05 255deg);
+        /* --brand-*-font-family declarations removed — now live in themes/canvas.css */
+      }
 
-        /* Font-role overrides (Intent tier). Fall back to base faces. */
-        --brand-body-font-family: "Poppins";
-        --brand-header-font-family: "Libre Baskerville";
-        --brand-nav-font-family: "Roboto";
-        --brand-monospace-font-family: "JetBrains Mono";
+      /* ── Intent panel — demo chrome only ──────────────────────────────────
+         Layout, surface, buttons, and labels come from Jiffies primitives:
+         the panel is a <section> (a named region landmark that also picks up
+         the flat-panel surface), split by the .grid utility into two .flex
+         tiles; controls are form <label>s, the density toggle is a
+         fieldset[role=group] of buttons, the copy control is a button. What
+         is left here is the chrome the system has no primitive for, written
+         entirely in Intent tokens (no magic numbers). */
+      #intent-panel {
+        /* Controls tile — a surface-variant card; .flex stacks the rows. */
+        & #intent-controls {
+          background-color: var(--color-surface-variant);
+          color: var(--color-on-surface-variant);
+          padding: var(--size-medium);
+          border-radius: var(--border-radius-item);
+
+          /* .flex gap owns the row rhythm; drop the inherited block margins so
+             the two spacings don't stack. */
+          & > * {
+            margin-block: 0;
+          }
+        }
+
+        /* Overline group title (no overline primitive). */
+        & .eyebrow {
+          font-family: var(--label-font-family);
+          font-size: var(--small-font-size);
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--color-on-surface-variant);
+        }
+
+        /* Brand-color preview chip (no swatch primitive). */
+        & #brand-swatch {
+          display: block;
+          height: var(--size-medium);
+          margin-block-start: var(--size-small);
+          border: var(--base-border);
+          border-radius: var(--border-radius-inline);
+          transition: background-color var(--transition);
+        }
+
+        /* Range is excluded from the forms component; give it the width and
+           brand accent the system has no range primitive for. */
+        & input[type="range"] {
+          width: 100%;
+          accent-color: var(--color-primary);
+        }
+
+        /* Generated-code tile — an inverse-surface code panel (the content
+           layer gives <pre> only a monospace face, no code-block surface). */
+        & #intent-code-wrap {
+          margin: 0;
+          background-color: var(--color-inverse-surface);
+          color: var(--color-inverse-on-surface);
+          padding: var(--size-medium) var(--size-large);
+          border-radius: var(--border-radius-item);
+        }
+        & #intent-code {
+          margin: 0;
+          color: inherit;
+          font-size: var(--small-font-size);
+          overflow-x: auto;
+        }
+
+        /* Copy control — the button component supplies geometry/focus/radius/
+           states; only its color pair is retuned to the inverse surface
+           (Application-final fine control, no inverse button variant ships). */
+        & #intent-copy {
+          align-self: flex-end;
+          --_button-fill: var(--color-inverse-primary);
+          --_button-label: var(--color-inverse-surface);
+
+          &:hover {
+            --_button-fill: color-mix(
+              in oklab,
+              var(--color-inverse-surface) 8%,
+              var(--color-inverse-primary)
+            );
+          }
+          &:active {
+            --_button-fill: color-mix(
+              in oklab,
+              var(--color-inverse-surface) 12%,
+              var(--color-inverse-primary)
+            );
+          }
+        }
+
+        /* Density segmented toggle — pressed member reads filled primary,
+           unpressed reads quiet (no toggle-selected button state ships). */
+        & fieldset[role="group"] > button {
+          --_button-fill: transparent;
+          --_button-label: var(--color-on-surface-variant);
+        }
+        & fieldset[role="group"] > button[aria-pressed="true"] {
+          --_button-fill: var(--color-primary);
+          --_button-label: var(--color-on-primary);
+        }
       }
     </style>
   </head>
@@ -64,6 +154,7 @@
         </h1>
       </nav>
     </header>
+
     <main>
       <!-- ===================================================================
            OVERVIEW & USAGE
@@ -114,24 +205,140 @@
 />
 &lt;script src="https://unpkg.com/@davidsouther/jiffies-css/accessibility.js">&lt;/script></code></pre>
           </li>
-          <li>
-            Theme with the Intent tier: set <code>--brand-color</code> in a
-            <code>:root {}</code> block to seed the whole scheme, add the
-            <code>.compact</code> or <code>.loose</code> class to
-            <code>:root</code> for density, and override
-            <code>--brand-*-font-family</code> for fonts.
-          </li>
-          <li>
-            Sample customization block:
-            <pre><code>:root {
-  --brand-color: oklch(55% 0.18 255deg);
-  --brand-body-font-family: "Poppins";
-  --brand-header-font-family: "Libre Baskerville";
-  --brand-monospace-font-family: "JetBrains Mono";
-}
-/* density: add .compact or .loose to :root */</code></pre>
-          </li>
         </ul>
+
+        <p>
+          Theme with the Intent tier: adjust the controls below to see how
+          a single <code>--brand-color</code> seed drives the whole M3
+          scheme. Copy the generated snippet into your own
+          <code>:root&nbsp;{}</code> block and you're done.
+        </p>
+
+        <section id="intent-panel" aria-label="Theme controls">
+          <div class="grid">
+            <div class="flex" id="intent-controls">
+              <p class="eyebrow">Intent Properties</p>
+
+              <label>
+                <code>--brand-color</code>
+                <span id="brand-swatch"></span>
+              </label>
+
+              <label>
+                hue <output id="val-h">255°</output>
+                <input type="range" id="color-h" min="0" max="360" step="1" value="255" />
+              </label>
+
+              <label>
+                <code>--font-scale</code> <output id="val-scale">1.25</output>
+                <input type="range" id="font-scale" min="110" max="160" step="1" value="125" />
+              </label>
+
+              <div>
+                <label for="density-normal">density</label>
+                <fieldset role="group" aria-label="Density">
+                  <button type="button" id="density-compact" aria-pressed="false" onclick="setDensity('compact')">compact</button>
+                  <button type="button" id="density-normal" aria-pressed="true" onclick="setDensity('')">normal</button>
+                  <button type="button" id="density-loose" aria-pressed="false" onclick="setDensity('loose')">loose</button>
+                </fieldset>
+              </div>
+
+              <div>
+                <label>theme</label>
+                <fieldset role="group" aria-label="Theme">
+                  <button type="button" id="theme-canvas"      aria-pressed="true"  onclick="setTheme('canvas')">canvas</button>
+                  <button type="button" id="theme-bento"       aria-pressed="false" onclick="setTheme('bento')">bento</button>
+                  <button type="button" id="theme-neumorphism" aria-pressed="false" onclick="setTheme('neumorphism')">neumorphism</button>
+                  <button type="button" id="theme-paper"       aria-pressed="false" onclick="setTheme('paper')">paper</button>
+                </fieldset>
+              </div>
+            </div>
+
+            <figure class="flex" id="intent-code-wrap">
+              <pre id="intent-code"></pre>
+              <button type="button" id="intent-copy" onclick="copyIntent()">Copy CSS</button>
+            </figure>
+          </div>
+        </section>
+
+        <script>
+          (function () {
+            const root = document.documentElement;
+            const hEl = document.getElementById('color-h');
+            const scaleEl = document.getElementById('font-scale');
+            let currentDensity = '';
+            let currentTheme = root.dataset.theme || 'canvas';
+
+            const THEME_DENSITY = {
+              canvas:      '',
+              bento:       '',
+              neumorphism: 'compact',
+              paper:       '',
+            };
+
+            function applyValues() {
+              const h = +hEl.value;
+              const scale = +(scaleEl.value / 100).toFixed(2);
+
+              const color = `oklch(55% 0.18 ${h}deg)`;
+              root.style.setProperty('--brand-color', color);
+              root.style.setProperty('--font-scale', scale);
+
+              document.getElementById('val-h').textContent = `${h}°`;
+              document.getElementById('val-scale').textContent = scale.toFixed(2);
+              document.getElementById('brand-swatch').style.background = color;
+
+              updateCode(color, scale);
+            }
+
+            function updateCode(color, scale) {
+              const densityLine = currentDensity
+                ? `\n/* density: add class="${currentDensity}" to <html> */`
+                : '';
+              document.getElementById('intent-code').textContent =
+                `<html data-theme="${currentTheme}">\n` +
+                `:root {\n  --brand-color: ${color};\n  --font-scale: ${scale.toFixed(2)};\n}${densityLine}`;
+            }
+
+            window.setDensity = function (density) {
+              currentDensity = density;
+              ['compact', 'loose'].forEach(d => root.classList.remove(d));
+              if (density) root.classList.add(density);
+              document.getElementById('density-compact').setAttribute('aria-pressed', density === 'compact' ? 'true' : 'false');
+              document.getElementById('density-normal').setAttribute('aria-pressed', density === '' ? 'true' : 'false');
+              document.getElementById('density-loose').setAttribute('aria-pressed', density === 'loose' ? 'true' : 'false');
+              updateCode(
+                `oklch(55% 0.18 ${hEl.value}deg)`,
+                +(scaleEl.value / 100).toFixed(2)
+              );
+            };
+
+            window.setTheme = function (name) {
+              currentTheme = name;
+              root.dataset.theme = name;
+              setDensity(THEME_DENSITY[name] ?? '');
+              ['canvas', 'bento', 'neumorphism', 'paper'].forEach(t => {
+                document.getElementById(`theme-${t}`)
+                  ?.setAttribute('aria-pressed', t === name ? 'true' : 'false');
+              });
+              updateCode(
+                `oklch(55% 0.18 ${hEl.value}deg)`,
+                +(scaleEl.value / 100).toFixed(2)
+              );
+            };
+
+            window.copyIntent = function () {
+              navigator.clipboard.writeText(document.getElementById('intent-code').textContent).catch(() => {});
+              const btn = document.getElementById('intent-copy');
+              const orig = btn.textContent;
+              btn.textContent = 'Copied!';
+              setTimeout(() => { btn.textContent = orig; }, 2000);
+            };
+
+            [hEl, scaleEl].forEach(el => el.addEventListener('input', applyValues));
+            applyValues();
+          }());
+        </script>
       </section>
 
       <!-- ===================================================================

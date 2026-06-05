@@ -1,0 +1,23 @@
+/* Paper: print-edge geometry, no shadows, ink hairline borders. */
+@layer theme {
+  :root[data-theme="paper"] {
+    --brand-body-font-family: "Roboto";
+    --brand-header-font-family: "Montserrat";
+    --brand-nav-font-family: "Roboto";
+    --brand-monospace-font-family: "PT Mono";
+    --border-radius-container: 2px;
+    --border-radius-item: 1px;
+  }
+}
+
+@layer user {
+  /* Flatten: remove all card depth, replace with a hairline ink border.
+     transition: none disables the card's box-shadow transition so the flat
+     state takes effect immediately — consistent with paper's static aesthetic. */
+  [data-theme="paper"] article,
+  [data-theme="paper"] .card {
+    box-shadow: none;
+    border: 1px solid var(--color-outline-variant);
+    transition: none;
+  }
+}
