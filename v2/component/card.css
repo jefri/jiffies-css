@@ -32,6 +32,15 @@
   transition: box-shadow var(--transition), border-color var(--transition),
     background-color var(--transition);
 
+  /* A BARE surface — one that holds content directly, with no header/main/footer
+     rail — pads itself so its content gets the same breathing room a rail or main
+     would. (A card that DOES use rails keeps the surface flush at 0 padding so the
+     rails — and a hero figure — can bleed to the card edge; the rails carry the
+     padding instead.) */
+  &:not(:has(> :is(header, main, footer))) {
+    padding: var(--size-medium) var(--size-large);
+  }
+
   /* ---- Header / footer rails ----------------------------------------- */
   & > :is(header, footer) {
     /* Application — rail padding + inner divider. Cards get a roomier internal
