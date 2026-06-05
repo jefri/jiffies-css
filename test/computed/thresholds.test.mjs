@@ -382,16 +382,23 @@ describe("thresholds — layout content clamp @ lg (1280px)", () => {
       "664px",
       `main flex-basis = ${geo.flexBasis}, expected 664px (--base-main-width) under the aside reflow`,
     );
-    // It shares the row: main + aside together span the viewport, neither is the
-    // full 920px clamp on its own.
+    // It shares the row beside a FIXED, narrow aside rail (--base-aside-width
+    // 256px at lg). The aside no longer grows to eat ~half the row.
     assert.ok(
-      geo.asideWidth > 0,
-      `aside should occupy the row (width ${geo.asideWidth})`,
+      Math.abs(geo.asideWidth - 256) <= 1,
+      `aside width = ${geo.asideWidth}, expected the fixed --base-aside-width 256px @ lg`,
+    );
+    // main + aside form the centered --base-viewport-width (920px) content band,
+    // NOT a full-bleed row filling the 1280px viewport (which ballooned the aside).
+    assert.ok(
+      Math.abs(geo.mainWidth + geo.asideWidth - 920) <= 1,
+      `main (${geo.mainWidth}) + aside (${geo.asideWidth}) should form the 920px ` +
+        `content band, got ${geo.mainWidth + geo.asideWidth}`,
     );
     assert.ok(
-      Math.abs(geo.mainWidth + geo.asideWidth - geo.innerWidth) <= 1,
-      `main (${geo.mainWidth}) + aside (${geo.asideWidth}) should fill the viewport ` +
-        `(${geo.innerWidth}) under the row-wrap reflow`,
+      geo.mainWidth + geo.asideWidth < geo.innerWidth,
+      `the content band (${geo.mainWidth + geo.asideWidth}) should be centered within ` +
+        `the viewport (${geo.innerWidth}), not full-bleed`,
     );
     assert.notStrictEqual(
       Math.round(geo.mainWidth),

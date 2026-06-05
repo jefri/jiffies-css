@@ -34,9 +34,10 @@
 
   /* ---- Header / footer rails ----------------------------------------- */
   & > :is(header, footer) {
-    /* Application — rail padding + inner divider. */
-    --_card-rail-padding: var(--spacing-block-vertical)
-      var(--spacing-block-horizontal);
+    /* Application — rail padding + inner divider. Cards get a roomier internal
+       measure than the base block rhythm: --size-medium vertical / --size-large
+       horizontal so content breathes inside the surface. */
+    --_card-rail-padding: var(--size-medium) var(--size-large);
     --_card-inner-border: var(--card-inner-border);
 
     padding: var(--_card-rail-padding);
@@ -59,12 +60,14 @@
 
   /* ---- Main body ----------------------------------------------------- */
   & > main {
-    /* Application — body padding + multi-column flow. */
-    --_card-main-padding: var(--spacing-block-vertical)
-      var(--spacing-block-horizontal);
+    /* Application — body padding + multi-column flow. Roomier than the base
+       block rhythm so the card body breathes; multi-column main gets a matching
+       gutter so columns aren't cramped. */
+    --_card-main-padding: var(--size-medium) var(--size-large);
 
     padding: var(--_card-main-padding);
     columns: var(--content-columns);
+    column-gap: var(--size-large);
   }
 
   /* A header above main already supplies the gap; trim main's top padding so
@@ -75,7 +78,7 @@
 
   /* No footer below main: main owns the card's bottom padding. */
   & > main:last-child {
-    padding-bottom: var(--spacing-block-vertical);
+    padding-bottom: var(--size-medium);
   }
 }
 

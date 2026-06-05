@@ -127,6 +127,11 @@ body > #root {
      ------------------------------------------------------------------------- */
   &:has(> aside) {
     flex-flow: row wrap;
+    /* Center the main+aside content band; header/footer stay full-width bands.
+       main is capped to its content measure and aside is a FIXED, narrow rail —
+       neither grows to eat the row (the old `flex: 1 1` on both split the
+       leftover space ~50/50, ballooning the aside). */
+    justify-content: center;
 
     & > header {
       order: var(--layout-header-order);
@@ -135,11 +140,13 @@ body > #root {
     & > main {
       order: var(--layout-main-order);
       flex: 1 1 var(--base-main-width);
-      max-width: 100%;
+      max-width: var(--base-main-width);
+      min-width: 0;
     }
     & > aside {
       order: var(--layout-aside-order);
-      flex: 1 1 var(--base-aside-width);
+      flex: 0 0 var(--base-aside-width);
+      max-width: var(--base-aside-width);
     }
     & > footer {
       order: var(--layout-footer-order);

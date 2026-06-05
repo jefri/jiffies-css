@@ -24,9 +24,13 @@
    are deliberately excluded — when they hold a > nav they become page-end bars
    whose padding the layout layer owns, so padding them here would double up.
    --------------------------------------------------------------------------- */
-body:not(:has(> #root)) > :is(main, header, footer, aside),
-body > #root > :is(main, header, footer, aside) {
-  /* Contain in-flow overflow so a wide child can't blow out the slot width. */
+body:not(:has(> #root)) > :is(main, header, footer),
+body > #root > :is(main, header, footer) {
+  /* Contain in-flow overflow so a wide child can't blow out the slot width.
+     aside is EXCLUDED: overflow:hidden would make the aside its own scroll
+     container and capture its sticky TOC nav (navigation.css), defeating the
+     viewport-sticky behavior. The aside's content is the narrow TOC, so it has
+     no wide child to contain anyway. */
   overflow: hidden;
 }
 
