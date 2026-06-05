@@ -30,11 +30,19 @@
 @layer component {
   /* ---- Derivation: validity / editability color roles --------------------
    * base    : the resting outline color (M3 outline; clears WCAG 3:1).
+   * valid   : the success role — the raised border on a control marked valid.
    * invalid : the error role — used for both the raised border and the text.
    * disabled: the muted on-surface-variant, paired with opacity at the site.
-   * required: the marker accent on a [required] label. */
+   * required: the marker accent on a [required] label.
+   *
+   * valid/invalid are intentionally symmetric so a consumer can retune either
+   * validity state in isolation. Color is NEVER the sole carrier of the
+   * valid/invalid distinction: each state also paints a non-color status glyph
+   * (see --_field-status-icon below) so the two read apart under red-green CVD
+   * (WCAG 1.4.1). */
   * {
     --color-form-base: var(--color-outline);
+    --color-form-valid: var(--color-success);
     --color-form-invalid: var(--color-error);
     --color-form-disabled: var(--color-on-surface-variant);
     --color-form-required: var(--color-error);
@@ -144,9 +152,12 @@
     }
 
     /* A control explicitly marked valid keeps the success role on its border
-       so the state reads at a glance without color-only reliance elsewhere. */
+       so the state reads at a glance. Border COLOR alone, though, fails
+       WCAG 1.4.1: valid (success) and invalid (error) borders differ only by
+       hue, so a red-green-CVD reader cannot tell the two apart. The trailing
+       status glyph below carries the non-color cue. */
     &[aria-invalid="false"] {
-      --_fn-border-color: var(--color-success);
+      --_fn-border-color: var(--color-form-valid);
     }
 
     /* ---- READONLY — flat: drop the framed surface, keep it legible ----- */
@@ -169,6 +180,47 @@
     &[aria-busy="true"] {
       cursor: progress;
     }
+  }
+
+  /* =======================================================================
+     VALIDITY STATUS GLYPH — the non-color half of the WCAG 1.4.1 cue.
+
+     A validity border that differs only by hue (success-green vs error-red)
+     is invisible to a red-green-CVD reader. So each marked-validity input also
+     carries a trailing status glyph whose SHAPE — not its color — names the
+     state: a check for valid, an alert "!" for invalid. The two shapes read
+     apart with hue stripped out.
+
+     Inputs are replaced elements, so ::before/::after can't be placed inside
+     them; a no-repeat background-image at the inline-end is the vehicle. The
+     glyph color is baked into the data-URI (a background-image can't resolve
+     var()), but that is fine: the shape is the cue, and the stroke is a
+     mid-neutral that holds contrast on both the light and dark surface.
+
+     Scope: input only. select paints a native disclosure arrow at the inline
+     end and textarea a resize handle at the corner; a status glyph there would
+     collide with those affordances, so both opt out (the border + text cues
+     still apply to them). The glyph is also suppressed on [disabled]/[readonly]
+     inputs, which are not in an actionable validity state. */
+  input[aria-invalid]:not([disabled], [readonly], [aria-disabled="true"]) {
+    --_field-status-size: 1em;
+
+    background-repeat: no-repeat;
+    background-position: right var(--spacing-block-horizontal) center;
+    background-size: var(--_field-status-size);
+    /* Reserve room so typed text never runs under the glyph. */
+    padding-inline-end: calc(var(--spacing-block-horizontal) * 2 + 1em);
+  }
+
+  /* VALID — a check mark. */
+  input[aria-invalid="false"]:not([disabled], [readonly], [aria-disabled="true"]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  }
+
+  /* INVALID — an alert triangle with an exclamation mark. A wholly different
+     shape from the check, so the two states separate without any hue. */
+  input[aria-invalid="true"]:not([disabled], [readonly], [aria-disabled="true"]) {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E");
   }
 
   /* textarea may grow; lock the minimum to the rhythm and allow vertical

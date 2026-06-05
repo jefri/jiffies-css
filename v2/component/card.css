@@ -13,7 +13,10 @@
  * the block that consumes them.
  */
 
-:is(article, section) {
+/* :not([role]) keeps the card surface off sectioning elements that carry a
+ * component ARIA role — a `section[role=tablist]`, `[role=alert]`, etc. is a
+ * component, not a card/panel, and must not be double-styled as a surface. */
+:is(article, section):not([role]) {
   /* Application — surface, radius, vertical rhythm shared by card + panel. */
   --_card-background-color: var(--card-background-color);
   --_border-radius-card: var(--border-radius-container);

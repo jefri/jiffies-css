@@ -244,3 +244,24 @@ file yet) that get created and enabled.
   - Demo/screenshots honesty: the per-module screenshot folders show not-yet-styled
     components (intentional changelog), but note this so the set doesn't read as a
     more complete framework than ships.
+  - From the component symposium (tier-model + polish):
+    - Redefine D1 `--_` as "private to its declaring scope" (covers both `@layer fns`
+      engine intermediates AND component-local Application finals), so the ~90% of the
+      component layer that uses `--_` locals conforms without renames.
+    - Add a 4th token classification "public component alias" (scoped, static,
+      intentionally-overridable role-forwarder): `--color-form-*`, `--progress-track-color`.
+      Stop calling `--color-form-*` "Derivation".
+    - Decide per-component spacing home (local Application vs hoisted Intent) and apply
+      uniformly — `--nav-item-spacing-*` got hoisted to :root while button padding stayed
+      local; the Intent surface shouldn't grow by accretion.
+    - Pin the h1 exponent (1.25^6 ≈ 3.81×) in type-scale-apply as a deliberate ceiling.
+    - Fix the @layer-assignment phrasing ("imported sheets nest in the importing layer",
+      not "import order = cascade order").
+    - Code shouldFix: drop forms.css's redundant `@layer component {}` wrapper (the barrel
+      assigns the layer); scope `--color-form-*` off the `*` selector to :root/fieldset so
+      per-fieldset inheritance works; modernize the tabs visually-hidden recipe to
+      `clip-path: inset(50%)`; document/justify the `fieldset[role=group]` styling hook.
+    - Accordion: keep a real styled marker or document the custom-chevron state-announcement
+      degradation in the screen-reader matrix.
+    - Demo: add a live `@layer user` override example + the edge-class census; fix barrel
+      comments; note ARIA attribute-value casing (`nav[aria-label="Breadcrumb"]`).

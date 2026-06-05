@@ -55,6 +55,15 @@ dialog {
   }
 }
 
+/* A non-modal open dialog (the `open` attribute, NOT showModal) belongs to the
+ * document flow — only dialog:modal is the centered, scrimmed top-layer overlay.
+ * Keep the inline-open form in normal flow so it never floats over the page
+ * (e.g. an inline disclosure, or the always-open demo example). */
+dialog[open]:not(:modal) {
+  position: static;
+  margin-inline: auto;
+}
+
 @keyframes modal-open {
   from {
     opacity: 0;

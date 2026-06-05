@@ -476,17 +476,33 @@ Pure-CSS disclosure using native `details`; the chevron is the theme icon.
 
 ### Tabs
 
-A tablist whose selected state is driven entirely accessibly. 
+A tablist whose **selected state** the stylesheet reflects accessibly. Scope
+matters here: CSS reflects *which tab is selected*, but the full ARIA Authoring
+Practices keyboard model for a `tablist` — roving `tabindex`, arrow keys,
+`Home`/`End`, `Tab` into the panel — is **not** something a stylesheet can supply.
+Jiffies ships two selection paths, and operability differs between them:
 
-- **DOM shape:** `[role=tablist] > [role=tab]` paired with `[role=tabpanel]`
-  (commonly inside a `section`)
-- **ARIA:** `[role=tab]`, `[role=tabpanel]`, `[aria-selected]`, `[aria-controls]`,
-  `[tabpanel][hidden]`
+- **No-JS path (pure CSS):** each `[role=tab]` wraps a visually-hidden radio in a
+  shared `name` group; `:checked` drives the indicator and reveals the adjacent
+  panel. Keyboard operation is the browser's **native radio-group** behaviour
+  (arrow keys move and select within the group) — genuinely operable, though a
+  screen reader announces the radio, not a full APG `tab`.
+- **JS path:** the construction layer (`accessibility.js`) sets `[aria-selected]`
+  and supplies the APG roving-tabindex/arrow-key model. This script is a **hard
+  dependency** for the full `tab` keyboard contract; the stylesheet only paints the
+  state it sets.
+
+- **DOM shape:** `[role=tablist]` containing alternating `[role=tab]` +
+  `[role=tabpanel]` pairs (commonly a `section`); each tab wraps a `label` (and,
+  for the no-JS path, a grouped radio)
+- **ARIA:** `[role=tab]`, `[role=tabpanel]`, and `[aria-selected]` (JS path);
+  selection on the no-JS path is the radio's native `:checked`. `[hidden]` on an
+  inactive panel is still honoured.
 - **Tokens:** `--color-primary` (active-tab indicator), `--color-surface-variant`
-  (hover), `--label-font-family`, `--color-outline-variant` (tablist baseline, via
-  `--_fn-border`)
-- **States:** `[aria-selected=true]`, `:hover`, `:focus-visible`
+  (hover), `--label-font-family`, `--card-inner-border` (tablist baseline)
+- **States:** `[aria-selected=true]` / `:has(:checked)`, `:hover`, `:focus-visible`
 - **Edge-classes:** none
+- **Adapted from** the v1 jiffies-css `tabs.css`, re-tokenised to the v2 role surface.
 
 ### Modal
 

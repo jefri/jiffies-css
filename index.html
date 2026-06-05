@@ -20,14 +20,14 @@
       @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400;1,700&family=Roboto:wght@400;700&display=swap");
 
       /*
-        NEW Intent surface (design_system.md › Foundations).
-        These are the public-API dials a consumer overrides. They take effect
-        as Phase 1 (fns + theme) lands; until then the theme layer is an empty
-        shell, so they are inert but document the intended override site.
+        NEW Intent surface (design_system.md › Foundations) — the public-API
+        dials a consumer overrides. These are LIVE: the fns engine + theme layer
+        resolve them into the M3 scheme.
 
         - One brand color seeds the whole M3-derived scheme.
         - Density is a class on :root (.compact / .loose) that rescales --base-size.
-        - Font roles are per-role --brand-*-font-family overrides.
+        - Font roles are per-role --brand-*-font-family overrides (faces loaded by
+          the @import above).
       */
       :root {
         --brand-color: oklch(55% 0.18 255deg);
@@ -38,14 +38,6 @@
         --brand-nav-font-family: "Roboto";
         --brand-monospace-font-family: "JetBrains Mono";
       }
-
-      /*
-        Live theme controls (brand color, density, fonts) return here once the
-        theme tokens exist (Phase 1: m3-tonal-palettes + theme/sizing +
-        theme/typography). They were removed because they targeted dead OLD-API
-        tokens (--color-primary-hue, --sizing, --font-family-*). Re-add them
-        wired to --brand-color, .compact/.loose, and --brand-*-font-family.
-      */
     </style>
   </head>
   <body id="top">
