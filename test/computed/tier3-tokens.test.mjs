@@ -178,7 +178,13 @@ describe("tier-3 tokens — Zen Garden bridge layer", () => {
 
   it("neumorphism interactive elements have transparent border color", async () => {
     await selectTheme(page, "neumorphism");
-    const borderColor = await css(page, "button", "border-color");
+    // Target a framework button inside a demo card. The bare `button` / `main
+    // button` selectors resolve to the #intent-panel density control (demo
+    // chrome, which lives inside <main>); its border-color also *animates*, so an
+    // immediate read catches the pre-transition value. A filled card button is
+    // transparent in both canvas and neumorphism, so it reads cleanly with no
+    // transition flicker.
+    const borderColor = await css(page, "article button", "border-color");
     assert.match(
       borderColor,
       /rgba\(0,\s*0,\s*0,\s*0\)|transparent/i,
