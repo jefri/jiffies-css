@@ -10,12 +10,13 @@
     "jiffies-css-v2-bundle.css.map",
     "jiffies-css-v2-bundle.min.css",
     "jiffies-css-v2-bundle.min.css.map",
-    "accessibility.js",
+    "skills",
     "v2",
     "index.html",
     "design_system.md",
+    "PHILOSOPHY.md",
     "README.md",
-    "PHILOSOPHY.md"
+    "THEMES.md"
   ],
   "repository": {
     "type": "git",
