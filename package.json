@@ -1,6 +1,6 @@
 {
   "name": "@davidsouther/jiffies-css",
-  "version": "2.0.0-alpha",
+  "version": "2.0.0",
   "description": "Post-modern full-app CSS reset.",
   "main": "jiffies-css-v2-bundle.css",
   "style": "jiffies-css-v2-bundle.css",
@@ -10,7 +10,8 @@
     "jiffies-css-v2-bundle.css.map",
     "jiffies-css-v2-bundle.min.css",
     "jiffies-css-v2-bundle.min.css.map",
-    "skills",
+    "skills/jiffies-css-semantic-html",
+    "skills/jiffies-css-theming",
     "v2",
     "index.html",
     "DESIGN.md",
