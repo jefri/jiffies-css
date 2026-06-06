@@ -187,6 +187,25 @@ last and what that means for token conflicts.
 different tone of the same palette. A manual `[data-theme]` toggle is **not** built
 in — OS-driven theming is the current, intentional behavior.
 
+## Themes
+
+Four example themes ship with Jiffies CSS. Apply one by setting `data-theme` on `<html>`:
+
+```html
+<html data-theme="canvas">
+```
+
+| Theme | Character |
+|---|---|
+| `canvas` | Default. Poppins body, Libre Baskerville headers, soft corners, M3 elevation. |
+| `bento` | Editorial grid. Inter throughout, tight tile geometry, surface-variant card fills. |
+| `paper` | Print edge. Sharp corners, hairline ink borders, no shadows, no motion. |
+| `neumorphism` | Soft extruded geometry. Paired light/dark shadows on a mid-gray plane; no flat borders. |
+
+To build your own theme, see [docs/themes.md](docs/themes.md). The short version: every
+visual decision the built-in themes make is a CSS variable override in a single
+`:root { … }` or `:root[data-theme="name"] { … }` block — no element selectors required.
+
 ## Theming
 
 Override variables.

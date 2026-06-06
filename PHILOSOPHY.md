@@ -3,9 +3,9 @@
 Jiffies CSS is a **Post-Modern CSS Full-Page Reset**, one global stylesheet that
 normalizes and styles an entire page from a single place. It provides beautiful semantic
 defaults, components built from element relationships, responsive layout, and
-theming. Where a classic reset only *neutralizes* the browser to a blank slate,
+theming. Where a classic reset only _neutralizes_ the browser to a blank slate,
 Jiffies keeps the platform's semantics and builds the finished page on top of
-them, using the latest native CSS features. The *implementation* is purely 
+them, using the latest native CSS features. The _implementation_ is purely
 semantic: write semantic HTML with consistent, appropriate hierarchy and get a
 full-page app and its components in return. Set a few focused base variables to get
 your full branding.
@@ -21,9 +21,59 @@ pure CSS. Or you can fine-tune a derived role or an Application final directly,
 bypassing the derivation for that one outcome. The theming contract targets a
 single brand color per page; multiple brands per page are out of scope.
 
+## CSS Zen Garden and the Variable-First Theme Model
+
+CSS Zen Garden (Dave Shea, 2003) made a seminal demonstration. One fixed HTML file
+could show radically different visual designs by swapping only the external stylesheet.
+The directive was explicit: no HTML modifications, but as much CSS styling as the designer could manage. Hundreds of
+community submissions proved the point across the past two decades.
+When structure is stable,
+presentation is interchangeable.
+
+Early critiques of Zen Garden were practical, not conceptual. Without CSS custom
+properties, nesting, and other modern CSS conveniences, every theme required a full
+stylesheet rewrite. Changing the primary color meant
+grepping for every `#3366cc` in the file. A theme was a complete copy of the structural
+rules, with values changed — brittle to maintain and expensive to author.
+
+Modern CSS eliminates that friction. Custom properties separate the design decisions from
+the structural rules. The structural rules read `var(--color-primary)` and `var(--border-radius-container)`;
+a theme is only the overrides. Two stylesheets, not two complete copies:
+
+```css
+/* jiffies.css — structural rules referencing variables & defaults */
+:root {
+  --border-radius-container: 2px;
+  --card-shadow: 1px 1px 0 2px var(--color-outline);
+}
+article {
+  box-shadow: var(--card-shadow);
+  border-radius: var(--border-radius-container);
+}
+
+/* ocean.css — variables only, no structural rules */
+:root[data-theme="ocean"] {
+  --border-radius-container: 0;
+  --card-shadow: 0 0 0 1px var(--color-outline);
+}
+```
+
+Classless CSS frameworks like Water.css, MVP.css, Simple.css, and Pico CSS all converged on
+this architecture. Style semantic HTML elements via variables, let consumers
+override the variables rather than the rules. Pico CSS exposes 130+ custom properties as
+its theming API; Water.css ~20; all of them recognize that the public surface of a CSS
+library is its custom property contract, not its selector machinery.
+
+CSS Zen Garden is aspirational, not a constraint. It tells you whether the styling
+surface is complete. Where a theme must reach for element selectors to express a visual
+decision, that perhaps identifies a missing token. A likely gap between the structural rules
+and the theming API. The four built-in themes (canvas, bento, paper, neumorphism)
+express all visual decisons as variable overrides, with element
+selector rules unnecessary via tokens like `--card-shadow`, `--card-border`, `--grid-gap`, and `--button-shadow-active`.
+
 ## Semantic HTML & Classless CSS
 
-A component is identified by its **DOM hierarchy** and its **ARIA roles**, rarely
+A component is identified primaryliy by its **DOM hierarchy** and its **ARIA roles**, rarely
 by a class. `article > header` is a card header. `nav > ol` is a navigation
 list. `[role=tab]` is a tab. The meaning lives in the element; the stylesheet
 targets the element. This is the inverse of Tailwind (which puts meaning in
@@ -61,9 +111,9 @@ intent through appliction. A token starts as an author's intent and ends as a
 rendered property; reading the gradient tells you where to reach to change a given
 outcome and what else moves when you do.
 
-**Intent**  *on `:root`* Answers _"how will this be used?"_ Brand and base
+**Intent** _on `:root`_ Answers _"how will this be used?"_ Brand and base
 inputs like `--brand-color`, `--base-text-color`, `--base-size`, `--font-scale`
-control wide swaths of the page's style.  These properties are named in the words
+control wide swaths of the page's style. These properties are named in the words
 of someone shaping a page. **This tier is the public API.** It is small, stable,
 and deserves the most thought, because it is the contract an end user overrides.
 The Intent set is a small, focused public surface, extended deliberately with
@@ -82,7 +132,7 @@ universal selector so a locally-set `--color` on a button yields a local
 `--_color-hover` for the application properties. These properties are **lazy**.
 The `oklch()` and `color-mix()` math runs only when a real property reads the
 value, so an unread derivation costs its declaration but not its computation;
-Marked *private with a leading `--_`* so readers know these are part of the engine,
+Marked _private with a leading `--_`_ so readers know these are part of the engine,
 not a dial to override. When `@function` lands, this tier will be revised to take
 advantage of native function support.
 
@@ -114,7 +164,7 @@ is enforced where it can actually be checked, not asserted by hiding the dial.
 
 Jiffies CSS builds components out of patterns of DOM nodes. One component is one
 (nested) selector tree, and the shape of that tree matches the subtree the
-component styles.  In the Jiffies stack this is literal: a DOM function calls
+component styles. In the Jiffies stack this is literal: a DOM function calls
 child functions to build a hierarchy, and the matching CSS nests `& >` blocks in
 the same hierarchy. `article { & > header … & > main … & > footer … }` is the
 stylesheet half of a `Card()` that emits a header, a main, and a footer. The

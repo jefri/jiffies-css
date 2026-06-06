@@ -1,5 +1,6 @@
 /* Neumorphism: soft geometry, paired light/dark shadows, mid-gray surface.
-   This is the structural showcase — the one theme that overrides --color-surface.
+   One material — page, cards, buttons, inputs — all share --color-surface.
+   Outset shadows raise; inset shadows recess. Color accents on focus only.
    The override ships its own dark-mode block and a contrast assertion in the test. */
 @layer theme {
   :root[data-theme="neumorphism"] {
@@ -7,32 +8,115 @@
     --brand-header-font-family: "Space Mono";
     --brand-nav-font-family: "Space Mono";
     --brand-monospace-font-family: "JetBrains Mono";
-    --border-radius-container: 1rem;
-    --border-radius-item: 0.75rem;
-    /* Sanctioned surface override: the paired shadows need a mid-tone ground. */
+    --border-radius-container: 1.25rem;
+    --border-radius-item: 0.875rem;
+    --border-radius-button: 0.875rem;
+    --border-radius-input: 0.875rem;
+
+    /* Sanctioned surface override: paired shadows need a mid-tone ground. */
     --color-surface: #e0e0e0;
-    --color-on-surface: #1a1a1a;
-    /* Remove flat borders — shadow alone carries the edge. */
+    --color-on-surface: #2a2a2a;
+    /* Page background must match the surface — one continuous plane. */
+    --color-background: #e0e0e0;
+    --page-background-color: #e0e0e0;
+
+    /* Remove flat borders — shadow alone defines the edge. */
     --base-border-color: transparent;
-    /* Depth reads from shadows, not from animated transitions. */
-    --motion-duration-snap: 0s;
-    /* Paired light/dark box-shadow gives the pillowed effect. */
-    --card-shadow:
-      6px 6px 12px rgba(0, 0, 0, 0.25),
-      -6px -6px 12px rgba(255, 255, 255, 0.7);
+    --card-inner-border: none;
+
+    /* Shadow vocabulary for the whole theme (inherited by element rules below). */
+    --_nmph-light: rgba(255, 255, 255, 0.85);
+    --_nmph-dark: rgba(0, 0, 0, 0.18);
+
+    /* Outset (raised / extruded) — cards, nav shelf, buttons at rest. */
+    --_nmph-outset:
+      8px 8px 20px var(--_nmph-dark),
+      -8px -8px 20px var(--_nmph-light);
+
+    /* Inset (recessed) — form inputs, select, textarea. */
+    --_nmph-inset:
+      inset 5px 5px 12px var(--_nmph-dark),
+      inset -5px -5px 12px var(--_nmph-light);
+
+    /* Deep press — button active state. */
+    --_nmph-press:
+      inset 6px 6px 16px var(--_nmph-dark),
+      inset -6px -6px 16px var(--_nmph-light);
+
+    /* Bridge tokens consumed by card.css and buttons.css. */
+    --card-shadow: var(--_nmph-outset);
     --card-border: none;
-    /* Inset on active press for interactive elements. */
-    --button-shadow-active:
-      inset 3px 3px 6px rgba(0, 0, 0, 0.25),
-      inset -3px -3px 6px rgba(255, 255, 255, 0.7);
+    --button-shadow-active: var(--_nmph-press);
   }
+
+  /* ---- Buttons: surface material + outset shadow at rest -------------------
+     The component layer paints --color-primary; the theme layer wins and
+     replaces the fill with the surface so the button is a raised slab. */
+  [data-theme="neumorphism"] :is(button, a[role="button"],
+    input[type="button"], input[type="submit"], input[type="reset"]) {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    border-color: transparent;
+    box-shadow: var(--_nmph-outset);
+  }
+
+  [data-theme="neumorphism"] :is(button, a[role="button"],
+    input[type="button"], input[type="submit"], input[type="reset"]):hover {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
+    box-shadow:
+      10px 10px 24px var(--_nmph-dark),
+      -10px -10px 24px var(--_nmph-light);
+  }
+
+  [data-theme="neumorphism"] :is(button, a[role="button"],
+    input[type="button"], input[type="submit"], input[type="reset"]):active {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    box-shadow: var(--_nmph-press);
+  }
+
+  /* Disabled: flatten the shadow so the disabled state reads as inert. */
+  [data-theme="neumorphism"] :is(button, a[role="button"],
+    input[type="button"], input[type="submit"], input[type="reset"]):is([disabled], [aria-disabled="true"]) {
+    box-shadow:
+      3px 3px 8px var(--_nmph-dark),
+      -3px -3px 8px var(--_nmph-light);
+  }
+
+  /* ---- Form inputs: recessed into the surface with an inset shadow ---------
+     Text controls are "carved" into the material; they sit below the surface. */
+  [data-theme="neumorphism"] :is(
+    input:not([type="button"], [type="submit"], [type="reset"],
+              [type="checkbox"], [type="radio"], [type="range"],
+              [type="color"], [type="file"], [role="switch"]),
+    select,
+    textarea
+  ) {
+    background-color: var(--color-surface);
+    border-color: transparent;
+    box-shadow: var(--_nmph-inset);
+  }
+
+  /* ---- Navigation / page-end header: extruded shelf ----------------------- */
+  [data-theme="neumorphism"] body > header,
+  [data-theme="neumorphism"] body > footer {
+    background-color: var(--color-surface);
+    box-shadow: var(--_nmph-outset);
+  }
+
+  /* ================================================================
+     DARK MODE
+     ================================================================ */
   @media (prefers-color-scheme: dark) {
     :root[data-theme="neumorphism"] {
       --color-surface: #2a2a2a;
-      --color-on-surface: #e8e8e8;
-      --card-shadow:
-        6px 6px 12px rgba(0, 0, 0, 0.5),
-        -6px -6px 12px rgba(255, 255, 255, 0.1);
+      --color-on-surface: #e0e0e0;
+      --color-background: #2a2a2a;
+      --page-background-color: #2a2a2a;
+
+      --_nmph-light: rgba(255, 255, 255, 0.07);
+      --_nmph-dark: rgba(0, 0, 0, 0.55);
     }
   }
 }
