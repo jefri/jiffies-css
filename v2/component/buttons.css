@@ -7,7 +7,7 @@
  * disabled / busy) lives next to structure, and every Application final is
  * declared at the top of the block that consumes it.
  *
- * DOM shape (design_system.md › Buttons):
+ * DOM shape (DESIGN.md › Buttons):
  *   button, a[role=button], input[type=button|submit|reset]
  * ARIA:  [aria-disabled], [aria-busy] (links promoted via [role=button]).
  * Edge-classes: .secondary (tonal pair), .contrast (high-contrast), .outline.
@@ -46,7 +46,8 @@ input[type="reset"] {
   box-sizing: border-box;
   margin: 0;
   padding: var(--_button-padding-block) var(--_button-padding-inline);
-  border: var(--base-border-size) solid var(--_button-border-color);
+  border: var(--base-border-size) var(--button-border-style)
+    var(--_button-border-color);
   border-radius: var(--border-radius-button);
 
   font-family: var(--label-font-family);

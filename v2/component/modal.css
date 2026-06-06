@@ -1,4 +1,4 @@
-/* Modal (@layer component) — filled in Phase 4. See design_system.md "### Modal".
+/* Modal (@layer component) — filled in Phase 4. See DESIGN.md "### Modal".
  *
  * DOM shape: dialog (often dialog > article, reusing the card surface).
  * ARIA: native dialog[open], [aria-modal], [aria-labelledby].

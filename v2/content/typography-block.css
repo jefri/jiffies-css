@@ -8,9 +8,9 @@
  * Applies the type tokens from theme/typography.css (the major-third heading
  * ladder, the five font roles, --small-font-size) and theme/sizing.css (the
  * responsive --base-font-size ladder, --spacing-block-vertical) to the document
- * blocks. See design_system.md "### Typography" and "### Spacing & Sizing".
+ * blocks. See DESIGN.md "### Typography" and "### Spacing & Sizing".
  *
- * Tier discipline (design_system.md "### Variable model"): every block declares
+ * Tier discipline (DESIGN.md "### Variable model"): every block declares
  * its Application finals (--color-text-base, --font-family-body, …) at the top of
  * the rule that consumes them, sourcing them from the upstream Intent/Derivation
  * tokens so an author can retune one block without reaching into the theme.
@@ -23,7 +23,7 @@
 /* ---------------------------------------------------------------------------
    The responsive root. font-size anchors 1rem to the breakpoint ladder so the
    whole type system — heading scale included — rides the breakpoints together
-   (design_system.md: anchor on --base-font-size, NOT a bare 1rem). line-height
+   (DESIGN.md: anchor on --base-font-size, NOT a bare 1rem). line-height
    and the body font role are set here so every descendant inherits the rhythm
    and face; body text color reads the M3 on-background role.
    --------------------------------------------------------------------------- */

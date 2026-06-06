@@ -7,26 +7,6 @@ practices and common patterns for each component or feature.
 
 ## Active topics
 
-- [ ] **card-shadow-active** — Add `--card-shadow-active` bridge token for hover-state
-  elevation progression (card rises on hover). No existing theme needs it yet; add when
-  a theme requires it. Declare in `theme/borders.css` alongside `--card-shadow`, wire in
-  `card.css` `article:hover` rule. Deferred from tier-3-tokens design.
-
-- [ ] **button-border-style-token** — Buttons hardcode `solid` in their border shorthand
-  (`border: var(--base-border-size) solid var(--_button-border-color)`). A future
-  `--button-border-style` token would let themes control the border style without element
-  selectors. Currently `--base-border-color: transparent` is sufficient. Deferred from
-  tier-3-tokens design.
-
-- [ ] **table-font-token** — The tier-3 token work introduced `--table-font-family`
-  as a bridge token in `theme/typography.css` (defaults to `--body-font-family`;
-  canvas overrides to "Trebuchet MS"). The `--brand-table-font-family` sixth-role
-  design in the original task is now superseded. Remaining work: decide whether to
-  add `--brand-table-font-family` as a named face override in the font-role pattern
-  (so it follows the same brand→named→stack chain as the five existing roles), or
-  accept `--table-font-family` as a direct bridge token and document the gap.
-  Also reconciles `symposium-doc-debt` note (line 252–254).
-
 - [ ] **theme-skins-final-review** — After the theme-skins feature test passes,
   run a final refactor + review pass over the topic (themes/ files, panel theme
   row + JS, canvas font-role migration, contrast assertions) and tidy with
@@ -37,11 +17,11 @@ practices and common patterns for each component or feature.
 ## Conventions
 
 **Re-enablement model.** The v2 stylesheet has accumulated cruft and has drifted
-from `design_system.md`. Rather than edit in place, the rewrite **zeroes out** to a
+from `DESIGN.md`. Rather than edit in place, the rewrite **zeroes out** to a
 sanitize-only baseline (see **zero-out**) and then walks *up the cascade* —
 `fns → theme → layout → content → component → utility` — re-enabling **one module
 at a time**. Each module's task is the same shape: uncomment its `@import`, review
-and update the file against the spec in `design_system.md`, then capture a
+and update the file against the spec in `DESIGN.md`, then capture a
 screenshot. A module is not done until it matches the spec and its frame is
 refreshed. `fns` and `theme` are not written in isolation, but edited as necessary working through `layout`, `content`, and `component`.
 
@@ -53,12 +33,12 @@ separate Playwright job (see **screenshot-harness**), not an assertion test in
 `test/computed/`.
 
 **Doc/code divergence (read before any foundation work).** Commit `42b5c5b` rewrote
-the *docs* (`design_system.md`, `PHILOSOPHY.md`, `README.md`) to Material 3's
+the *docs* (`DESIGN.md`, `PHILOSOPHY.md`, `README.md`) to Material 3's
 `--brand-color` model, but `v2/` still ships the **old parts API**:
 `--brand-hue`/`--brand-luminance`/`--brand-chroma`, `--fn-color`/`--fn-merge`/
 `--fn-border`, the `--color-hover`/`-focus`/`-active` mixes, and
 `--brand-primary-color` (read by `navigation.css`). The `--_` private prefix is not
-yet used. `design_system.md` is the authority; every re-enable task realigns its
+yet used. `DESIGN.md` is the authority; every re-enable task realigns its
 module to it.
 
 ---
@@ -91,7 +71,7 @@ module to it.
   the old live-tuning controls (`--color-primary-hue`, `--sizing`,
   `--font-family-*`); replace them with the new Intent surface (`--brand-color`,
   `--base-size`/density, font-role overrides) or drop the controls until the engine
-  lands. Ensure every component in `design_system.md` has a demo home so screenshots
+  lands. Ensure every component in `DESIGN.md` has a demo home so screenshots
   can track it: add the markup that is currently missing or commented out —
   `progress` (Progress), `dialog` (Modal), `dl` property sheet, hero `figure > img`
   + heading inside a rail (Hero), `nav[aria-label="Breadcrumb"]` (Breadcrumb), and
@@ -240,7 +220,7 @@ file yet) that get created and enabled.
   `--brand-color` plus the `--color-*` role surface. Sweep PHILOSOPHY for any
   remaining brand-hue/luminance color language. Ref: Color.
 - [x] **layer-order-doc-alignment** — Reduce README and PHILOSOPHY layer lists to
-  the layering *concept*; the `@layer order` section of `design_system.md` owns
+  the layering *concept*; the `@layer order` section of `DESIGN.md` owns
   the canonical `fns, reset, layout, content, component, utility, user, theme`
   order. Ref: @layer order.
 - [x] **computed-thresholds** — Expand the seed `test/computed/` tests with exact
@@ -252,7 +232,7 @@ file yet) that get created and enabled.
   land):
   - README: add a Usage / Getting-Started section (install / CDN `<link>` / "write
     semantic HTML"); the only package ref today is a commented-out v1 unpkg line.
-  - Edge-class list: design_system.md calls `.secondary`/`.contrast`/`.outline` a
+  - Edge-class list: DESIGN.md calls `.secondary`/`.contrast`/`.outline` a
     *closed* list, but the system also sanctions `.fluid`, `.compact`/`.loose`,
     `.round`, `figure.scroll-x/-y`. Replace the closed enumeration with the
     *sanctioning criterion* ("a class only when an element can't infer intent from
@@ -261,7 +241,7 @@ file yet) that get created and enabled.
     `--ins-color`/`--del-color` (and `--page-background-color`/`--card-background-color`)
     to the documented category-first grammar (`--color-mark-background`, `--color-mark`,
     `--color-ins`, `--color-del`), or have consumers read the role tokens directly.
-  - Font roles: reconcile design_system.md (names App-Header Roboto, Tables Trebuchet
+  - Font roles: reconcile DESIGN.md (names App-Header Roboto, Tables Trebuchet
     MS) with the shipped five roles (body/header/label/nav/monospace); introduce
     `--table-font-family` with the tables component (Phase 4) and document it.
   - Mark info/success/warning as PROJECT EXTENSIONS (not M3-canonical) in the Color

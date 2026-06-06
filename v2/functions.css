@@ -11,7 +11,7 @@
  * times (defined unconditionally, not inside a media query). Dark mode does not
  * re-derive — it remaps role tokens (theme/colors.css).
  *
- * See design_system.md › Color and › Naming grammar.
+ * See DESIGN.md › Color and › Naming grammar.
  */
 
 /* Register the toe lightness intermediates as <number> so the calc() resolves

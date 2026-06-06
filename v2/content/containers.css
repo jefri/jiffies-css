@@ -12,7 +12,7 @@
  * figure scroll opt-ins. It must not re-declare a spine, a page-end, an order
  * map, or a width/margin clamp.
  *
- * DOM shape (design_system.md):
+ * DOM shape (DESIGN.md):
  *   body:not(:has(> #root)), body > #root          <- the layout root (spine)
  *     & > :is(main, header, footer, aside)         <- container slots
  */

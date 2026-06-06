@@ -1,5 +1,5 @@
 /* Grid utility — the sanctioned class-based helper for equal-column grids.
-   See README "Layout" › Grid and design_system.md "@layer order" (utility).
+   See README "Layout" › Grid and DESIGN.md "@layer order" (utility).
 
    `.grid` lays its children out in N equal columns. N is the
    `--grid-column-count` dial — the same OVERRIDE token that component/forms.css

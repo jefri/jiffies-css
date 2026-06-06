@@ -1,4 +1,4 @@
-/* Card & Panel — design_system.md › "Card & Panel"
+/* Card & Panel — DESIGN.md › "Card & Panel"
  *
  * A surface with optional header/footer rails around a main body.
  *   article = elevated card  (surface + subtle M3 shadow)
@@ -98,6 +98,14 @@ article {
   color: var(--card-color);
   box-shadow: var(--card-shadow);
   border: var(--card-border);
+}
+
+/* Hover elevation — reads --card-shadow-active, which defaults to the resting
+ * --card-shadow (no lift). A theme that sets a stronger --card-shadow-active
+ * makes the card rise on hover; the surface rule above already transitions
+ * box-shadow, so the change animates. */
+article:hover {
+  box-shadow: var(--card-shadow-active);
 }
 
 /* Flat panel — no elevation; a load-bearing outline (--color-outline, clears

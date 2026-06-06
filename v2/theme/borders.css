@@ -34,6 +34,9 @@
   --base-border-color: var(--color-outline);
   --base-border: var(--base-border-size) var(--base-border-style)
     var(--base-border-color);
+  /* Per-family border-style seam: buttons read this so a theme can change the
+   * button border style without an element selector. Defaults to the global. */
+  --button-border-style: var(--base-border-style);
 
   /* Composed application borders read by consumers. */
   --page-end-border: var(--base-border);
@@ -42,12 +45,16 @@
   /* Elevation and interactive-depth tokens.
    * --card-shadow: M3 resting elevation by default; themes override to escape M3
    *   (neumorphism uses paired light/dark shadows; paper uses none).
+   * --card-shadow-active: the hovered-card elevation. Defaults to the resting
+   *   --card-shadow (no lift), so a card rises on hover only when a theme raises
+   *   it above the resting value.
    * --card-border: none by default — article uses shadow for depth;
    *   themes that flatten elevation (paper) supply a visible edge here.
    * --button-shadow-active: none by default; neumorphism uses inset shadows. */
   --card-shadow:
     0 1px 2px color-mix(in oklab, var(--color-on-surface) 18%, transparent),
     0 2px 6px -1px color-mix(in oklab, var(--color-on-surface) 18%, transparent);
+  --card-shadow-active: var(--card-shadow);
   --card-border: none;
   --button-shadow-active: none;
 }

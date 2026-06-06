@@ -1,8 +1,6 @@
-/* Tabs (@layer component) — see design_system.md › Tabs.
+/* Tabs (@layer component) — see DESIGN.md › Tabs.
  *
- * Adapted from the v1 jiffies-css implementation
- * (github.com/jefri/jiffies-css /component/tabs.css), re-tokenized to the v2 M3
- * role surface. Pure-CSS AND ARIA-driven: selection is carried by a
+ * Pure-CSS AND ARIA-driven: selection is carried by a
  * visually-hidden radio inside each [role=tab] label (:checked — no JS needed)
  * OR by [aria-selected="true"] (set by the CDN accessibility.js). Either path
  * drives the connected-tab indicator and reveals the adjacent [role=tabpanel].

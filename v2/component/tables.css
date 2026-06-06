@@ -1,4 +1,4 @@
-/* Tables (@layer component). See design_system.md "### Tables".
+/* Tables (@layer component). See DESIGN.md "### Tables".
  *
  * table > thead, tbody, tfoot > tr > th, td. Opinionated zebra-striped table
  * with a type face (Trebuchet MS) separate from body or code text. Row

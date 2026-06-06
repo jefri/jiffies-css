@@ -1,4 +1,4 @@
-/* component/navigation.css (@layer component) — design_system.md › "Navigation".
+/* component/navigation.css (@layer component) — DESIGN.md › "Navigation".
  *
  * `nav > ol` in two modes selected by ANCESTOR, not by class:
  *   1. :is(header, footer) > nav > ol  — a horizontal page-end bar list.

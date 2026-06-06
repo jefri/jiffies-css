@@ -2,7 +2,7 @@
 //
 // User story:
 //   A contributor follows a `Ref: <Heading>` pointer from TASKS.md into
-//   design_system.md and lands on a real section. The aspirational spec uses
+//   DESIGN.md and lands on a real section. The aspirational spec uses
 //   heading *names* as stable anchors (no section numbers); every design_system
 //   `Ref:` pointer in TASKS.md must resolve to a heading that exists in the doc.
 //
@@ -19,9 +19,9 @@ import { dirname, join } from "node:path";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const tasksPath = join(repoRoot, "docs", "developer", "TASKS.md");
-const docPath = join(repoRoot, "design_system.md");
+const docPath = join(repoRoot, "DESIGN.md");
 
-// Names of the real `##`/`###` headings in design_system.md (the `#` document
+// Names of the real `##`/`###` headings in DESIGN.md (the `#` document
 // title is excluded). A heading looks like `### Color` or
 // `### Page layout & page-ends`.
 function headingNames(markdown) {
@@ -55,7 +55,7 @@ test("TASKS.md contains design_system Ref: pointers to check", () => {
   );
 });
 
-// zero-out (Phase 0): docs (design_system.md) were rewritten ahead of TASKS.md,
+// zero-out (Phase 0): docs (DESIGN.md) were rewritten ahead of TASKS.md,
 // so several `Ref:` pointers do not yet resolve to existing headings.
 // re-enable with Phase 6 layer-order-doc-alignment / color-doc-alignment (doc realignment).
 test.skip("every design_system Ref: pointer in TASKS.md resolves to a heading", () => {
@@ -68,7 +68,7 @@ test.skip("every design_system Ref: pointer in TASKS.md resolves to a heading", 
   assert.deepEqual(
     missing,
     [],
-    `TASKS.md references headings design_system.md has none for: ${missing
+    `TASKS.md references headings DESIGN.md has none for: ${missing
       .map((ref) => `"${ref}"`)
       .join(", ")}`,
   );

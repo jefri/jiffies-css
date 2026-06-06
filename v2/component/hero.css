@@ -9,7 +9,7 @@
  *   - inside the page spine  (body > #root) > :is(header, footer) > figure,
  *       or any .fluid header/footer  is a full-bleed page banner (square).
  *
- * See design_system.md › Hero.  No edge-classes of its own — a full-bleed page
+ * See DESIGN.md › Hero.  No edge-classes of its own — a full-bleed page
  * hero reuses the .fluid layout utility (layout.css already makes the spine
  * header/footer full-width; here we own the figure/img/title treatment).
  */

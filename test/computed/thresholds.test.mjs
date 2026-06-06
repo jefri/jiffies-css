@@ -3,7 +3,7 @@
 // EXACT THRESHOLD GATE (Phase 6 computed-thresholds). The seed suites
 // (colors/layout) assert only "non-zero" / "differs"; the shouldFix work has
 // landed and the values are now FINAL, so these assertions PIN the specific
-// numbers design_system.md specifies, with tight numeric deltas — never
+// numbers DESIGN.md specifies, with tight numeric deltas — never
 // "non-zero".
 //
 // BREAKPOINT IS FIXED. Every value below is breakpoint-dependent (the font /

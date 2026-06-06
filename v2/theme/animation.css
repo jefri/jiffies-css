@@ -1,5 +1,5 @@
 /* Motion — named duration + curve vocabulary, plus the composed --transition
- * triple for back-compat. See design_system.md "### Motion & Iconography".
+ * triple for back-compat. See DESIGN.md "### Motion & Iconography".
  *
  * Tier: Intent (:root, public). Three named beats and three named curves give
  * authors a small, deliberate motion vocabulary instead of magic numbers:

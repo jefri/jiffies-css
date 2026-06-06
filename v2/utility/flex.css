@@ -1,5 +1,5 @@
 /* Flex utilities — the sanctioned class-based helpers for flex layout.
-   See README "Layout" › Flex and design_system.md "@layer order" (utility).
+   See README "Layout" › Flex and DESIGN.md "@layer order" (utility).
 
    These live in @layer utility, which sits AFTER component, so a helper
    placed on an element wins over the component's own flow. They are small,

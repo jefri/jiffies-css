@@ -1,8 +1,2 @@
 node_modules
-
-# Build artifacts — regenerate from v2/index.css via build.sh (source of truth).
-jiffies-css-v2-bundle.css
-jiffies-css-v2-bundle.css.map
-jiffies-css-v2-bundle.min.css
-jiffies-css-v2-bundle.min.css.map
-docs/screenshots/latest/
+docs

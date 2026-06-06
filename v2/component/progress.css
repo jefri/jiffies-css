@@ -1,5 +1,5 @@
 /* Progress (@layer component) — a styled native <progress>.
- * design_system.md › Progress.
+ * DESIGN.md › Progress.
  *
  * DOM shape: progress (progress[value] = determinate; valueless = indeterminate).
  * ARIA:      native progress role; [aria-label] for context.
@@ -16,7 +16,7 @@
  * selector list.
  */
 progress {
-  /* Public component alias (design_system.md › Variable model) — a scoped,
+  /* Public component alias (DESIGN.md › Variable model) — a scoped,
    * static, intentionally-overridable role-forwarder. The track defaults to the
    * surface-variant role; consumers may override --progress-track-color upstream
    * without touching the component. */

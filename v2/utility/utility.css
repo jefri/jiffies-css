@@ -1,5 +1,5 @@
 /* utility — the sanctioned class-based helper layer (@layer utility).
    Sits AFTER component in the @layer order so a helper placed on an element
-   wins over the component's own flow. See design_system.md "@layer order". */
+   wins over the component's own flow. See DESIGN.md "@layer order". */
 @import "./flex.css";
 @import "./grid.css";

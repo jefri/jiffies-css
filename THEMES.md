@@ -193,10 +193,12 @@ Surface aliases consumed by specific components:
 | Variable | Default | Effect |
 |---|---|---|
 | `--card-shadow` | M3 resting elevation (two `color-mix()` shadows) | `article` box-shadow |
+| `--card-shadow-active` | `var(--card-shadow)` | `article:hover` box-shadow — raise it above `--card-shadow` to lift cards on hover |
 | `--card-border` | `none` | `article` border (flat themes supply a hairline here) |
 | `--card-inner-border` | `var(--base-border)` | Divider between card header/main/footer |
 | `--base-border-size` | `var(--size-xsmall)` = 2px | Border width everywhere |
 | `--base-border-style` | `solid` | Border style everywhere (`none` removes all structural borders) |
+| `--button-border-style` | `var(--base-border-style)` = `solid` | Button border style only (e.g. `none` / `dashed`) without changing the global |
 | `--base-border-color` | `var(--color-outline)` | Border color everywhere |
 | `--page-end-border` | `var(--base-border)` | `body > header` / `body > footer` border |
 

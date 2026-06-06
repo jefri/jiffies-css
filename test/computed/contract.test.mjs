@@ -2,7 +2,7 @@
 //
 // SHAPE / ROLE CONTRACT — the classless "DOM + ARIA" rebuttal, enforced.
 //
-// design_system.md's central claim is that the design system keys on element
+// DESIGN.md's central claim is that the design system keys on element
 // shape and ARIA role, NOT on class names, and that this is robust ("not
 // brittle") in the LIVE cascade. The component symposium (Marcus) found this
 // rebuttal had ZERO test enforcement: nothing actually proved that a role on a

@@ -19,15 +19,16 @@ Or pull the stylesheet straight from a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@davidsouther/jiffies-css/dist/index.css"
+  href="https://unpkg.com/@davidsouther/jiffies-css/jiffies-css-v2-bundle.min.css"
 />
 ```
 
 Then write semantic HTML. Jiffies styles base elements, derives components from
 the relationships between them, and reads ARIA roles to select between
 modalities. The single dial for color is `--brand-color`; set it once and the
-whole scheme derives. See [design_system.md](design_system.md) for the full
-token surface and [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
+whole scheme derives. See [DESIGN.md](DESIGN.md) for the full design system — the
+architecture, component contracts, and token surface — and
+[PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 
 ## Principles
 
@@ -50,11 +51,10 @@ token surface and [PHILOSOPHY.md](PHILOSOPHY.md) for the rationale.
 - [Cloudscape foundations](https://cloudscape.design/foundation/)
 - [Material design tokens](https://m3.material.io/foundations/design-tokens/overview)
 
-## Support floor (Chrome 119 / Safari 16.4 / Firefox 128, mid-2024 Baseline)
+## Minimum Supported Browsers (mid-2024 baseline) Chrome 119 / Safari 16.4 / Firefox 128
 
-The engine is built on a recent slice of the platform. These are the load-bearing
-features it actually uses; the support floor is set by the latest of them
-(approximately Chrome 119, Safari 16.4, Firefox 128 — a mid-2024 Baseline):
+Jiffies CSS uses modern CSS features.
+
 
 - [oklch()](https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/oklch) — every color is assembled here from parts.
 - [relative color syntax](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_colors/Relative_colors) — `oklch(from var(--brand-color) <L> <C> h)` derives every palette from the one seed.
@@ -65,87 +65,24 @@ features it actually uses; the support floor is set by the latest of them
 - [@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer) — the cascade order that makes the token contract win.
 - [pow()](https://developer.mozilla.org/en-US/docs/Web/CSS/pow) — the modular type scale is one `calc()`.
 
-## Fonts
+## Themes
 
-- Body: Poppins
-- Text Header: Libre Baskerville
-- App Header: Roboto
-- Tables: Trebuchet MS
-- Code: JetBrains Mono
+Four example themes ship with Jiffies CSS. Apply one by setting `data-theme` on `<html>`:
 
-## Layers
+```html
+<html data-theme="canvas">
+```
 
-Jiffies stacks its styles in `@layer`s, each with one job:
+| Theme | Character |
+|---|---|
+| `canvas` | Default. Poppins body, Libre Baskerville headers, soft corners, M3 elevation. |
+| `bento` | Editorial grid. Inter throughout, tight tile geometry, surface-variant card fills. |
+| `paper` | Print edge. Sharp corners, hairline ink borders, no shadows, no motion. |
+| `neumorphism` | Soft extruded geometry. Paired light/dark shadows on a mid-gray plane; no flat borders. |
 
-- `fns` — the Derivation engine (`* { --_fn-* }`). Derivations cost no paint until
-  a property reads one, but the `@property`-registered toe tokens (`--_l-*`) do
-  carry a computed numeric value on every element, so the tier carries its
-  per-element declaration footprint even where it goes unread.
-- `reset` — browser normalize (vendored sanitize.css at zero specificity).
-- `layout` — page-level structure (container clamp, page-ends, aside reflow).
-- `content` — semantic element styles (typography, tables, links).
-- `component` — DOM + ARIA components.
-- `utility` — class-based helpers (`.flex`, `.grid`).
-- `user` — untouched layer reserved for your overrides.
-- `theme` — `:root` Intent tokens; declared last so the token contract wins.
-
-The exact declared order — and why `theme` is last and `fns` first — is owned by
-[design_system.md › @layer order](design_system.md#layer-order). That section is
-the single authority; this list is only the concept.
-
-## Reset
-
-- Sanitize.css
-- Reduced Motion
-- Content `p`, `figure`
-- Containers `body (> #root) > { main, header, footer, aside }(.fluid)`
-- Overflow `scrolling` `figure(.scroll-{x,y})`
-- Block Typography `html` `hgroup` `h1` `h2` `h3` `h4` `h5` `h6` `p` `ul` `ol` `blockquote` `textarea`
-- Inline Typography `a[.secondary,.contrast]` `abbr` `strong` `b` `em` `i` `cite` `del` `ins` `kbd` `mark` `s` `small` `sub` `sub` `u`
-- Buttons `button` `a[role=button]` `input[type={button,submit,reset]`
-- Forms `label` `input` `select` `textarea` `label` `fieldset` `legend`
-  - `\[aria-invalid]` `\[disabled]` `\[readonly]`
-- Toggles `input\[type={checkbox,radio}]\[role=switch]`
-- Extended Forms input` `\[type={color,date,file,search}]
-- Tables `table` `thead` `tbody` `tfoot` `tr` `th` `td`
-
-## Components
-
-- Card & Panel `{article, section} > {main, header, footer}`
-- Alerts `aside\[data-variant+role]`, `\[role=alert]`, `\[role=status]`
-  - `\[role=alert]` + `\[data-variant=warning|error]`
-  - `\[role=status]` + `\[data-variant=info|success|neutral]`
-- Chips `small\[data-variant=warning|error|info|success|neutral]`
-- Accordion `details > summary`
-- Tab `details \[role=tablist] summary\[role=tab]`
-- Modal `dialog`
-- Navigation `nav > ol`
-  - Breadcrumb `span:has(nav > ol) nav > ol`
-- Progress `progress`
-- Property Sheet `dl, dt, dd`
-- Form group `fieldset\[role=group]`
-
-## Edge-classes & utilities
-
-A class is sanctioned only when an element cannot carry the intent from its shape
-or ARIA. That criterion — not a fixed enumeration — is what admits a class.
-
-- **Edge-classes** ride on a component to add intent its shape can't express:
-  `.secondary`, `.contrast`, `.outline`.
-- **Utilities** are a separate category — standalone helpers, not component
-  variants: `.fluid` (full-bleed opt-out of the content clamp), `.compact` /
-  `.loose` (density), `.round`, and `figure.scroll-x` / `figure.scroll-y`
-  (overflow), plus the layout helpers `.flex` and `.grid`.
-
-See [design_system.md](design_system.md) for the canonical census and the
-per-component edge-class lists.
-
-## Layout
-
-- Loading `\[aria-busy=true]`
-- Tooltip `\[data-tooltip][data-direction]`
-- Flex `.flex` `.row` `.inline` `.flex-{0-4}` `.justify-{around, between, center}` `.align-{baseline, center, stretch, end}`
-- Grid `.grid` with the `--grid-column-count` dial
+To build your own theme, see [docs/themes.md](docs/themes.md). The short version: every
+visual decision the built-in themes make is a CSS variable override in a single
+`:root { … }` or `:root[data-theme="name"] { … }` block — no element selectors required.
 
 ## Customizing
 
@@ -180,31 +117,12 @@ other Intent token) unlayered, where an unlayered declaration outranks every lay
 ```
 
 That one dial re-derives the whole scheme. See
-[design_system.md › @layer order](design_system.md#layer-order) for why `theme` is
+[DESIGN.md › @layer order](DESIGN.md#layer-order) for why `theme` is
 last and what that means for token conflicts.
 
 **Dark mode** follows the OS via `prefers-color-scheme`; each role reassigns to a
 different tone of the same palette. A manual `[data-theme]` toggle is **not** built
-in — OS-driven theming is the current, intentional behavior.
-
-## Themes
-
-Four example themes ship with Jiffies CSS. Apply one by setting `data-theme` on `<html>`:
-
-```html
-<html data-theme="canvas">
-```
-
-| Theme | Character |
-|---|---|
-| `canvas` | Default. Poppins body, Libre Baskerville headers, soft corners, M3 elevation. |
-| `bento` | Editorial grid. Inter throughout, tight tile geometry, surface-variant card fills. |
-| `paper` | Print edge. Sharp corners, hairline ink borders, no shadows, no motion. |
-| `neumorphism` | Soft extruded geometry. Paired light/dark shadows on a mid-gray plane; no flat borders. |
-
-To build your own theme, see [docs/themes.md](docs/themes.md). The short version: every
-visual decision the built-in themes make is a CSS variable override in a single
-`:root { … }` or `:root[data-theme="name"] { … }` block — no element selectors required.
+in — OS-driven color schemes are the current, intentional behavior.
 
 ## Theming
 
@@ -264,7 +182,7 @@ State roles (project extensions, dialed by hue): info (`--blue-hue`), success
 (`--green-hue`), warning (`--amber-hue`); error is the built-in fixed red.
 
 Dark mode reassigns each role to a different tone of the same palette; it does not
-re-derive. See [design_system.md › Color](design_system.md#color) for the full
+re-derive. See [DESIGN.md › Color](DESIGN.md#color) for the full
 Roles table, the tonal-palette machinery, and the contrast guarantee.
 
 ### Motion

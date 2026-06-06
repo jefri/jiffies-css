@@ -1,4 +1,4 @@
-/* Forms (@layer component). See design_system.md › "### Forms".
+/* Forms (@layer component). See DESIGN.md › "### Forms".
  *
  * Form controls share ONE border / radius / focus language. Validity and
  * editability are read from ARIA + native attributes, never from classes.
@@ -10,7 +10,7 @@
  *               [disabled], [readonly]
  *   Edge-cls  : none
  *
- * Variable tiers (per design_system.md › Variable model):
+ * Variable tiers (per DESIGN.md › Variable model):
  *   - Intent           :root  (e.g. --color-surface, --border-radius-input)
  *   - Public component alias  :root  (the --color-form-* family)
  *   - Derivation       the control rule (the --_fn-border builder)
@@ -18,7 +18,7 @@
  *                      reads them.
  *
  * The four --color-form-* roles named by the spec are the component's
- * Public component alias tier (design_system.md › Variable model): a scoped,
+ * Public component alias tier (DESIGN.md › Variable model): a scoped,
  * static, intentionally-overridable role-forwarder. They alias upstream M3 role
  * tokens so a consumer can retune one validity state without reaching into the
  * controls. They are declared once
@@ -34,7 +34,7 @@
  */
 
 /* ---- Public component alias: validity / editability color roles --------
- * (design_system.md › Variable model)
+ * (DESIGN.md › Variable model)
  * base    : the resting outline color (M3 outline; clears WCAG 3:1).
  * valid   : the success role — the raised border on a control marked valid.
  * invalid : the error role — used for both the raised border and the text.

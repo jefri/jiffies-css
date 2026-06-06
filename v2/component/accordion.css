@@ -1,5 +1,5 @@
 /* Accordion (@layer component) — pure-CSS disclosure on native <details>.
- * See design_system.md › Accordion.
+ * See DESIGN.md › Accordion.
  *
  * DOM:    details > summary (+ flow content sibling)
  * ARIA:   native details[open]; summary exposes aria-expanded

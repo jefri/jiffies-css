@@ -1,6 +1,6 @@
 /* layout/layout.css (@layer layout) — the page SPINE + the page-END treatment.
  *
- * design_system.md › "Page layout & page-ends" is the contract. This layer owns:
+ * DESIGN.md › "Page layout & page-ends" is the contract. This layer owns:
  *   1. the page spine — a flex-column root that centers content to the responsive
  *      clamp --base-viewport-width, with .fluid the full-bleed opt-out;
  *   2. the page-END treatment — header/footer become a brand "page-end" bar when
@@ -13,7 +13,7 @@
  * MODEL (overflow, .scroll-*) on the same slots; it must NOT re-style page-ends.
  * The page-end brand-bar rules therefore live HERE, in the layout layer.
  *
- * DOM shape (design_system.md):
+ * DOM shape (DESIGN.md):
  *   body:not(:has(> #root)), body > #root          <- the layout root
  *     & > :is(header, main, footer, aside)         <- its slots
  * Supporting both a bare body and a direct-child #root app mount (React, etc.).

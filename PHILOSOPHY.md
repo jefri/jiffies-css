@@ -99,7 +99,7 @@ Two distinct sanctioned categories pass this gate:
   `figure.scroll-x`/`.scroll-y`, and the `.flex`/`.grid` family.
 
 These are different in kind: a control edge-class refines a component, a utility
-requests a behaviour. design_system.md › Components and › Patterns hold the
+requests a behaviour. DESIGN.md › Components and › Patterns hold the
 canonical census of which classes each component sanctions; this document owns
 only the criterion.
 
@@ -208,7 +208,7 @@ Two organizing rules follow from this map:
   `@layer` order fixes how the files stack so that the cascade order is the
   reading order: a reader meets the browser reset before the elements, the
   elements before the components, and the components before the adjustments. The
-  canonical order is owned by design_system.md › @layer order; this document
+  canonical order is owned by DESIGN.md › @layer order; this document
   argues only the concept. The concept holds only for normal author declarations
   kept within the layer order: it depends on every author style being layered,
   since an unlayered rule or an `!important` declaration escapes that order.

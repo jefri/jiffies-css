@@ -8,7 +8,7 @@
  * palettes (every tone exists at all times in fns) — it REASSIGNS each role to
  * its dark tone inside the prefers-color-scheme: dark block.
  *
- * See design_system.md › Color (the Roles table is the authority).
+ * See DESIGN.md › Color (the Roles table is the authority).
  */
 :root {
   color-scheme: light;
@@ -76,7 +76,7 @@
   --color-inverse-primary: var(--_p-80);
 
   /* ---- E. Bridge aliases --------------------------------------------------
-   * Downstream consumers named in the design_system.md "Read by" column resolve
+   * Downstream consumers named in the DESIGN.md "Read by" column resolve
    * through these once their layers re-enable. */
   --page-background-color: var(--color-background);
   --card-background-color: var(--color-surface);

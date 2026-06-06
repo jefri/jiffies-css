@@ -1,4 +1,4 @@
-/* Breadcrumb — design_system.md › Breadcrumb.
+/* Breadcrumb — DESIGN.md › Breadcrumb.
  * Classless: the `Breadcrumb` ARIA label selects it, not a class, so it stays
  * inside the closed Components edge-class list. DOM shape:
  *   nav[aria-label="Breadcrumb"] > ol > li   (with [aria-current=page] last)

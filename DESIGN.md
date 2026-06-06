@@ -92,10 +92,12 @@ Body **Poppins**, Header **Libre Baskerville**, Label/Nav **Roboto**, Code
 
 Two reconciliations with the code:
 
-- **Tables are not a sixth theme role.** Tables use `--table-font-family`
-  (**Trebuchet MS**), a token *introduced by the tables component*, not one of the
-  five theme roles. It lives with the component that needs it, so the theme's role
-  surface stays at five.
+- **Tables are not a sixth theme role.** Tables read `--table-font-family`, a
+  bridge token *introduced by the tables component*, not one of the five theme
+  roles. It **defaults to `--body-font-family`**, and the `canvas` theme overrides
+  it to **Trebuchet MS** for a distinct tabular face. There is deliberately no
+  `--brand-table-font-family`: the table face is a direct component bridge token,
+  not a brand-tier role, so the theme's role surface stays at five.
 - **App-Header is not its own role.** The application header maps to the
   **label/nav (Roboto)** role rather than a distinct `--app-header-` face. There is
   no sixth "app header" font role; the App-Header surface reuses label/nav.
@@ -461,6 +463,27 @@ for normal declarations, the declaration whose cascade layer is last wins;
 the first `@layer` statement fixes the order; and an `@import` made within a layer
 places the imported sheet into that layer.
 
+### Reset & normalized content
+
+The `reset` layer vendors **sanitize.css** (wrapped in `:where()` for zero
+specificity) plus a reduced-motion pass; the `content` layer then gives semantic
+elements their typographic defaults. Together they normalize and style:
+
+- **Block typography** — `html`, `hgroup`, `h1`–`h6`, `p`, `ul`, `ol`,
+  `blockquote`, `textarea`.
+- **Inline typography** — `a` (`.secondary` / `.contrast`), `abbr`, `strong`, `b`,
+  `em`, `i`, `cite`, `del`, `ins`, `kbd`, `mark`, `s`, `small`, `sub`, `sup`, `u`.
+- **Containers & overflow** — `body (> #root) > :is(main, header, footer, aside)`
+  (with `.fluid`), and `figure.scroll-x` / `figure.scroll-y` for overflowing
+  figures.
+- **Form controls** — `label`, `input`, `select`, `textarea`, `fieldset`,
+  `legend`, with `[aria-invalid]` / `[disabled]` / `[readonly]` states, plus
+  `input[type=checkbox|radio][role=switch]` toggles.
+- **Tables** — `table`, `thead`, `tbody`, `tfoot`, `tr`, `th`, `td`.
+
+Reduced motion (`prefers-reduced-motion: reduce`) collapses transition durations to
+`0s`; `theme/animation.css` repeats the collapse, belt-and-suspenders.
+
 ### Selector & nesting conventions
 
 Components are built from patterns of DOM nodes: one component is one nested
@@ -559,8 +582,8 @@ Any class outside this census is out of contract.
   `:focus-visible` ring; `.secondary` reads the tonal pair
   `--color-secondary-container`/`--color-on-secondary-container`; `.outline` reads
   `--color-outline` (border) + `--color-primary` (label). Plus `--label-font-family`,
-  `--font-size-base`, `--border-radius-button`, `--size-small`/`--size-base`
-  (padding)
+  `--font-size-base`, `--border-radius-button`, `--button-border-style` (border
+  style, defaults to `--base-border-style`), `--size-small`/`--size-base` (padding)
 - **States:** `:hover`, `:focus-visible`, `:active`, `[disabled]`/`[aria-disabled]`,
   `[aria-busy]`
 - **Edge-classes:** `.secondary`, `.contrast`, `.outline`
@@ -601,7 +624,8 @@ Opinionated tables with zebra striping and a type face separate from body or cod
 
 - **DOM shape:** `table > thead, tbody, tfoot > tr > th, td`
 - **ARIA:** `[aria-sort]` on sortable `th`; `scope` on header cells
-- **Tokens:** `--table-font-family` (Trebuchet MS), `--table-row-even-color`/
+- **Tokens:** `--table-font-family` (defaults to `--body-font-family`; `canvas`
+  overrides to Trebuchet MS), `--table-row-even-color`/
   `--table-row-odd-color`, `--_fn-border`, `--spacing-block-vertical`/
   `--spacing-block-horizontal` (cell padding)
 - **States:** `tr:nth-child(even|odd)`, `th[aria-sort]`, `tr:hover`
@@ -708,6 +732,47 @@ flattening interior borders and radii.
   (raise the focused member)
 - **Edge-classes:** none
 
+### Alerts
+
+A status banner. `aside` is the container; the ARIA role sets urgency and
+`data-variant` selects the semantic color. Classless: intent rides the role and
+the attribute, not a class.
+
+- **DOM shape:** `aside[data-variant]` carrying `[role=alert]` or `[role=status]`
+- **ARIA:** `[role=alert]` (assertive — `warning` / `error`) vs `[role=status]`
+  (polite — `info` / `success` / `neutral`)
+- **Tokens:** the state roles (`--color-error`/`--color-on-error` and the
+  project-extension info/success/warning roles), `--border-radius-container`,
+  `--card-inner-border`, `--spacing-block-vertical`/`--spacing-block-horizontal`
+- **States:** `[role=alert]` + `[data-variant=warning|error]`; `[role=status]` +
+  `[data-variant=info|success|neutral]`
+- **Edge-classes:** none (`data-variant` is an attribute, not a class)
+
+### Chips
+
+A compact inline tag carrying a status color.
+
+- **DOM shape:** `small[data-variant=warning|error|info|success|neutral]`
+- **ARIA:** none beyond surrounding context
+- **Tokens:** the matching state role pair, `--border-radius-badge`,
+  `--size-xsmall`/`--size-small` (padding)
+- **States:** one presentation per `data-variant`
+- **Edge-classes:** none (`data-variant` is an attribute, not a class)
+
+### Tooltip
+
+A hover/focus label driven by data attributes, with no extra markup.
+
+- **DOM shape:** any element with `[data-tooltip]`; `[data-direction]` picks the
+  side
+- **ARIA:** the label text rides `[data-tooltip]`; pair with `[aria-label]` /
+  `[aria-describedby]` where the affordance must be announced to assistive tech
+- **Tokens:** `--color-surface`/`--color-on-surface` (bubble), `--border-radius-item`,
+  `--motion-duration-snap`, `--size-small` (padding)
+- **States:** `:hover` / `:focus-visible` reveal;
+  `[data-direction=top|right|bottom|left]` placement
+- **Edge-classes:** none (`data-tooltip` / `data-direction` are attributes)
+
 ---
 
 ## Patterns
@@ -723,7 +788,9 @@ elevated card; `section` is the flat panel.
 - **DOM shape:** `:is(article, section) > :is(header, main, footer)` — a `header`
   or `footer` rail may carry a hero `figure` (see Hero)
 - **ARIA:** none beyond the native sectioning roles
-- **Tokens:** `--card-background-color`, `--border-radius-card` (`--base-size`),
+- **Tokens:** `--card-background-color`, `--card-shadow` (resting elevation) /
+  `--card-shadow-active` (`article:hover` elevation, defaults to `--card-shadow`),
+  `--card-border`, `--border-radius-card` (`--base-size`),
   `--margin-card-vertical` (`--size-large`), `--card-inner-border`,
   `--spacing-block-vertical`/`--spacing-block-horizontal` (rail padding),
   `--content-columns` (multi-column `main`)
