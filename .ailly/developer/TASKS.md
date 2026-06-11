@@ -7,6 +7,11 @@ practices and common patterns for each component or feature.
 
 ## Active topics
 
+- [ ] **vitest-migration** — Port the `node --test` static and computed suites
+  to Vitest, retiring the dual runner. `vitest.config.mjs` is already in place
+  from the storybook-harness topic. Goal: a single `npm test` that runs all
+  test types under one runner.
+
 - [ ] **theme-skins-final-review** — After the theme-skins feature test passes,
   run a final refactor + review pass over the topic (themes/ files, panel theme
   row + JS, canvas font-role migration, contrast assertions) and tidy with

@@ -12,7 +12,7 @@ export default defineConfig({
           browser: "chromium",
           name: "vr",
           launch: { args: ["--force-device-scale-factor=1"] },
-          context: { reducedMotion: "reduce" },
+          context: { reducedMotion: "reduce", colorScheme: "light" },
         },
       ],
     },

@@ -34,13 +34,12 @@
     "prepublishOnly": "sh build.sh",
     "pretest": "npx playwright install chromium",
     "pretest:vr": "npx playwright install chromium",
-    "test": "node --test 'test/**/*.test.mjs'",
+    "test": "node --test 'test/*.test.mjs' 'test/computed/*.test.mjs' 'test/feature/*.test.mjs'",
     "test:vr": "vitest run",
     "approve": "vitest run --update",
     "demo:build": "node test/build-demo.mjs",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build",
-    "screenshots": "node test/screenshots.mjs"
+    "storybook:build": "storybook build"
   },
   "devDependencies": {
     "@parcel/css-cli": "^1.13.1",

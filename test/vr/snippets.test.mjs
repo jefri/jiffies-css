@@ -46,7 +46,8 @@ async function setScheme(scheme) {
   await cdp().send("Emulation.setEmulatedMedia", {
     features: [{ name: "prefers-color-scheme", value: scheme }],
   });
-  // Wait for styles to recompute after the media change.
+  // Wait two frames for styles to recompute and layout to settle.
+  await new Promise((r) => requestAnimationFrame(r));
   await new Promise((r) => requestAnimationFrame(r));
 }
 
