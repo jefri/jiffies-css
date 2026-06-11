@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { readFileSync, statSync, mkdirSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
@@ -113,26 +113,3 @@ export async function css(page, selector, property) {
   );
 }
 
-/**
- * screenshot(page, name, options?) — writes a PNG of the page to
- * docs/screenshots/<name>.png (relative to the repo root), creating any
- * intervening directories. `name` may include subdirectories (e.g.
- * "00-baseline/overview--light"). Defaults to a full-page capture; pass
- * { clip } / { element } / { fullPage: false } to scope a frame.
- *
- * @param {import('playwright').Page} page
- * @param {string} name  — path under docs/screenshots/, without the .png suffix
- * @param {{ fullPage?: boolean, element?: import('playwright').Locator | import('playwright').ElementHandle }=} options
- * @returns {Promise<string>}  — the absolute path of the PNG written
- */
-export async function screenshot(page, name, options = {}) {
-  const { fullPage = true, element } = options;
-  const path = join(repoRoot, "docs", "screenshots", `${name}.png`);
-  mkdirSync(dirname(path), { recursive: true });
-  if (element !== undefined) {
-    await element.screenshot({ path });
-  } else {
-    await page.screenshot({ path, fullPage });
-  }
-  return path;
-}

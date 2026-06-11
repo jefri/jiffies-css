@@ -33,12 +33,26 @@
     "build": "sh build.sh",
     "prepublishOnly": "sh build.sh",
     "pretest": "npx playwright install chromium",
-    "test": "node --test 'test/**/*.test.mjs'",
-    "screenshots": "node test/screenshots.mjs"
+    "pretest:vr": "npx playwright install chromium",
+    "test": "node --test 'test/*.test.mjs' 'test/computed/*.test.mjs' 'test/feature/*.test.mjs'",
+    "test:vr": "vitest run",
+    "approve": "vitest run --update",
+    "demo:build": "node test/build-demo.mjs",
+    "storybook": "storybook dev -p 6006",
+    "storybook:build": "storybook build"
   },
   "devDependencies": {
     "@parcel/css-cli": "^1.13.1",
+    "@storybook/addon-themes": "^10.4.4",
+    "@storybook/html-vite": "^10.4.4",
+    "@vitest/browser": "^4.1.8",
+    "@vitest/browser-playwright": "^4.1.8",
     "esbuild": "^0.19.5",
-    "playwright": "^1.60.0"
+    "playwright": "^1.60.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^10.4.4",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
   }
 }
