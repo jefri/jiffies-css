@@ -346,6 +346,7 @@
            DESIGN.md › Color. Depends on --brand-color palette plumbing
            from m3-tonal-palettes (Phase 1); swatches will fill in then.
       ==================================================================== -->
+      <!-- demo:color-swatches -->
       <section id="color-swatches">
         <h1>Color</h1>
         <p>
@@ -399,11 +400,13 @@
           <p style="background-color: var(--_p-100); color: var(--_p-10)">100</p>
         </div>
       </section>
+      <!-- /demo:color-swatches -->
 
       <!-- ===================================================================
            CONTENT: HEADINGS / FORMATTING / LISTS
            (exercise the content layer; kept as demo homes for typography.)
       ==================================================================== -->
+      <!-- demo:headings -->
       <section id="headings">
         <h1>Headings</h1>
         <p>Headings are built using &lt;h1&gt; etc tags.</p>
@@ -443,7 +446,9 @@
           voluptatem necessitatibus eos iusto nam deserunt, dicta possimus.
         </p>
       </section>
+      <!-- /demo:headings -->
 
+      <!-- demo:formatting -->
       <section id="formatting">
         <h1>Formatting</h1>
         <p>
@@ -504,7 +509,9 @@ public:
         <h2>Horizontal Line</h2>
         <hr />
       </section>
+      <!-- /demo:formatting -->
 
+      <!-- demo:lists -->
       <section id="lists">
         <h1>Lists</h1>
         <h2>Unordered list</h2>
@@ -539,6 +546,7 @@ public:
           <dd>Second definition description</dd>
         </dl>
       </section>
+      <!-- /demo:lists -->
 
       <!-- ===================================================================
            COMPONENT: BUTTONS (incl .secondary / .contrast / .outline)
@@ -598,6 +606,7 @@ public:
            label / input / select / textarea / fieldset / legend
            + [aria-invalid] / [disabled] / [readonly]
       ==================================================================== -->
+      <!-- demo:forms -->
       <section id="forms">
         <h1>Forms</h1>
         <form onsubmit="event.preventDefault(); return false;">
@@ -685,12 +694,14 @@ public:
           </fieldset>
         </form>
       </section>
+      <!-- /demo:forms -->
 
       <!-- ===================================================================
            COMPONENT: FORM SWITCH
            DESIGN.md › Form switch
            input[type=checkbox|radio][role=switch]
       ==================================================================== -->
+      <!-- demo:form-switch -->
       <section id="form-switch">
         <h1>Form switch</h1>
         <p>
@@ -720,12 +731,14 @@ public:
           </label>
         </form>
       </section>
+      <!-- /demo:form-switch -->
 
       <!-- ===================================================================
            COMPONENT: TABLES
            DESIGN.md › Tables
            thead / tbody / tfoot, [aria-sort]
       ==================================================================== -->
+      <!-- demo:tables -->
       <section id="tables">
         <h1>Tables</h1>
         <table>
@@ -762,12 +775,14 @@ public:
           </tbody>
         </table>
       </section>
+      <!-- /demo:tables -->
 
       <!-- ===================================================================
            COMPONENT: ACCORDION
            DESIGN.md › Accordion
            details > summary
       ==================================================================== -->
+      <!-- demo:accordion -->
       <section id="accordion">
         <h1>Accordion</h1>
         <p>
@@ -792,12 +807,14 @@ public:
           </ul>
         </details>
       </section>
+      <!-- /demo:accordion -->
 
       <!-- ===================================================================
            COMPONENT: TABS
            DESIGN.md › Tabs
            [role=tablist] > [role=tab] paired with [role=tabpanel]
       ==================================================================== -->
+      <!-- demo:tabs -->
       <section id="tabs">
         <h1 id="tab-sample-header">Tabs</h1>
         <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
@@ -836,12 +853,14 @@ public:
           </div>
         </section>
       </section>
+      <!-- /demo:tabs -->
 
       <!-- ===================================================================
            COMPONENT: MODAL
            DESIGN.md › Modal
            dialog (often dialog > article reusing the card surface)
       ==================================================================== -->
+      <!-- demo:modal -->
       <section id="modal">
         <h1>Modal</h1>
         <p>Native <code>dialog</code>; often <code>dialog &gt; article</code>.</p>
@@ -875,12 +894,14 @@ public:
           </article>
         </dialog>
       </section>
+      <!-- /demo:modal -->
 
       <!-- ===================================================================
            COMPONENT: PROPERTY SHEET
            DESIGN.md › Property sheet
            dl > dt, dd rendered as aligned label/value rows
       ==================================================================== -->
+      <!-- demo:property-sheet -->
       <section id="property-sheet">
         <h1>Property sheet</h1>
         <p>A <code>dl</code> rendered as aligned label/value rows.</p>
@@ -895,12 +916,14 @@ public:
           <dd>David Souther</dd>
         </dl>
       </section>
+      <!-- /demo:property-sheet -->
 
       <!-- ===================================================================
            COMPONENT: PROGRESS
            DESIGN.md › Progress
            determinate + indeterminate, .round
       ==================================================================== -->
+      <!-- demo:progress -->
       <section id="progress">
         <h1>Progress</h1>
         <p>A styled native <code>progress</code>, line and round.</p>
@@ -913,12 +936,14 @@ public:
         <progress class="round" value="40" max="100" aria-label="40 percent"></progress>
         <progress class="round" aria-label="Loading"></progress>
       </section>
+      <!-- /demo:progress -->
 
       <!-- ===================================================================
            COMPONENT: FORM GROUP
            DESIGN.md › Form group
            fieldset[role=group] > :is(button, input, select)
       ==================================================================== -->
+      <!-- demo:form-group -->
       <section id="form-group">
         <h1>Form group</h1>
         <p>
@@ -940,12 +965,14 @@ public:
           </fieldset>
         </form>
       </section>
+      <!-- /demo:form-group -->
 
       <!-- ===================================================================
            PATTERN: CARD & PANEL
            DESIGN.md › Card & Panel
            :is(article, section) > :is(header, main, footer)
       ==================================================================== -->
+      <!-- demo:card-panel -->
       <section id="card-panel">
         <h1>Card &amp; Panel</h1>
         <p>
@@ -1004,6 +1031,7 @@ public:
           </main>
         </article>
       </section>
+      <!-- /demo:card-panel -->
 
       <!-- ===================================================================
            PATTERN: HERO (page-scoped)
@@ -1011,6 +1039,7 @@ public:
            A header > figure > img + heading inside the page spine is a
            full-bleed banner. .fluid opts out of the content clamp.
       ==================================================================== -->
+      <!-- demo:hero-page -->
       <section id="hero-page">
         <h1>Hero (page-scoped)</h1>
         <p>
@@ -1027,6 +1056,7 @@ public:
           </figure>
         </header>
       </section>
+      <!-- /demo:hero-page -->
 
       <!-- ===================================================================
            PATTERN: NAVIGATION
@@ -1034,6 +1064,7 @@ public:
            :is(header, footer) > nav > ol  AND  aside > nav > ol
            (The page-level header/footer/aside below also demonstrate these.)
       ==================================================================== -->
+      <!-- demo:navigation -->
       <section id="navigation">
         <h1>Navigation</h1>
         <p>
@@ -1053,12 +1084,14 @@ public:
           </nav>
         </header>
       </section>
+      <!-- /demo:navigation -->
 
       <!-- ===================================================================
            PATTERN: BREADCRUMB
            DESIGN.md › Breadcrumb
            nav[aria-label="Breadcrumb"] > ol > li with [aria-current=page]
       ==================================================================== -->
+      <!-- demo:breadcrumb -->
       <section id="breadcrumb">
         <h1>Breadcrumb</h1>
         <p>Classless: the <code>Breadcrumb</code> ARIA label selects it.</p>
@@ -1070,7 +1103,9 @@ public:
           </ol>
         </nav>
       </section>
+      <!-- /demo:breadcrumb -->
 
+      <!-- demo:utilities -->
       <section id="utilities">
         <h1>Utilities</h1>
         <p>
@@ -1105,6 +1140,7 @@ public:
           <div style="background-color: var(--color-surface-variant); color: var(--color-on-surface-variant); padding: var(--size-base)">6</div>
         </div>
       </section>
+      <!-- /demo:utilities -->
     </main>
 
     <!-- =====================================================================
