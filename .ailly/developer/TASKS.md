@@ -12,6 +12,16 @@ practices and common patterns for each component or feature.
   from the storybook-harness topic. Goal: a single `npm test` that runs all
   test types under one runner.
 
+- [ ] **cross-platform-baselines** — VR baselines are committed from macOS and
+  are not portable across platforms (system font fallbacks differ). Deferred from
+  storybook-harness. Options: vendor fonts into the repo or run the VR suite in a
+  container image for CI.
+
+- [ ] **snippet-chrome-sections** — The three chrome sections of `index.html`
+  (`overview`, `usage`, `intent-panel`) are still authored directly in the file.
+  Deferred from storybook-harness. Decide whether they become snippet modules too
+  (uniform authoring) or remain as static HTML.
+
 - [ ] **theme-skins-final-review** — After the theme-skins feature test passes,
   run a final refactor + review pass over the topic (themes/ files, panel theme
   row + JS, canvas font-role migration, contrast assertions) and tidy with
