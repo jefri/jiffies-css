@@ -12,6 +12,10 @@ practices and common patterns for each component or feature.
   row + JS, canvas font-role migration, contrast assertions) and tidy with
   `developer:cleanup`. Gated on the feature test being green.
 
+- [ ] **modern-css-wave-2** — Adopt `interpolate-size` + height animation on
+  `::details-content` (accordion slide) and `field-sizing: content` on `textarea`
+  once both reach cross-browser baseline. Gate on Firefox shipping both.
+
 ---
 
 ## Conventions
