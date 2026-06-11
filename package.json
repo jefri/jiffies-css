@@ -34,6 +34,7 @@
     "prepublishOnly": "sh build.sh",
     "pretest": "npx playwright install chromium",
     "test": "node --test 'test/**/*.test.mjs'",
+    "demo:build": "node test/build-demo.mjs",
     "screenshots": "node test/screenshots.mjs"
   },
   "devDependencies": {
