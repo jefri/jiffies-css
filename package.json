@@ -1,15 +1,15 @@
 {
   "name": "@davidsouther/jiffies-css",
-  "version": "2.0.0",
+  "version": "2026.36.0",
   "description": "Post-modern full-app CSS reset.",
-  "main": "jiffies-css-v2-bundle.css",
-  "style": "jiffies-css-v2-bundle.css",
-  "unpkg": "jiffies-css-v2-bundle.min.css",
+  "main": "jiffies-css-bundle.css",
+  "style": "jiffies-css-bundle.css",
+  "unpkg": "jiffies-css-bundle.min.css",
   "files": [
-    "jiffies-css-v2-bundle.css",
-    "jiffies-css-v2-bundle.css.map",
-    "jiffies-css-v2-bundle.min.css",
-    "jiffies-css-v2-bundle.min.css.map",
+    "jiffies-css-bundle.css",
+    "jiffies-css-bundle.css.map",
+    "jiffies-css-bundle.min.css",
+    "jiffies-css-bundle.min.css.map",
     "skills/jiffies-css-semantic-html",
     "skills/jiffies-css-theming",
     "v2",
@@ -35,6 +35,7 @@
     "pretest": "npx playwright install chromium",
     "test": "node --test 'test/**/*.test.mjs'",
     "screenshots": "node test/screenshots.mjs",
+    "prerelease": "npm test && npm run build",
     "release": "node scripts/release.mjs"
   },
   "devDependencies": {

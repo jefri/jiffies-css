@@ -1,168 +1,94 @@
 #!/usr/bin/env node
-// scripts/release.mjs — cut a release: verify, bump, build, commit, tag.
+// scripts/release.mjs — cut a release: bump, commit, tag, push, publish.
 //
-// Usage:
-//   node scripts/release.mjs <patch|minor|major|X.Y.Z> [options]
+// Usage: npm run release [-- X.Y.Z]
 //
-// Options:
-//   --dry-run     Print what would happen; touch no files, run no git commands.
-//   --skip-tests  Skip the test suite gate (not recommended).
-//   --push        After tagging, `git push && git push --tags`.
-//   --publish     After tagging (and pushing, if --push), run `npm publish`.
+// Always run it as `npm run release`, not `node scripts/release.mjs`
+// directly: testing and building happen first via npm's own "prerelease"
+// script (package.json), which npm runs automatically before "release"
+// whenever you invoke it through `npm run`. Calling this file directly
+// skips that.
 //
-// Without --push/--publish, the script stops after a local commit + tag and
-// prints the exact follow-up commands — publishing to npm and pushing tags
-// are outward-facing, hard-to-reverse actions and stay opt-in.
+// Version is CalVer by default: <ISO-week-year>.<ISO-week>.<micro> — the
+// same scheme @davidsouther/jiffies uses. micro increments if a release
+// already went out this ISO week; otherwise it starts at 0. Pass an
+// explicit X.Y.Z to override.
 //
-// What it does, in order:
-//   1. Refuse to run with a dirty working tree.
-//   2. Run the test suite (`npm test`), unless --skip-tests.
-//   3. Compute the new version (semver bump, or an explicit X.Y.Z).
-//   4. Write it into package.json AND package-lock.json (both the top-level
-//      `version` and the `packages[""].version` field — the two fields npm
-//      itself keeps in sync, and which had drifted independently before).
-//   5. Rebuild the published bundle (`sh build.sh`) so the checked-in
-//      jiffies-css-v2-bundle.* artifacts match the new version's source.
-//   6. Commit exactly those files as "Bump to X.Y.Z" and tag `vX.Y.Z`.
+// Always pushes the commit + tag and runs `npm publish` — that's the point
+// of running this script instead of bumping the version by hand.
 
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
 
-const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const PACKAGE_JSON = path.join(ROOT, "package.json");
-const PACKAGE_LOCK = path.join(ROOT, "package-lock.json");
+const BUNDLE_FILES = [
+  "jiffies-css-bundle.css",
+  "jiffies-css-bundle.css.map",
+  "jiffies-css-bundle.min.css",
+  "jiffies-css-bundle.min.css.map",
+];
 
-const BUMP_KINDS = new Set(["patch", "minor", "major"]);
-const SEMVER_RE = /^\d+\.\d+\.\d+$/;
+function run(command, args) {
+  execFileSync(command, args, { stdio: "inherit" });
+}
 
-const args = process.argv.slice(2);
-const flags = new Set(args.filter((a) => a.startsWith("--")));
-const positional = args.filter((a) => !a.startsWith("--"));
-const dryRun = flags.has("--dry-run");
-const skipTests = flags.has("--skip-tests");
-const shouldPush = flags.has("--push");
-const shouldPublish = flags.has("--publish");
+function capture(command, args) {
+  return execFileSync(command, args, { encoding: "utf8" });
+}
 
-function fail(message) {
-  console.error(`release: ${message}`);
+// ISO 8601 week-year and week number (matches @davidsouther/jiffies's scheme).
+function isoWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7) + 3); // nearest Thursday
+  const firstThursday = new Date(Date.UTC(d.getUTCFullYear(), 0, 4));
+  firstThursday.setUTCDate(
+    firstThursday.getUTCDate() - ((firstThursday.getUTCDay() + 6) % 7) + 3,
+  );
+  const week = 1 + Math.round((d - firstThursday) / (7 * 86400000));
+  return `${d.getUTCFullYear()}.${week}`;
+}
+
+function nextVersion(currentVersion) {
+  const yearWeek = isoWeek(new Date());
+  const [currentYearWeek, currentMicro] = [
+    currentVersion.split(".").slice(0, 2).join("."),
+    Number(currentVersion.split(".")[2] ?? -1),
+  ];
+  const micro = currentYearWeek === yearWeek ? currentMicro + 1 : 0;
+  return `${yearWeek}.${micro}`;
+}
+
+// The tree must be clean except for the bundle files `prerelease`'s build
+// step just regenerated — those are exactly what this release commits.
+const dirty = capture("git", [
+  "status",
+  "--porcelain",
+  "--",
+  ".",
+  ...BUNDLE_FILES.map((f) => `:!${f}`),
+]).trim();
+if (dirty) {
+  console.error(`release: working tree has unexpected changes:\n${dirty}`);
   process.exit(1);
 }
 
-function run(command, cmdArgs, { silent = false } = {}) {
-  if (dryRun) {
-    console.log(`[dry-run] ${command} ${cmdArgs.join(" ")}`);
-    return "";
-  }
-  return execFileSync(command, cmdArgs, {
-    cwd: ROOT,
-    stdio: silent ? ["ignore", "pipe", "pipe"] : "inherit",
-    encoding: "utf8",
-  });
-}
+const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+const version = process.argv[2] ?? nextVersion(pkg.version);
+console.log(`release: ${pkg.version} -> ${version}`);
 
-function git(cmdArgs, opts) {
-  return run("git", cmdArgs, opts);
-}
+pkg.version = version;
+writeFileSync("package.json", `${JSON.stringify(pkg, null, 2)}\n`);
 
-function bumpVersion(current, kind) {
-  if (SEMVER_RE.test(kind)) return kind;
-  if (!BUMP_KINDS.has(kind)) {
-    fail(
-      `expected "patch", "minor", "major", or an explicit X.Y.Z version, got "${kind}"`,
-    );
-  }
-  const [major, minor, patch] = current.split(".").map(Number);
-  if ([major, minor, patch].some(Number.isNaN)) {
-    fail(`current package.json version "${current}" is not a plain X.Y.Z semver`);
-  }
-  if (kind === "major") return `${major + 1}.0.0`;
-  if (kind === "minor") return `${major}.${minor + 1}.0`;
-  return `${major}.${minor}.${patch + 1}`;
-}
+const lock = JSON.parse(readFileSync("package-lock.json", "utf8"));
+lock.version = version;
+if (lock.packages?.[""]) lock.packages[""].version = version;
+writeFileSync("package-lock.json", `${JSON.stringify(lock, null, 2)}\n`);
 
-function main() {
-  const bumpArg = positional[0];
-  if (!bumpArg) {
-    fail('missing version argument — run `node scripts/release.mjs <patch|minor|major|X.Y.Z>`');
-  }
+run("git", ["add", "package.json", "package-lock.json", ...BUNDLE_FILES]);
+run("git", ["commit", "-m", `Bump to ${version}`]);
+run("git", ["tag", "-a", `v${version}`, "-m", `v${version}`]);
 
-  // ---- 1. Clean working tree ------------------------------------------------
-  const status = git(["status", "--porcelain"], { silent: true });
-  if (status.trim() && !dryRun) {
-    fail(
-      "working tree is not clean — commit, stash, or discard changes before releasing:\n" +
-        status,
-    );
-  }
+run("git", ["push"]);
+run("git", ["push", "--tags"]);
+run("npm", ["publish"]);
 
-  const pkg = JSON.parse(readFileSync(PACKAGE_JSON, "utf8"));
-  const currentVersion = pkg.version;
-  const nextVersion = bumpVersion(currentVersion, bumpArg);
-  console.log(`release: ${currentVersion} -> ${nextVersion}`);
-
-  // ---- 2. Test gate -----------------------------------------------------
-  if (skipTests) {
-    console.log("release: --skip-tests set, skipping the test suite (not recommended)");
-  } else {
-    console.log("release: running the test suite (npm test)...");
-    run("npm", ["test"]);
-  }
-
-  // ---- 3/4. Bump package.json + package-lock.json -----------------------
-  pkg.version = nextVersion;
-  const pkgJsonText = `${JSON.stringify(pkg, null, 2)}\n`;
-  if (dryRun) {
-    console.log(`[dry-run] would write ${PACKAGE_JSON} with version ${nextVersion}`);
-  } else {
-    writeFileSync(PACKAGE_JSON, pkgJsonText);
-  }
-
-  const lock = JSON.parse(readFileSync(PACKAGE_LOCK, "utf8"));
-  lock.version = nextVersion;
-  if (lock.packages?.[""]) lock.packages[""].version = nextVersion;
-  const lockJsonText = `${JSON.stringify(lock, null, 2)}\n`;
-  if (dryRun) {
-    console.log(`[dry-run] would write ${PACKAGE_LOCK} with version ${nextVersion}`);
-  } else {
-    writeFileSync(PACKAGE_LOCK, lockJsonText);
-  }
-
-  // ---- 5. Rebuild the published bundle -----------------------------------
-  console.log("release: rebuilding the bundle (sh build.sh)...");
-  run("sh", ["build.sh"]);
-
-  // ---- 6. Commit + tag ----------------------------------------------------
-  const filesToCommit = [
-    "package.json",
-    "package-lock.json",
-    "jiffies-css-v2-bundle.css",
-    "jiffies-css-v2-bundle.css.map",
-    "jiffies-css-v2-bundle.min.css",
-    "jiffies-css-v2-bundle.min.css.map",
-  ];
-  git(["add", ...filesToCommit]);
-  git(["commit", "-m", `Bump to ${nextVersion}`]);
-  git(["tag", "-a", `v${nextVersion}`, "-m", `v${nextVersion}`]);
-  console.log(`release: committed and tagged v${nextVersion}`);
-
-  // ---- 7. Push / publish, opt-in only -------------------------------------
-  if (shouldPush) {
-    console.log("release: pushing commit and tags...");
-    git(["push"]);
-    git(["push", "--tags"]);
-  }
-  if (shouldPublish) {
-    console.log("release: publishing to npm...");
-    run("npm", ["publish"]);
-  }
-
-  if (!shouldPush || !shouldPublish) {
-    console.log("\nrelease: local commit + tag done. Remaining steps:");
-    if (!shouldPush) console.log("  git push && git push --tags");
-    if (!shouldPublish) console.log("  npm publish");
-  }
-}
-
-main();
+console.log(`release: published v${version}`);
