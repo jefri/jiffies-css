@@ -160,7 +160,7 @@
            OVERVIEW & USAGE
       ==================================================================== -->
       <section id="overview">
-        <h1>About Jiffies CSS</h1>
+        <h2>About Jiffies CSS</h2>
         <p>
           <b>Jiffies CSS</b>
           is a "postmodern" CSS full-page reset. It uses "cutting edge" 100%
@@ -176,7 +176,7 @@
       </section>
 
       <section id="usage">
-        <h1>Usage</h1>
+        <h2>Usage</h2>
         <ul>
           <li>
             For appropriate semantic markup, view the
@@ -347,7 +347,7 @@
            from m3-tonal-palettes (Phase 1); swatches will fill in then.
       ==================================================================== -->
       <section id="color-swatches">
-        <h1>Color</h1>
+        <h2>Color</h2>
         <p>
           The scheme derives from one <code>--brand-color</code>: five key
           palettes plus a fixed error, each a tonal ramp, assigned to semantic
@@ -374,7 +374,7 @@
           }
         </style>
 
-        <h2>Semantic roles</h2>
+        <h3>Semantic roles</h3>
         <div class="swatch-grid">
           <p style="background-color: var(--color-primary); color: var(--color-on-primary)">Primary</p>
           <p style="background-color: var(--color-secondary); color: var(--color-on-secondary)">Secondary</p>
@@ -388,7 +388,7 @@
           <p style="background-color: var(--color-error-container); color: var(--color-on-error-container)">Error container</p>
         </div>
 
-        <h2>Primary tonal palette</h2>
+        <h3>Primary tonal palette</h3>
         <div class="swatch-grid tonal-ramp">
           <p style="background-color: var(--_p-10); color: var(--_p-90)">10</p>
           <p style="background-color: var(--_p-20); color: var(--_p-90)">20</p>
@@ -405,7 +405,7 @@
            (exercise the content layer; kept as demo homes for typography.)
       ==================================================================== -->
       <section id="headings">
-        <h1>Headings</h1>
+        <h2>Headings</h2>
         <p>Headings are built using &lt;h1&gt; etc tags.</p>
         <hgroup>
           <h1>Heading 1</h1>
@@ -445,7 +445,7 @@
       </section>
 
       <section id="formatting">
-        <h1>Formatting</h1>
+        <h2>Formatting</h2>
         <p>
           Formatting uses the appropriate <code>&lt;b&gt;</code> etc inline text
           tags.
@@ -477,7 +477,7 @@
           </p>
         </address>
 
-        <h2>Blockquote</h2>
+        <h3>Blockquote</h3>
         <blockquote>
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam
           molestiae et assumenda molestias alias ut saepe doloribus, porro,
@@ -486,7 +486,7 @@
           <cite>- Blockquote Citation</cite>
         </blockquote>
 
-        <h2>Preformatted Text</h2>
+        <h3>Preformatted Text</h3>
         <pre>
 If you can keep your head when all about you
     Are losing theirs and blaming it on you,
@@ -495,19 +495,19 @@ If you can trust yourself when all men doubt you,
 
 - Rudyard Kipling, If-
         </pre>
-        <h3>Code</h3>
+        <h4>Code</h4>
         <pre><code class="language-cpp">class Voila {
 public:
   // Voila
   static const string VOILA = "Voila";
 }</code></pre>
-        <h2>Horizontal Line</h2>
+        <h3>Horizontal Line</h3>
         <hr />
       </section>
 
       <section id="lists">
-        <h1>Lists</h1>
-        <h2>Unordered list</h2>
+        <h2>Lists</h2>
+        <h3>Unordered list</h3>
         <ul>
           <li>
             List item one
@@ -519,7 +519,7 @@ public:
           <li>List item three</li>
         </ul>
 
-        <h2>Ordered list</h2>
+        <h3>Ordered list</h3>
         <ol>
           <li>
             List item one
@@ -531,7 +531,7 @@ public:
           <li>List item three</li>
         </ol>
 
-        <h2>Definition List</h2>
+        <h3>Definition List</h3>
         <dl>
           <dt>Definition Title One</dt>
           <dd>First definition description</dd>
@@ -545,20 +545,20 @@ public:
            DESIGN.md › Buttons
       ==================================================================== -->
       <section id="buttons">
-        <h1>Buttons</h1>
+        <h2>Buttons</h2>
         <p>
           Button elements, links with <code>role="button"</code>, and input
           elements should all render exactly the same.
         </p>
 
-        <h2>Primary</h2>
+        <h3>Primary</h3>
         <button>Button</button>
         <input type="submit" value="Submit" />
         <input type="button" value="Input" />
         <input type="reset" value="Reset" />
         <a role="button">Link</a>
 
-        <h2>Secondary</h2>
+        <h3>Secondary</h3>
         <p>
           Adding a <code>secondary</code> class reads the tonal container pair.
         </p>
@@ -567,14 +567,14 @@ public:
         <input type="button" value="Input" class="secondary" />
         <a role="button" class="secondary">Link</a>
 
-        <h2>Contrast</h2>
+        <h3>Contrast</h3>
         <p>Adding a <code>contrast</code> class.</p>
         <button class="contrast">Button</button>
         <input type="submit" value="Submit" class="contrast" />
         <input type="button" value="Input" class="contrast" />
         <a role="button" class="contrast">Link</a>
 
-        <h2>Outline</h2>
+        <h3>Outline</h3>
         <p>
           Adding an <code>outline</code> class creates outlined buttons with no
           background.
@@ -583,7 +583,7 @@ public:
         <input type="reset" value="Reset" class="outline" />
         <input type="submit" value="Submit" class="contrast outline" />
 
-        <h2>States</h2>
+        <h3>States</h3>
         <p>Disabled and busy (loading) states.</p>
         <button disabled>Disabled</button>
         <button aria-disabled="true">aria-disabled</button>
@@ -597,7 +597,7 @@ public:
            + [aria-invalid] / [disabled] / [readonly]
       ==================================================================== -->
       <section id="forms">
-        <h1>Forms</h1>
+        <h2>Forms</h2>
         <form onsubmit="event.preventDefault(); return false;">
           <fieldset style="--grid-column-count: 3">
             <legend>Account</legend>
@@ -656,7 +656,7 @@ public:
           <button>Button element</button>
         </form>
 
-        <h2>States</h2>
+        <h3>States</h3>
         <p>
           Validity and editability are read from ARIA and native attributes, not
           classes.
@@ -690,7 +690,7 @@ public:
            input[type=checkbox|radio][role=switch]
       ==================================================================== -->
       <section id="form-switch">
-        <h1>Form switch</h1>
+        <h2>Form switch</h2>
         <p>
           A pure-CSS toggle: a checkbox or radio painted as a sliding switch.
         </p>
@@ -725,7 +725,7 @@ public:
            thead / tbody / tfoot, [aria-sort]
       ==================================================================== -->
       <section id="tables">
-        <h1>Tables</h1>
+        <h2>Tables</h2>
         <table>
           <thead>
             <tr>
@@ -767,7 +767,7 @@ public:
            details > summary
       ==================================================================== -->
       <section id="accordion">
-        <h1>Accordion</h1>
+        <h2>Accordion</h2>
         <p>
           Styling for <code>&lt;details&gt;</code> and
           <code>&lt;summary&gt;</code>.
@@ -797,7 +797,7 @@ public:
            [role=tablist] > [role=tab] paired with [role=tabpanel]
       ==================================================================== -->
       <section id="tabs">
-        <h1 id="tab-sample-header">Tabs</h1>
+        <h2 id="tab-sample-header">Tabs</h2>
         <p>Styling for <code>&lt;section role="tablist"&gt;</code>.</p>
         <section role="tablist" aria-labelledby="tab-sample-header">
           <div role="tab" id="tab-1" aria-controls="tabpanel-1" aria-selected="false">
@@ -841,7 +841,7 @@ public:
            dialog (often dialog > article reusing the card surface)
       ==================================================================== -->
       <section id="modal">
-        <h1>Modal</h1>
+        <h2>Modal</h2>
         <p>Native <code>dialog</code>; often <code>dialog &gt; article</code>.</p>
         <button onclick="document.getElementById('demo-dialog').showModal()">
           Open modal
@@ -880,7 +880,7 @@ public:
            dl > dt, dd rendered as aligned label/value rows
       ==================================================================== -->
       <section id="property-sheet">
-        <h1>Property sheet</h1>
+        <h2>Property sheet</h2>
         <p>A <code>dl</code> rendered as aligned label/value rows.</p>
         <dl>
           <dt>Name</dt>
@@ -900,14 +900,14 @@ public:
            determinate + indeterminate, .round
       ==================================================================== -->
       <section id="progress">
-        <h1>Progress</h1>
+        <h2>Progress</h2>
         <p>A styled native <code>progress</code>, line and round.</p>
-        <h2>Determinate</h2>
+        <h3>Determinate</h3>
         <progress value="25" max="100" aria-label="25 percent"></progress>
         <progress value="60" max="100" aria-label="60 percent"></progress>
-        <h2>Indeterminate</h2>
+        <h3>Indeterminate</h3>
         <progress aria-label="Loading"></progress>
-        <h2>Round</h2>
+        <h3>Round</h3>
         <progress class="round" value="40" max="100" aria-label="40 percent"></progress>
         <progress class="round" aria-label="Loading"></progress>
       </section>
@@ -918,7 +918,7 @@ public:
            fieldset[role=group] > :is(button, input, select)
       ==================================================================== -->
       <section id="form-group">
-        <h1>Form group</h1>
+        <h2>Form group</h2>
         <p>
           A <code>fieldset[role=group]</code> joins adjacent controls into one
           segmented row.
@@ -945,7 +945,7 @@ public:
            :is(article, section) > :is(header, main, footer)
       ==================================================================== -->
       <section id="card-panel">
-        <h1>Card &amp; Panel</h1>
+        <h2>Card &amp; Panel</h2>
         <p>
           <code>article</code> is the elevated card; <code>section</code> is the
           flat panel. Each may carry header/main/footer rails.
@@ -953,7 +953,7 @@ public:
 
         <article>
           <header>
-            <h2>Card (article)</h2>
+            <h3>Card (article)</h3>
             <p>An elevated surface with header, main, and footer rails.</p>
           </header>
           <main>
@@ -971,7 +971,7 @@ public:
 
         <section>
           <header>
-            <h2>Panel (section)</h2>
+            <h3>Panel (section)</h3>
           </header>
           <main>
             <p>
@@ -990,7 +990,7 @@ public:
                 src="https://picsum.photos/seed/jiffies-card/1200/400"
                 alt="Decorative banner inside a card header"
               />
-              <h2>Card-scoped hero</h2>
+              <h3>Card-scoped hero</h3>
             </figure>
           </header>
           <main>
@@ -1010,7 +1010,7 @@ public:
            full-bleed banner. .fluid opts out of the content clamp.
       ==================================================================== -->
       <section id="hero-page">
-        <h1>Hero (page-scoped)</h1>
+        <h2>Hero (page-scoped)</h2>
         <p>
           A full-bleed page banner: a <code>figure &gt; img</code> plus a
           heading inside a page-level <code>header</code> rail.
@@ -1021,7 +1021,7 @@ public:
               src="https://picsum.photos/seed/jiffies-page/2000/500"
               alt="Decorative full-bleed page banner"
             />
-            <h2>Page-scoped hero</h2>
+            <h3>Page-scoped hero</h3>
           </figure>
         </header>
       </section>
@@ -1033,7 +1033,7 @@ public:
            (The page-level header/footer/aside below also demonstrate these.)
       ==================================================================== -->
       <section id="navigation">
-        <h1>Navigation</h1>
+        <h2>Navigation</h2>
         <p>
           <code>nav &gt; ol</code> in two modes selected by ancestor, not by
           class: a page-end bar (header/footer) and a sticky table of contents
@@ -1058,7 +1058,7 @@ public:
            nav[aria-label="Breadcrumb"] > ol > li with [aria-current=page]
       ==================================================================== -->
       <section id="breadcrumb">
-        <h1>Breadcrumb</h1>
+        <h2>Breadcrumb</h2>
         <p>Classless: the <code>Breadcrumb</code> ARIA label selects it.</p>
         <nav aria-label="Breadcrumb">
           <ol>
@@ -1070,7 +1070,7 @@ public:
       </section>
 
       <section id="utilities">
-        <h1>Utilities</h1>
+        <h2>Utilities</h2>
         <p>
           Class-based helpers in the <code>utility</code> layer:
           <code>.flex</code> / <code>.row</code> / <code>.inline</code> /
@@ -1079,21 +1079,21 @@ public:
           <code>--grid-column-count</code> dial.
         </p>
 
-        <h2>Flex row — justify &amp; align</h2>
+        <h3>Flex row — justify &amp; align</h3>
         <div class="flex row justify-between align-center">
           <button>Left</button>
           <button class="secondary">Middle</button>
           <button class="outline">Right</button>
         </div>
 
-        <h2>Flex grow steps</h2>
+        <h3>Flex grow steps</h3>
         <div class="flex row">
           <div class="flex-1" style="background-color: var(--color-primary-container); color: var(--color-on-primary-container); padding: var(--size-small)">.flex-1</div>
           <div class="flex-2" style="background-color: var(--color-secondary-container); color: var(--color-on-secondary-container); padding: var(--size-small)">.flex-2 (2× share)</div>
           <div class="flex-0" style="background-color: var(--color-tertiary-container); color: var(--color-on-tertiary-container); padding: var(--size-small)">.flex-0 (holds size)</div>
         </div>
 
-        <h2>Grid — 3-column override</h2>
+        <h3>Grid — 3-column override</h3>
         <div class="grid" style="--grid-column-count: 3">
           <div style="background-color: var(--color-surface-variant); color: var(--color-on-surface-variant); padding: var(--size-base)">1</div>
           <div style="background-color: var(--color-surface-variant); color: var(--color-on-surface-variant); padding: var(--size-base)">2</div>

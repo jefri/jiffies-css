@@ -135,7 +135,9 @@ aside > nav {
   }
 
   & li {
-    transition: background-color var(--transition), padding var(--transition);
+    /* transform, not padding: the hover-indent below shifts a compositor
+       layer instead of triggering layout on every hover. */
+    transition: background-color var(--transition), transform var(--transition);
 
     &:has(> a:hover) {
       background-color: var(--color-surface-variant);
@@ -149,6 +151,6 @@ aside > nav {
 
   /* Nested list hover-indent: hovering a row nudges its sub-rows in. */
   & li:hover > ol > li {
-    padding-inline-start: var(--toc-left-offset);
+    transform: translateX(var(--toc-left-offset));
   }
 }

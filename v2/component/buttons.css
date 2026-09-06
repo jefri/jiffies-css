@@ -1,19 +1,9 @@
-/* Buttons (@layer component) — the reference port for the design system.
+/* Buttons (@layer component)
  *
- * THE first consumer of the --color-primary / --color-on-primary role pair, and
- * the canonical M3 state-layer + focus pattern that the other 13 components
- * echo. One file = one component; the whole button family is a single nested
- * block keyed off the DOM-shape selector. State (:hover / :active / focus /
- * disabled / busy) lives next to structure, and every Application final is
- * declared at the top of the block that consumes it.
- *
- * DOM shape (DESIGN.md › Buttons):
+ * DOM shape:
  *   button, a[role=button], input[type=button|submit|reset]
  * ARIA:  [aria-disabled], [aria-busy] (links promoted via [role=button]).
  * Edge-classes: .secondary (tonal pair), .contrast (high-contrast), .outline.
- *
- * Color comes ONLY from M3 role tokens. Dark mode is automatic — the roles
- * remap upstream in theme/colors.css, so there is no second dark rule here.
  *
  * State layers (M3): a filled control overlays its ON-color onto the fill at
  *   8% (:hover) / 12% (:active) via color-mix in oklab. A tonal control does the
@@ -31,6 +21,10 @@ input[type="reset"] {
   --_button-fill: var(--color-primary);
   --_button-label: var(--color-on-primary);
   --_button-border-color: transparent;
+  /* Absolute, not rem: html's font-size tracks --base-font-size's breakpoint
+     ladder, so a rem-based floor would rescale with the breakpoint instead of
+     holding the fixed WCAG 24px minimum. */
+  --_button-min-block-size: 24px;
 
   /* Per-control geometry/type, declared where they are consumed. */
   --font-size-base: var(--base-font-size);
@@ -49,6 +43,7 @@ input[type="reset"] {
   border: var(--base-border-size) var(--button-border-style)
     var(--_button-border-color);
   border-radius: var(--border-radius-button);
+  min-block-size: var(--_button-min-block-size);
 
   font-family: var(--label-font-family);
   font-size: var(--font-size-base);
