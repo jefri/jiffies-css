@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // scripts/release.mjs — cut a release: bump, commit, tag, push, publish.
 //
-// Usage: npm run release [-- X.Y.Z]
+// Usage: npm run release
 //
 // Always run it as `npm run release`, not `node scripts/release.mjs`
 // directly: testing and building happen first via npm's own "prerelease"
@@ -9,10 +9,11 @@
 // whenever you invoke it through `npm run`. Calling this file directly
 // skips that.
 //
-// Version is CalVer by default: <ISO-week-year>.<ISO-week>.<micro> — the
-// same scheme @davidsouther/jiffies uses. micro increments if a release
-// already went out this ISO week; otherwise it starts at 0. Pass an
-// explicit X.Y.Z to override.
+// Version is always CalVer: <ISO-week-year>.<ISO-week>.<micro> — the same
+// scheme @davidsouther/jiffies uses. micro increments if a release already
+// went out this ISO week; otherwise it starts at 0. No overrides — if the
+// computed version is wrong, the clock or the last release's version is
+// wrong; fix that instead.
 //
 // Always pushes the commit + tag and runs `npm publish` — that's the point
 // of running this script instead of bumping the version by hand.
@@ -72,7 +73,7 @@ if (dirty) {
 }
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
-const version = process.argv[2] ?? nextVersion(pkg.version);
+const version = nextVersion(pkg.version);
 console.log(`release: ${pkg.version} -> ${version}`);
 
 pkg.version = version;

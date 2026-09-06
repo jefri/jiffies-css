@@ -47,7 +47,7 @@ direct `node` call skips it.
 Versioning is **CalVer**, matching `@davidsouther/jiffies`:
 `<ISO-week-year>.<ISO-week>.<micro>`. `micro` increments if a release
 already went out during the current ISO week; otherwise it starts at `0`.
-Pass an explicit version to override: `npm run release -- 2026.36.2`.
+No overrides — there is no argument to pass.
 
 What it does, after `prerelease` has already run:
 
