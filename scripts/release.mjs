@@ -26,6 +26,12 @@ const BUNDLE_FILES = [
   "jiffies-css-bundle.css.map",
   "jiffies-css-bundle.min.css",
   "jiffies-css-bundle.min.css.map",
+  // Compatibility copies under the old name — see build.sh. Drop these once
+  // known consumers (davidsouther/resume) have moved off jiffies-css-v2-bundle.*.
+  "jiffies-css-v2-bundle.css",
+  "jiffies-css-v2-bundle.css.map",
+  "jiffies-css-v2-bundle.min.css",
+  "jiffies-css-v2-bundle.min.css.map",
 ];
 
 function run(command, args) {

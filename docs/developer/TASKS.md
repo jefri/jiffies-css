@@ -12,6 +12,16 @@ practices and common patterns for each component or feature.
   row + JS, canvas font-role migration, contrast assertions) and tidy with
   `developer:cleanup`. Gated on the feature test being green.
 
+- [ ] **drop-v2-bundle-name** — `build.sh` currently publishes the bundle under
+  both `jiffies-css-bundle.*` (canonical) and `jiffies-css-v2-bundle.*`
+  (compatibility copy, `package.json`'s `files` list ships both) so
+  `davidsouther/resume` and any other consumer still on the old unpkg URL
+  keep working. Once known consumers have migrated (resume: see its own PR
+  moving off `jiffies-css-v2-bundle.min.css`), drop the `-v2-` build step from
+  `build.sh`, the four `jiffies-css-v2-bundle.*` entries from `package.json`'s
+  `files` and from `scripts/release.mjs`'s `BUNDLE_FILES`, and delete the
+  tracked `jiffies-css-v2-bundle.*` files.
+
 ---
 
 ## Conventions
