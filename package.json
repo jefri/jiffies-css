@@ -1,6 +1,6 @@
 {
   "name": "@davidsouther/jiffies-css",
-  "version": "2026.36.0",
+  "version": "2026.36.1",
   "description": "Post-modern full-app CSS reset.",
   "main": "jiffies-css-bundle.css",
   "style": "jiffies-css-bundle.css",
