@@ -19,7 +19,7 @@ Or pull the stylesheet straight from a CDN:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/@davidsouther/jiffies-css/jiffies-css-v2-bundle.min.css"
+  href="https://unpkg.com/@davidsouther/jiffies-css/jiffies-css-bundle.min.css"
 />
 ```
 

@@ -583,7 +583,9 @@ Any class outside this census is out of contract.
   `--color-secondary-container`/`--color-on-secondary-container`; `.outline` reads
   `--color-outline` (border) + `--color-primary` (label). Plus `--label-font-family`,
   `--font-size-base`, `--border-radius-button`, `--button-border-style` (border
-  style, defaults to `--base-border-style`), `--size-small`/`--size-base` (padding)
+  style, defaults to `--base-border-style`), `--size-small`/`--size-base` (padding),
+  `--_button-min-block-size` (fixed 24px floor guaranteeing the WCAG 2.5.8 AA
+  minimum touch-target height regardless of breakpoint or density)
 - **States:** `:hover`, `:focus-visible`, `:active`, `[disabled]`/`[aria-disabled]`,
   `[aria-busy]`
 - **Edge-classes:** `.secondary`, `.contrast`, `.outline`
@@ -798,6 +800,17 @@ elevated card; `section` is the flat panel.
   bottom padding; a hero `figure` in a rail bleeds past the rail padding and clips
   to `--border-radius-card`
 - **Edge-classes:** none (`.fluid` is a layout utility, see Page layout & page-ends)
+- **Nesting:** a card never surfaces a card. An `article`/`section` with an
+  `article`/`section` ancestor gets the surface (background, radius, margin,
+  border/shadow) only if it uses the rail shape above; a **bare** nested
+  article/section (heading plus flow content, no rail) gets none of it. This
+  matters because the rail shape is a deliberate authoring choice nobody
+  produces by accident, while a bare nested section is exactly what a tool
+  that compiles one `<section>` per heading (e.g. this project's own markdown
+  pipeline) emits for every sub-heading — without the exclusion, a document
+  three headings deep would stack a card inside a card inside a card,
+  compounding margin/padding/border at every level. An unnested article or
+  section is unaffected either way.
 
 ### Navigation
 

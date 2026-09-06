@@ -1244,7 +1244,7 @@
 
 /* v2/component/card.css */
 @layer component {
-  :is(article, section):not([role]) {
+  :is(article, section):not([role]):is(:not(:is(article, section) :is(article, section)), :has(> :is(header, main, footer))) {
     --_card-background-color: var(--card-background-color);
     --_border-radius-card: var(--border-radius-container);
     --_margin-card-vertical: var(--size-large);
@@ -1287,15 +1287,15 @@
       padding-bottom: var(--size-medium);
     }
   }
-  article {
+  article:is(:not(:is(article, section) :is(article, section)), :has(> :is(header, main, footer))) {
     color: var(--card-color);
     box-shadow: var(--card-shadow);
     border: var(--card-border);
   }
-  article:hover {
+  article:is(:not(:is(article, section) :is(article, section)), :has(> :is(header, main, footer))):hover {
     box-shadow: var(--card-shadow-active);
   }
-  section {
+  section:is(:not(:is(article, section) :is(article, section)), :has(> :is(header, main, footer))) {
     color: var(--color-on-surface);
     border: var(--base-border);
   }
@@ -1311,6 +1311,7 @@
     --_button-fill: var(--color-primary);
     --_button-label: var(--color-on-primary);
     --_button-border-color: transparent;
+    --_button-min-block-size: 24px;
     --font-size-base: var(--base-font-size);
     --_button-padding-block: var(--size-small);
     --_button-padding-inline: var(--size-base);
@@ -1324,6 +1325,7 @@
     padding: var(--_button-padding-block) var(--_button-padding-inline);
     border: var(--base-border-size) var(--button-border-style) var(--_button-border-color);
     border-radius: var(--border-radius-button);
+    min-block-size: var(--_button-min-block-size);
     font-family: var(--label-font-family);
     font-size: var(--font-size-base);
     font-weight: var(--label-font-weight);
@@ -2264,7 +2266,7 @@
       flex-direction: column;
     }
     & li {
-      transition: background-color var(--transition), padding var(--transition);
+      transition: background-color var(--transition), transform var(--transition);
       &:has(> a:hover) {
         background-color: var(--color-surface-variant);
       }
@@ -2274,7 +2276,7 @@
       padding: var(--nav-item-spacing-vertical) var(--nav-item-spacing-horizontal);
     }
     & li:hover > ol > li {
-      padding-inline-start: var(--toc-left-offset);
+      transform: translateX(var(--toc-left-offset));
     }
   }
 }

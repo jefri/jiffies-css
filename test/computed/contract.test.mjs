@@ -290,4 +290,62 @@ describe("shape/role contract (live cascade)", () => {
       );
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // CLAUSE 6 — a card does not surface its own nested cards. jiffdown (and any
+  // other tool that nests one <section> per heading level) produces exactly
+  // this shape: an article/section whose descendants are themselves bare
+  // article/section elements. Only the outermost one in a chain may read as a
+  // card; nesting the surface would stack a card inside a card, compounding
+  // margin/padding/border/background at every level (see DESIGN.md's Card &
+  // Panel contract). The outer element here (#card-panel, an <article> in the
+  // live demo) already gets the surface — CLAUSE 2 covers a bare section at
+  // that top level; this clause covers what happens one level deeper.
+  // ---------------------------------------------------------------------------
+  describe("CLAUSE 6: a nested article/section is not card-surfaced", () => {
+    it("a section nested inside another section has no surface, margin, or border", async () => {
+      const result = await page.evaluate(() => {
+        const outer = document.querySelector("#card-panel > section");
+        const inner = document.createElement("section");
+        inner.innerHTML = "<p>nested</p>";
+        outer.appendChild(inner);
+        const outerStyle = getComputedStyle(outer);
+        const innerStyle = getComputedStyle(inner);
+        const captured = {
+          outerBg: outerStyle.backgroundColor,
+          innerBg: innerStyle.backgroundColor,
+          innerMarginTop: innerStyle.marginBlockStart,
+          innerBorderWidth: innerStyle.borderTopWidth,
+          innerRadius: innerStyle.borderTopLeftRadius,
+        };
+        inner.remove();
+        return captured;
+      });
+      assert.notStrictEqual(
+        result.outerBg,
+        TRANSPARENT,
+        "the outer, non-nested section must keep its card surface",
+      );
+      assert.strictEqual(
+        result.innerBg,
+        TRANSPARENT,
+        "a section nested inside another section must NOT get the card surface",
+      );
+      assert.strictEqual(
+        result.innerMarginTop,
+        "0px",
+        "a nested section must not carry the card's vertical rhythm",
+      );
+      assert.strictEqual(
+        result.innerBorderWidth,
+        "0px",
+        "a nested section must not carry the flat-panel border",
+      );
+      assert.strictEqual(
+        result.innerRadius,
+        "0px",
+        "a nested section must not carry the card radius",
+      );
+    });
+  });
 });

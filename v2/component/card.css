@@ -1,4 +1,4 @@
-/* Card & Panel — DESIGN.md › "Card & Panel"
+/* Card & Panel
  *
  * A surface with optional header/footer rails around a main body.
  *   article = elevated card  (surface + subtle M3 shadow)
@@ -15,8 +15,30 @@
 
 /* :not([role]) keeps the card surface off sectioning elements that carry a
  * component ARIA role — a `section[role=tablist]`, `[role=alert]`, etc. is a
- * component, not a card/panel, and must not be double-styled as a surface. */
-:is(article, section):not([role]) {
+ * component, not a card/panel, and must not be double-styled as a surface.
+ *
+ * The :is(...) that follows draws the line for NESTED article/sections: an
+ * article/section with an article/section ancestor keeps its card surface
+ * only if it uses the rail shape this file's header names as the real card
+ * contract (`> :is(header, main, footer)`). That shape is a deliberate,
+ * hard-to-produce-by-accident authoring choice — nobody's markdown compiler
+ * emits a header/main/footer rail unless the author built one on purpose
+ * (the Card & Panel demo nesting a fully-railed article and section inside
+ * its own demo section; Modal's `dialog > article > header + main`). A BARE
+ * nested article/section — heading plus flow content, no rail — gets no
+ * card surface, because that shape is exactly what jiffdown (and any tool
+ * that nests one <section> per markdown heading) produces for every
+ * sub-heading. Without this exclusion, a card holding a card holding a card
+ * compounds its own margin/padding/border/background at every heading
+ * level, and a document three headings deep loses most of its measure to
+ * gutters that only exist because the card rule couldn't tell "a nested
+ * heading" from "a standalone panel." An unnested article/section is
+ * unaffected either way — the rail is only load-bearing for something
+ * that's already inside another card. */
+:is(article, section):not([role]):is(
+    :not(:is(article, section) :is(article, section)),
+    :has(> :is(header, main, footer))
+  ) {
   /* Application — surface, radius, vertical rhythm shared by card + panel. */
   --_card-background-color: var(--card-background-color);
   --_border-radius-card: var(--border-radius-container);
@@ -93,8 +115,13 @@
 }
 
 /* Elevated card — elevation and color read from bridge tokens so themes can
- * override without element-selector rules. */
-article {
+ * override without element-selector rules. Nested exclusion matches the
+ * surface rule above: a bare nested article should not grow its own shadow
+ * either, but a nested, railed one (a deliberate card) still does. */
+article:is(
+    :not(:is(article, section) :is(article, section)),
+    :has(> :is(header, main, footer))
+  ) {
   color: var(--card-color);
   box-shadow: var(--card-shadow);
   border: var(--card-border);
@@ -104,13 +131,22 @@ article {
  * --card-shadow (no lift). A theme that sets a stronger --card-shadow-active
  * makes the card rise on hover; the surface rule above already transitions
  * box-shadow, so the change animates. */
-article:hover {
+article:is(
+    :not(:is(article, section) :is(article, section)),
+    :has(> :is(header, main, footer))
+  ):hover {
   box-shadow: var(--card-shadow-active);
 }
 
 /* Flat panel — no elevation; a load-bearing outline (--color-outline, clears
- * WCAG 3:1) delineates the surface from the page. */
-section {
+ * WCAG 3:1) delineates the surface from the page. Same nested exclusion: a
+ * bare section nested inside another article/section (jiffdown's per-heading
+ * nesting, most commonly) is structural, not a panel, and gets no border; a
+ * railed one is a deliberate panel and keeps it. */
+section:is(
+    :not(:is(article, section) :is(article, section)),
+    :has(> :is(header, main, footer))
+  ) {
   color: var(--color-on-surface);
   border: var(--base-border);
 }
